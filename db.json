@@ -56,6 +56,19 @@
       "title": "Fila de atendimento"
     }
   },
+  "columnOrder": [
+    "approval",
+    "disponivelpararetirada_769",
+    "doing",
+    "done",
+    "emproduo_216",
+    "filadeproduo_612",
+    "payment",
+    "prontoparaentrega_2",
+    "todo",
+    "psvenda_619",
+    "review"
+  ],
   "orders": [
     {
       "id": "ped-1766529735880",
