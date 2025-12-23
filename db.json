@@ -57,10 +57,10 @@
     }
   },
   "columnOrder": [
-    "approval",
     "filadeatendimento_988",
-    "disponivelpararetirada_769",
+    "approval",
     "doing",
+    "disponivelpararetirada_769",
     "done",
     "emproduo_216",
     "filadeproduo_612",
