@@ -1,0 +1,51 @@
+name: Receber Pedido via Webhook
+
+on:
+  repository_dispatch:
+    types: [novo_pedido]
+
+jobs:
+  atualizar-crm:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Baixar código atual
+        uses: actions/checkout@v3
+
+      - name: Configurar Robô
+        run: |
+          git config --global user.name 'Robo CRM'
+          git config --global user.email 'robo@warrior.com'
+
+      - name: Adicionar Pedido no JSON
+        run: |
+          # Pega os dados enviados pelo BotConversa
+          CLIENTE="${{ github.event.client_payload.nome }}"
+          PRODUTO="${{ github.event.client_payload.produto }}"
+          DATA="${{ github.event.client_payload.prazo }}"
+          ID="ped-$(date +%s)"
+
+          # Script para inserir no arquivo db.json com segurança
+          node -e "
+            const fs = require('fs');
+            try {
+              const db = JSON.parse(fs.readFileSync('db.json', 'utf8'));
+              db.push({
+                id: '$ID',
+                client: '$CLIENTE',
+                product: '$PRODUTO',
+                dueDate: '$DATA',
+                status: 'todo'
+              });
+              fs.writeFileSync('db.json', JSON.stringify(db, null, 2));
+            } catch (e) {
+              console.error('Erro ao ler db.json', e);
+            }
+          "
+
+      - name: Salvar alterações
+        run: |
+          git add db.json
+          git commit -m "Novo pedido: ${{ github.event.client_payload.nome }}"
+          git push
