@@ -1,0 +1,78 @@
+name: CRM Backend (Gerente Geral)
+
+on:
+  repository_dispatch:
+    types: [novo_pedido, update_status, delete_order]
+
+jobs:
+  gerenciar-crm:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v3
+
+      - name: Processar Solicitação
+        run: |
+          git config --global user.name 'CRM Robot'
+          git config --global user.email 'bot@warrior.com'
+
+          # Identifica qual ação foi pedida
+          TIPO_ACAO="${{ github.event.action }}"
+          
+          echo "Processando ação: $TIPO_ACAO"
+
+          node -e "
+            const fs = require('fs');
+            const action = '$TIPO_ACAO';
+            const payload = ${{ toJson(github.event.client_payload) }};
+            
+            try {
+              let db = [];
+              if (fs.existsSync('db.json')) {
+                db = JSON.parse(fs.readFileSync('db.json', 'utf8'));
+              }
+
+              // --- CENÁRIO 1: NOVO PEDIDO ---
+              if (action === 'novo_pedido') {
+                const novo = {
+                  id: 'ped-' + Date.now(),
+                  client: payload.nome || 'Cliente Sem Nome',
+                  chat_id: payload.chat_id || '',
+                  product: payload.produto || 'Pedido',
+                  dueDate: payload.prazo || '',
+                  status: 'todo' // Sempre começa no 'A Fazer'
+                };
+                db.push(novo);
+                console.log('Novo pedido criado:', novo.client);
+              }
+
+              // --- CENÁRIO 2: ATUALIZAR STATUS ---
+              else if (action === 'update_status') {
+                const index = db.findIndex(o => o.id === payload.id);
+                if (index > -1) {
+                  db[index].status = payload.status;
+                  console.log('Status atualizado para:', payload.status);
+                }
+              }
+
+              // --- CENÁRIO 3: DELETAR PEDIDO ---
+              else if (action === 'delete_order') {
+                const tamanhoOriginal = db.length;
+                db = db.filter(o => o.id !== payload.id);
+                console.log('Pedido deletado. Total restante:', db.length);
+              }
+
+              // Salva o arquivo
+              fs.writeFileSync('db.json', JSON.stringify(db, null, 2));
+
+            } catch (e) {
+              console.error('Erro crítico:', e);
+              process.exit(1); 
+            }
+          "
+
+          git add db.json
+          git commit -m "CRM Ação: $TIPO_ACAO" || echo "Nada para commitar"
+          git push
