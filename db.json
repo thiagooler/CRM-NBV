@@ -71,14 +71,6 @@
   ],
   "orders": [
     {
-      "id": "ped-1766529735880",
-      "client": "Thiago",
-      "chat_id": "621060456",
-      "product": "Pedido via Bot",
-      "dueDate": "2025-12-28",
-      "status": "review"
-    },
-    {
       "id": "ped-1766532786759",
       "client": "Marta ♥️ Alaelson",
       "chat_id": "841862022",
