@@ -2,12 +2,12 @@
   "columns": {
     "approval": {
       "color": "#6554c0",
-      "days": 0,
+      "days": 30,
       "title": "Aguardando resposta"
     },
     "disponivelpararetirada_769": {
       "color": "#1e9816",
-      "days": 0,
+      "days": 30,
       "title": "Disponivel para retirada"
     },
     "doing": {
@@ -17,7 +17,7 @@
     },
     "done": {
       "color": "#42526e",
-      "days": 0,
+      "days": 10,
       "title": "Em diagramação"
     },
     "emproduo_216": {
@@ -37,7 +37,7 @@
     },
     "payment": {
       "color": "#36b37e",
-      "days": 0,
+      "days": 30,
       "title": "Aguardando pagamento"
     },
     "prontoparaentrega_2": {
@@ -47,7 +47,7 @@
     },
     "psvenda_619": {
       "color": "#0ea7aa",
-      "days": 0,
+      "days": 30,
       "title": "Pós venda"
     },
     "review": {
