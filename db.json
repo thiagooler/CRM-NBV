@@ -49,17 +49,10 @@
       "color": "#0052cc",
       "days": 5,
       "title": "em Elaboração"
-    },
-    "todo": {
-      "color": "#ff5630",
-      "days": 0,
-      "title": "Fila de atendimento"
     }
   },
   "columnOrder": [
-    "todo",
     "approval",
-    "todo",
     "disponivelpararetirada_769",
     "doing",
     "done",
