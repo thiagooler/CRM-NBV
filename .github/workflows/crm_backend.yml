@@ -1,4 +1,4 @@
-name: CRM Backend (Gerenciador de Colunas)
+name: CRM Backend (Anti-Conflito)
 
 on:
   repository_dispatch:
@@ -20,26 +20,30 @@ jobs:
           ACTION_TYPE: ${{ github.event.action }}
           API_KEY: ${{ secrets.BOTCONVERSA_KEY }}
         run: |
+          # 1. Configura Identidade
           git config --global user.name 'CRM Robot'
           git config --global user.email 'bot@warrior.com'
+          
+          # 2. Prepara Autenticação (Importante fazer antes do pull)
+          git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}
 
+          # 3. Garante que estamos na versão mais recente antes de começar
+          git pull origin main || echo "Já estava atualizado"
+
+          # 4. Executa a Lógica (Node.js)
           node -e "
             const fs = require('fs');
             const action = process.env.ACTION_TYPE;
             const payload = JSON.parse(process.env.PAYLOAD_JSON);
             
-            // Colunas Padrão (Caso não exista configuração ainda)
+            // Colunas Padrão
             const defaultColumns = {
               'todo': { title: '📥 Novos', color: '#ff5630', days: 0 },
               'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 },
-              'review': { title: '👀 Revisão', color: '#0052cc', days: 5 },
-              'approval': { title: '👍 Aprovação', color: '#6554c0', days: 0 },
-              'payment': { title: '💰 Pagamento', color: '#36b37e', days: 0 },
               'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }
             };
 
             try {
-              // --- 1. CARREGAMENTO INTELIGENTE (Migração) ---
               let db = { columns: defaultColumns, orders: [] };
               
               if (fs.existsSync('db.json')) {
@@ -47,26 +51,17 @@ jobs:
                   const content = fs.readFileSync('db.json', 'utf8');
                   if (content.trim()) {
                     const json = JSON.parse(content);
-                    // Se for Array (formato antigo), converte para Objeto
-                    if (Array.isArray(json)) {
-                        db.orders = json;
-                    } else {
-                        db = json; // Já é o formato novo
-                    }
+                    if (Array.isArray(json)) { db.orders = json; } 
+                    else { db = json; }
                   }
-                } catch (err) { console.log('Erro ao ler DB, criando novo...'); }
+                } catch (err) { console.log('Criando novo DB...'); }
               }
 
               let notify = '';
 
-              // --- 2. PROCESSAMENTO DAS AÇÕES ---
-              
-              // >>> NOVA AÇÃO: SALVAR COLUNAS <<<
               if (action === 'save_columns') {
                 db.columns = payload;
-                console.log('Colunas atualizadas via Site');
               }
-
               else if (action === 'novo_pedido') {
                 const novo = {
                   id: 'ped-' + Date.now(),
@@ -78,7 +73,6 @@ jobs:
                 };
                 db.orders.push(novo);
               }
-
               else if (action === 'update_status') {
                 const index = db.orders.findIndex(o => o.id === payload.id);
                 if (index > -1) {
@@ -87,12 +81,10 @@ jobs:
                   notify = (db.orders[index].chat_id || '') + '|' + payload.status;
                 }
               }
-
               else if (action === 'delete_order') {
                 db.orders = db.orders.filter(o => o.id !== payload.id);
               }
 
-              // --- 3. SALVAMENTO ---
               fs.writeFileSync('db.json', JSON.stringify(db, null, 2));
               fs.writeFileSync('notify.txt', notify);
 
@@ -102,10 +94,12 @@ jobs:
             }
           "
 
+          # 5. Salva e Envia (Com Proteção Anti-Erro)
           git add db.json
           git commit -m "CRM: ${{ github.event.action }}" || echo "Nada mudou"
-          git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}
-          git push origin main
+          
+          # O TRUQUE: Tenta enviar. Se falhar (conflito), puxa de novo e reenvia.
+          git push origin main || (git pull --rebase origin main && git push origin main)
 
       - name: Notificar BotConversa
         env:
