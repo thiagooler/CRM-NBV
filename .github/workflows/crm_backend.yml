@@ -1,8 +1,8 @@
-name: CRM Backend (Blindado v2)
+name: CRM Backend (Gerenciador de Colunas)
 
 on:
   repository_dispatch:
-    types: [novo_pedido, update_status, delete_order]
+    types: [novo_pedido, update_status, delete_order, save_columns]
 
 jobs:
   gerenciar-crm:
@@ -15,7 +15,6 @@ jobs:
 
       - name: Processar e Salvar
         env:
-          # AQUI ESTÁ A CORREÇÃO: Passamos os dados via envelope (ENV), não direto no texto
           MY_TOKEN: ${{ secrets.GH_PAT }} 
           PAYLOAD_JSON: ${{ toJson(github.event.client_payload) }}
           ACTION_TYPE: ${{ github.event.action }}
@@ -24,28 +23,51 @@ jobs:
           git config --global user.name 'CRM Robot'
           git config --global user.email 'bot@warrior.com'
 
-          # Executa o Node.js lendo o envelope seguro
           node -e "
             const fs = require('fs');
-            
-            // Lê as variáveis de ambiente (Seguro contra erros de aspas)
             const action = process.env.ACTION_TYPE;
             const payload = JSON.parse(process.env.PAYLOAD_JSON);
             
-            console.log('Ação:', action);
-            
+            // Colunas Padrão (Caso não exista configuração ainda)
+            const defaultColumns = {
+              'todo': { title: '📥 Novos', color: '#ff5630', days: 0 },
+              'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 },
+              'review': { title: '👀 Revisão', color: '#0052cc', days: 5 },
+              'approval': { title: '👍 Aprovação', color: '#6554c0', days: 0 },
+              'payment': { title: '💰 Pagamento', color: '#36b37e', days: 0 },
+              'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }
+            };
+
             try {
-              let db = [];
+              // --- 1. CARREGAMENTO INTELIGENTE (Migração) ---
+              let db = { columns: defaultColumns, orders: [] };
+              
               if (fs.existsSync('db.json')) {
                 try {
                   const content = fs.readFileSync('db.json', 'utf8');
-                  if (content.trim()) db = JSON.parse(content);
-                } catch (err) { db = []; }
+                  if (content.trim()) {
+                    const json = JSON.parse(content);
+                    // Se for Array (formato antigo), converte para Objeto
+                    if (Array.isArray(json)) {
+                        db.orders = json;
+                    } else {
+                        db = json; // Já é o formato novo
+                    }
+                  }
+                } catch (err) { console.log('Erro ao ler DB, criando novo...'); }
               }
 
               let notify = '';
 
-              if (action === 'novo_pedido') {
+              // --- 2. PROCESSAMENTO DAS AÇÕES ---
+              
+              // >>> NOVA AÇÃO: SALVAR COLUNAS <<<
+              if (action === 'save_columns') {
+                db.columns = payload;
+                console.log('Colunas atualizadas via Site');
+              }
+
+              else if (action === 'novo_pedido') {
                 const novo = {
                   id: 'ped-' + Date.now(),
                   client: payload.nome || 'Cliente',
@@ -54,35 +76,34 @@ jobs:
                   dueDate: payload.prazo || '',
                   status: 'todo'
                 };
-                db.push(novo);
-              }
-              else if (action === 'update_status') {
-                const index = db.findIndex(o => o.id === payload.id);
-                if (index > -1) {
-                  db[index].status = payload.status;
-                  if (payload.newDate) db[index].dueDate = payload.newDate;
-                  notify = (db[index].chat_id || '') + '|' + payload.status;
-                }
-              }
-              else if (action === 'delete_order') {
-                db = db.filter(o => o.id !== payload.id);
-                console.log('Pedido deletado.');
+                db.orders.push(novo);
               }
 
+              else if (action === 'update_status') {
+                const index = db.orders.findIndex(o => o.id === payload.id);
+                if (index > -1) {
+                  db.orders[index].status = payload.status;
+                  if (payload.newDate) db.orders[index].dueDate = payload.newDate;
+                  notify = (db.orders[index].chat_id || '') + '|' + payload.status;
+                }
+              }
+
+              else if (action === 'delete_order') {
+                db.orders = db.orders.filter(o => o.id !== payload.id);
+              }
+
+              // --- 3. SALVAMENTO ---
               fs.writeFileSync('db.json', JSON.stringify(db, null, 2));
               fs.writeFileSync('notify.txt', notify);
 
             } catch (e) {
-              console.error('Erro no script:', e);
+              console.error('Erro Fatal:', e);
               process.exit(1); 
             }
           "
 
-          # Salva no GitHub
           git add db.json
-          git commit -m "CRM Action: ${{ github.event.action }}" || echo "Nada mudou"
-          
-          # Autentica e Envia
+          git commit -m "CRM: ${{ github.event.action }}" || echo "Nada mudou"
           git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}
           git push origin main
 
@@ -95,9 +116,7 @@ jobs:
             if [ ! -z "$CONTENT" ]; then
               CHAT_ID=$(echo "$CONTENT" | cut -d'|' -f1)
               STATUS=$(echo "$CONTENT" | cut -d'|' -f2)
-              
               if [ ! -z "$CHAT_ID" ] && [ "$STATUS" == "doing" ]; then
-                 echo "Notificando BotConversa..."
                  curl -s -X POST "https://backend.botconversa.com.br/api/v1/subscriber/$CHAT_ID/tags" \
                  -H "api-key: $API_KEY" \
                  -H "Content-Type: application/json" \
