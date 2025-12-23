@@ -40,13 +40,6 @@
       "status": "todo"
     },
     {
-      "id": "ped-1766509838",
-      "client": "{{first_name}} {{last_name}}",
-      "product": "Novo Pedido",
-      "dueDate": "2025-12-30",
-      "status": "todo"
-    },
-    {
       "id": "ped-1766510219",
       "client": "Thiago",
       "product": "Novo Pedido",
