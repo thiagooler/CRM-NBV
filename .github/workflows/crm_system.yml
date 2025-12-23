@@ -1,0 +1,174 @@
+name: CRM System (Renascimento)
+
+on:
+  # Permite acionamento manual pelo site do GitHub (para teste)
+  workflow_dispatch:
+  # O gatilho principal via Site/BotConversa (Aceita QUALQUER tipo)
+  repository_dispatch:
+
+jobs:
+  crm-core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Executar Lógica CRM
+        env:
+          MY_TOKEN: ${{ secrets.GH_PAT }} 
+          PAYLOAD_JSON: ${{ toJson(github.event.client_payload) }}
+          # Fallback: Se for manual (workflow_dispatch), define um tipo padrão
+          ACTION_TYPE: ${{ github.event.action || 'manual_trigger' }}
+          API_KEY: ${{ secrets.BOTCONVERSA_KEY }}
+        run: |
+          git config --global user.name 'CRM Robot'
+          git config --global user.email 'bot@warrior.com'
+          
+          # Configura URL com Token
+          git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}
+          git pull origin main || echo "Já atualizado"
+
+          # Script Node.js Blindado
+          node -e "
+            const fs = require('fs');
+            const action = process.env.ACTION_TYPE;
+            
+            // Tratamento de Payload Seguro
+            let payload = {};
+            try {
+                const raw = process.env.PAYLOAD_JSON;
+                if(raw && raw !== 'null') payload = JSON.parse(raw);
+            } catch (e) { console.log('Payload vazio ou manual'); }
+
+            console.log('--- COMANDO: ' + action + ' ---');
+
+            const defaultColumns = {
+              'todo': { title: '📥 Novos', color: '#ff5630', days: 0 },
+              'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 },
+              'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }
+            };
+
+            try {
+              let db = { columns: defaultColumns, orders: [] };
+              
+              // Leitura Segura do DB
+              if (fs.existsSync('db.json')) {
+                try {
+                  const content = fs.readFileSync('db.json', 'utf8');
+                  if (content.trim()) {
+                    const json = JSON.parse(content);
+                    if (Array.isArray(json)) { db.orders = json; } 
+                    else { db = json; }
+                  }
+                } catch (err) { console.log('DB ilegível, criando novo...'); }
+              }
+
+              let notify = '';
+
+              // --- LÓGICA DE COMANDOS ---
+
+              if (action === 'save_columns') {
+                if (payload && Object.keys(payload).length > 0) {
+                    db.columns = payload;
+                    console.log('✅ Colunas Salvas');
+                }
+              }
+              
+              else if (action === 'novo_pedido') {
+                const novo = {
+                  id: 'ped-' + Date.now(),
+                  client: payload.nome || 'Cliente',
+                  chat_id: payload.chat_id || '',
+                  product: payload.produto || 'Pedido',
+                  dueDate: payload.prazo || '',
+                  status: 'todo'
+                };
+                db.orders.push(novo);
+              }
+
+              else if (action === 'update_status') {
+                const index = db.orders.findIndex(o => o.id === payload.id);
+                if (index > -1) {
+                  db.orders[index].status = payload.status;
+                  if (payload.newDate) db.orders[index].dueDate = payload.newDate;
+                  notify = (db.orders[index].chat_id || '') + '|' + payload.status;
+                }
+              }
+
+              else if (action === 'update_order') {
+                const index = db.orders.findIndex(o => o.id === payload.id);
+                if (index > -1) {
+                    if (payload.client) db.orders[index].client = payload.client;
+                    if (payload.product) db.orders[index].product = payload.product;
+                    if (payload.dueDate) db.orders[index].dueDate = payload.dueDate;
+                }
+              }
+
+              else if (action === 'delete_order') {
+                db.orders = db.orders.filter(o => o.id !== payload.id);
+              }
+              
+              // INTEGRAÇÃO BOTCONVERSA
+              else if (action === 'move_card_external') {
+                 const newStatus = payload.status;
+                 const index = db.orders.findIndex(o => o.chat_id === payload.chat_id);
+                 
+                 let newDate = '';
+                 const colConfig = (db.columns && db.columns[newStatus]) ? db.columns[newStatus] : { days: 0 };
+                 
+                 if (colConfig.days > 0) {
+                    const d = new Date(); d.setDate(d.getDate() + colConfig.days);
+                    newDate = d.toISOString().split('T')[0];
+                 }
+
+                 if (index > -1) {
+                    db.orders[index].status = newStatus;
+                    if (newDate) db.orders[index].dueDate = newDate;
+                 } else {
+                    const novo = {
+                      id: 'ped-' + Date.now(),
+                      client: payload.nome || 'Cliente Bot',
+                      chat_id: payload.chat_id || '',
+                      product: 'Pedido via Bot',
+                      dueDate: newDate || '',
+                      status: newStatus
+                    };
+                    db.orders.push(novo);
+                 }
+              }
+
+              fs.writeFileSync('db.json', JSON.stringify(db, null, 2));
+              fs.writeFileSync('notify.txt', notify);
+
+            } catch (e) {
+              console.error('ERRO CRÍTICO:', e);
+              process.exit(1); 
+            }
+          "
+
+          git add db.json
+          git commit -m "CRM Action: ${{ github.event.action }}" || echo "Nada mudou"
+          git push origin main || (git pull --rebase origin main && git push origin main)
+
+      - name: Notificar BotConversa
+        env:
+          API_KEY: ${{ secrets.BOTCONVERSA_KEY }}
+        run: |
+          if [ -f notify.txt ]; then
+            CONTENT=$(cat notify.txt)
+            if [ ! -z "$CONTENT" ]; then
+              CHAT_ID=$(echo "$CONTENT" | cut -d'|' -f1)
+              STATUS=$(echo "$CONTENT" | cut -d'|' -f2)
+              # Evita loop infinito se a ação veio do próprio bot
+              if [ "${{ github.event.action }}" != "move_card_external" ]; then
+                  if [ ! -z "$CHAT_ID" ] && [ "$STATUS" == "doing" ]; then
+                     curl -s -X POST "https://backend.botconversa.com.br/api/v1/subscriber/$CHAT_ID/tags" \
+                     -H "api-key: $API_KEY" \
+                     -H "Content-Type: application/json" \
+                     -d '{"tag_id": "Status: Produção"}'
+                  fi
+              fi
+            fi
+          fi
