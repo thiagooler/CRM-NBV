@@ -45,6 +45,10 @@
         .btn-icon:hover { background: #dfe1e6; color: #0052cc; }
         .btn-trash:hover { background: #ffebe6; color: #bf2600; }
         .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
+        
+        /* BOTÃO NOVO PEDIDO */
+        .btn-add-new { background: #36b37e; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
+        .btn-add-new:hover { background: #2d9668; }
 
         /* MODAIS */
         dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); padding: 0; width: 450px; font-family: inherit; overflow: hidden;}
@@ -65,6 +69,8 @@
         .col-item { display: flex; align-items: center; gap: 8px; padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px; border: 1px solid #eee;}
         .col-inputs { flex-grow: 1; display: flex; gap: 5px; flex-direction: column; }
         .col-row { display: flex; gap: 5px; }
+        
+        label { font-size: 0.9em; font-weight: bold; color: #444; }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-thumb { background: #c1c7d0; border-radius: 4px; }
@@ -76,6 +82,11 @@
         <h1><i class="fa-solid fa-layer-group"></i> CRM Warrior</h1>
         <div style="display:flex; gap:10px; align-items:center;">
             <div id="statusMsg" class="status-badge"></div>
+            
+            <button class="btn-add-new" onclick="openNewOrderModal()">
+                <i class="fa-solid fa-plus"></i> Novo Pedido
+            </button>
+            
             <button class="btn-config" onclick="openSettings()" title="Configurações"><i class="fa-solid fa-gear"></i></button>
         </div>
     </div>
@@ -101,9 +112,7 @@
 
             <div id="tab-columns" class="tab-content">
                 <div id="columnsList"></div>
-                
                 <button class="btn-primary" onclick="saveAllColumns()" style="background:#36b37e; margin-bottom: 20px;">💾 Salvar Alterações</button>
-
                 <h4 style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">Nova Coluna</h4>
                 <input type="text" id="newColTitle" class="inp-full" placeholder="Nome (Ex: Aguardando)">
                 <div style="display:flex; gap:10px;">
@@ -112,6 +121,25 @@
                 </div>
                 <button class="btn-primary" onclick="addColumn()">+ Adicionar</button>
             </div>
+        </div>
+    </dialog>
+
+    <dialog id="newOrderModal">
+        <div class="modal-header">
+            <h3 style="margin:0">Novo Pedido Manual</h3>
+            <button onclick="closeModal('newOrderModal')" style="border:none; background:none; cursor:pointer;">&times;</button>
+        </div>
+        <div class="modal-body">
+            <label>Nome do Cliente *</label>
+            <input type="text" id="manualName" class="inp-full" placeholder="Ex: João da Silva">
+            
+            <label>Produto / Serviço</label>
+            <input type="text" id="manualProduct" class="inp-full" placeholder="Ex: Ensaio Externo">
+            
+            <label>Prazo</label>
+            <input type="date" id="manualDate" class="inp-full">
+            
+            <button class="btn-primary" onclick="createManualOrder()">Criar Pedido</button>
         </div>
     </dialog>
 
@@ -170,33 +198,21 @@
                 const res = await fetch(`db.json?t=${new Date().getTime()}`);
                 if(!res.ok) throw new Error("Erro DB");
                 const data = await res.json();
-
-                if (Array.isArray(data)) {
-                    orders = data;
-                } else {
-                    orders = data.orders || [];
-                    if(data.columns) columnsConfig = data.columns;
-                }
+                if (Array.isArray(data)) { orders = data; } 
+                else { orders = data.orders || []; if(data.columns) columnsConfig = data.columns; }
                 renderBoard();
                 hideStatus();
-            } catch (e) {
-                console.error(e);
-                renderBoard();
-                hideStatus();
-            }
+            } catch (e) { console.error(e); renderBoard(); hideStatus(); }
         }
 
-        // --- RENDER ---
         function renderBoard() {
             const board = document.getElementById('board');
             board.innerHTML = '';
-
             Object.keys(columnsConfig).forEach(key => {
                 const config = columnsConfig[key];
                 const colDiv = document.createElement('div');
                 colDiv.className = 'column';
                 colDiv.style.borderTopColor = config.color;
-                
                 colDiv.innerHTML = `
                     <div class="column-header" style="color:${config.color}">
                         <span>${config.title} <span id="count-${key}" style="background:#fff; padding:2px 8px; border-radius:10px; font-size:0.8em; color:#333;">0</span></span>
@@ -211,11 +227,9 @@
                     <div class="card-list" id="${key}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
                 `;
                 board.appendChild(colDiv);
-
                 const listDiv = colDiv.querySelector('.card-list');
                 const colOrders = orders.filter(o => o.status === key);
                 document.getElementById(`count-${key}`).innerText = colOrders.length;
-
                 colOrders.forEach(order => listDiv.appendChild(createCard(order, config.color)));
             });
         }
@@ -227,7 +241,6 @@
             card.draggable = true;
             card.style.borderLeftColor = color;
             card.ondragstart = drag;
-            
             const dateObj = new Date(order.dueDate);
             const isLate = dateObj < new Date() && order.status !== 'done';
             
@@ -244,26 +257,65 @@
             return card;
         }
 
-        // --- EDIÇÃO DE PEDIDOS ---
+        // --- CRIAR MANUALMENTE ---
+        function openNewOrderModal() {
+            document.getElementById('manualName').value = '';
+            document.getElementById('manualProduct').value = '';
+            // Data de hoje como padrão
+            document.getElementById('manualDate').valueAsDate = new Date();
+            document.getElementById('newOrderModal').showModal();
+        }
+
+        async function createManualOrder() {
+            const nome = document.getElementById('manualName').value;
+            const produto = document.getElementById('manualProduct').value;
+            const prazo = document.getElementById('manualDate').value;
+            
+            if(!nome) return alert("O nome do cliente é obrigatório!");
+
+            // Cria o objeto para enviar
+            const payload = {
+                nome: nome,
+                produto: produto || 'Pedido Manual',
+                prazo: prazo,
+                chat_id: '' // Pedido manual não tem chat_id do BotConversa
+            };
+
+            // Adiciona visualmente na hora (na primeira coluna)
+            const firstCol = Object.keys(columnsConfig)[0];
+            const tempOrder = {
+                id: 'ped-' + Date.now(),
+                client: nome,
+                product: payload.produto,
+                dueDate: prazo,
+                status: firstCol
+            };
+            orders.push(tempOrder);
+            renderBoard();
+            closeModal('newOrderModal');
+
+            // Envia para o GitHub (usando a mesma lógica do Webhook)
+            showStatus('Criando...', '#36b37e');
+            await sendToGitHub('novo_pedido', payload);
+            showStatus('✅ Criado!', '#36b37e');
+            setTimeout(hideStatus, 2000);
+        }
+
+        // --- EDIÇÃO ---
         function openEditOrder(id) {
             const order = orders.find(o => o.id === id);
             if(!order) return;
-
             document.getElementById('editOrderId').value = order.id;
             document.getElementById('editClientName').value = order.client;
             document.getElementById('editProduct').value = order.product;
             document.getElementById('editDueDate').value = order.dueDate;
-            
             document.getElementById('editOrderModal').showModal();
         }
-
         async function saveOrderEdits() {
             const id = document.getElementById('editOrderId').value;
             const client = document.getElementById('editClientName').value;
             const product = document.getElementById('editProduct').value;
             const dueDate = document.getElementById('editDueDate').value;
-
-            // Atualiza localmente
             const idx = orders.findIndex(o => o.id === id);
             if(idx > -1) {
                 orders[idx].client = client;
@@ -271,20 +323,17 @@
                 orders[idx].dueDate = dueDate;
                 renderBoard();
             }
-
             closeModal('editOrderModal');
-            
             showStatus('Salvando...', '#ffab00');
             await sendToGitHub('update_order', { id, client, product, dueDate });
             showStatus('✅ Editado!', '#36b37e');
             setTimeout(hideStatus, 2000);
         }
 
-        // --- GERENCIADOR DE COLUNAS ---
+        // --- CONFIG ---
         function openSettings() {
             const list = document.getElementById('columnsList');
             list.innerHTML = '';
-            
             Object.keys(columnsConfig).forEach(key => {
                 const col = columnsConfig[key];
                 list.innerHTML += `
@@ -303,41 +352,32 @@
             });
             document.getElementById('settingsModal').showModal();
         }
-
         function updateColConfig(key, field, value) {
             if(field === 'days') value = parseInt(value);
             columnsConfig[key][field] = value;
         }
-
         async function saveAllColumns() {
-            renderBoard(); // Atualiza visual
-            showStatus('Salvando Colunas...', '#ffab00');
+            renderBoard(); showStatus('Salvando Colunas...', '#ffab00');
             await sendToGitHub('save_columns', columnsConfig);
-            showStatus('✅ Config Salva!', '#36b37e');
-            setTimeout(hideStatus, 2000);
+            showStatus('✅ Config Salva!', '#36b37e'); setTimeout(hideStatus, 2000);
         }
-
         async function addColumn() {
             const title = document.getElementById('newColTitle').value;
             const color = document.getElementById('newColColor').value;
             const days = parseInt(document.getElementById('newColDays').value) || 0;
             if(!title) return alert("Digite um nome!");
-
             const id = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '_' + Math.floor(Math.random()*1000);
             columnsConfig[id] = { title, color, days };
-            
             document.getElementById('newColTitle').value = '';
-            openSettings(); // Recarrega a lista para mostrar o novo
+            openSettings();
         }
-
         async function removeColumn(key) {
             if(!confirm("Remover esta coluna?")) return;
             delete columnsConfig[key];
-            const row = document.getElementById('row-'+key);
-            if(row) row.remove();
+            const row = document.getElementById('row-'+key); if(row) row.remove();
         }
 
-        // --- DRAG, DROP & SERVER ---
+        // --- CORE ---
         function allowDrop(ev) { ev.preventDefault(); }
         function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
         async function drop(ev) {
@@ -345,11 +385,9 @@
             const orderId = ev.dataTransfer.getData("text");
             const column = ev.target.closest('.card-list');
             if (!column) return;
-            
             const newStatus = column.id;
             const idx = orders.findIndex(o => o.id === orderId);
             if(idx === -1) return;
-
             if (orders[idx].status !== newStatus) {
                 let newDate = null;
                 const days = columnsConfig[newStatus]?.days || 0;
@@ -358,13 +396,11 @@
                     newDate = d.toISOString().split('T')[0];
                     orders[idx].dueDate = newDate;
                 }
-                
                 orders[idx].status = newStatus;
                 renderBoard();
                 await sendToGitHub('update_status', { id: orderId, status: newStatus, newDate });
             }
         }
-
         async function deleteOrder(id) {
             if(confirm('Apagar pedido?')) {
                 orders = orders.filter(o => o.id !== id);
@@ -372,7 +408,6 @@
                 await sendToGitHub('delete_order', { id });
             }
         }
-
         async function sendToGitHub(action, payload) {
             const token = getToken();
             if(!token) return alert("Token não encontrado!");
@@ -385,7 +420,6 @@
             } catch (e) { alert("Erro de conexão"); }
         }
 
-        // --- UTIL ---
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
