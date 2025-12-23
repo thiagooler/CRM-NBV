@@ -51,13 +51,5 @@
       "title": "Fila de atendimento"
     }
   },
-  "orders": [
-    {
-      "id": "ped-1766510219",
-      "client": "Thiago",
-      "product": "Novo Pedido",
-      "dueDate": "2026-01-22",
-      "status": "doing"
-    }
-  ]
+  "orders": []
 }
