@@ -1,8 +1,8 @@
-name: CRM Backend (Gestão Total)
+name: CRM Backend (Final)
 
 on:
   repository_dispatch:
-    types: [novo_pedido, update_status, delete_order, save_columns, update_order]
+    types: [novo_pedido, update_status, delete_order, save_columns, update_order, move_card_external]
 
 jobs:
   gerenciar-crm:
@@ -23,7 +23,7 @@ jobs:
           git config --global user.name 'CRM Robot'
           git config --global user.email 'bot@warrior.com'
           
-          # Prepara URL e Atualiza para evitar conflitos
+          # Previne conflito de atualizações
           git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}
           git pull origin main || echo "Já atualizado"
 
@@ -32,7 +32,7 @@ jobs:
             const action = process.env.ACTION_TYPE;
             const payload = JSON.parse(process.env.PAYLOAD_JSON);
             
-            // Colunas Padrão de Segurança
+            // Colunas Padrão
             const defaultColumns = {
               'todo': { title: '📥 Novos', color: '#ff5630', days: 0 },
               'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 },
@@ -55,13 +55,9 @@ jobs:
 
               let notify = '';
 
-              // --- AÇÕES ---
-              
               if (action === 'save_columns') {
                 db.columns = payload;
-                console.log('Colunas reconfiguradas');
               }
-
               else if (action === 'novo_pedido') {
                 const novo = {
                   id: 'ped-' + Date.now(),
@@ -73,7 +69,6 @@ jobs:
                 };
                 db.orders.push(novo);
               }
-
               else if (action === 'update_status') {
                 const index = db.orders.findIndex(o => o.id === payload.id);
                 if (index > -1) {
@@ -82,20 +77,36 @@ jobs:
                   notify = (db.orders[index].chat_id || '') + '|' + payload.status;
                 }
               }
-
-              // >>> NOVA AÇÃO: EDITAR DETALHES <<<
               else if (action === 'update_order') {
                 const index = db.orders.findIndex(o => o.id === payload.id);
                 if (index > -1) {
                     if (payload.client) db.orders[index].client = payload.client;
                     if (payload.product) db.orders[index].product = payload.product;
                     if (payload.dueDate) db.orders[index].dueDate = payload.dueDate;
-                    console.log('Pedido editado:', payload.id);
                 }
               }
-
               else if (action === 'delete_order') {
                 db.orders = db.orders.filter(o => o.id !== payload.id);
+              }
+              
+              // >>> AQUI ESTÁ A INTEGRAÇÃO COM BOTCONVERSA <<<
+              else if (action === 'move_card_external') {
+                 // Procura pelo chat_id
+                 const index = db.orders.findIndex(o => o.chat_id === payload.chat_id);
+                 
+                 if (index > -1) {
+                    const newStatus = payload.status;
+                    db.orders[index].status = newStatus;
+                    
+                    // Atualiza prazo se necessário
+                    const colConfig = db.columns[newStatus];
+                    if (colConfig && colConfig.days > 0) {
+                        const d = new Date(); d.setDate(d.getDate() + colConfig.days);
+                        db.orders[index].dueDate = d.toISOString().split('T')[0];
+                    }
+                 } else {
+                    console.log('Cliente não encontrado para ID: ' + payload.chat_id);
+                 }
               }
 
               fs.writeFileSync('db.json', JSON.stringify(db, null, 2));
@@ -120,11 +131,13 @@ jobs:
             if [ ! -z "$CONTENT" ]; then
               CHAT_ID=$(echo "$CONTENT" | cut -d'|' -f1)
               STATUS=$(echo "$CONTENT" | cut -d'|' -f2)
-              if [ ! -z "$CHAT_ID" ] && [ "$STATUS" == "doing" ]; then
-                 curl -s -X POST "https://backend.botconversa.com.br/api/v1/subscriber/$CHAT_ID/tags" \
-                 -H "api-key: $API_KEY" \
-                 -H "Content-Type: application/json" \
-                 -d '{"tag_id": "Status: Produção"}'
+              if [ "${{ github.event.action }}" != "move_card_external" ]; then
+                  if [ ! -z "$CHAT_ID" ] && [ "$STATUS" == "doing" ]; then
+                     curl -s -X POST "https://backend.botconversa.com.br/api/v1/subscriber/$CHAT_ID/tags" \
+                     -H "api-key: $API_KEY" \
+                     -H "Content-Type: application/json" \
+                     -d '{"tag_id": "Status: Produção"}'
+                  fi
               fi
             fi
           fi
