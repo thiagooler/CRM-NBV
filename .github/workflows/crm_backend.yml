@@ -1,4 +1,4 @@
-name: CRM Backend (Cria ou Move)
+name: CRM Backend (Mestre)
 
 on:
   repository_dispatch:
@@ -56,8 +56,13 @@ jobs:
               // --- AÇÕES ---
 
               if (action === 'save_columns') {
-                db.columns = payload;
+                // Aqui estava o segredo: garantimos que columns seja um objeto válido
+                if (typeof payload === 'object') {
+                    db.columns = payload;
+                    console.log('Colunas salvas com sucesso');
+                }
               }
+              
               else if (action === 'novo_pedido') {
                 const novo = {
                   id: 'ped-' + Date.now(),
@@ -69,6 +74,7 @@ jobs:
                 };
                 db.orders.push(novo);
               }
+
               else if (action === 'update_status') {
                 const index = db.orders.findIndex(o => o.id === payload.id);
                 if (index > -1) {
@@ -77,6 +83,7 @@ jobs:
                   notify = (db.orders[index].chat_id || '') + '|' + payload.status;
                 }
               }
+
               else if (action === 'update_order') {
                 const index = db.orders.findIndex(o => o.id === payload.id);
                 if (index > -1) {
@@ -85,38 +92,31 @@ jobs:
                     if (payload.dueDate) db.orders[index].dueDate = payload.dueDate;
                 }
               }
+
               else if (action === 'delete_order') {
                 db.orders = db.orders.filter(o => o.id !== payload.id);
               }
               
-              // >>> LÓGICA INTELIGENTE: MOVE OU CRIA <<<
               else if (action === 'move_card_external') {
                  const newStatus = payload.status;
                  const index = db.orders.findIndex(o => o.chat_id === payload.chat_id);
-                 
-                 // Calcula Prazo da Coluna
                  let newDate = '';
                  const colConfig = db.columns[newStatus];
                  if (colConfig && colConfig.days > 0) {
                     const d = new Date(); d.setDate(d.getDate() + colConfig.days);
                     newDate = d.toISOString().split('T')[0];
                  }
-
                  if (index > -1) {
-                    // Cenario 1: EXISTE -> MOVE
                     db.orders[index].status = newStatus;
                     if (newDate) db.orders[index].dueDate = newDate;
-                    console.log('Cliente Movido');
                  } else {
-                    // Cenario 2: NÃO EXISTE -> CRIA NOVO NA COLUNA CERTA
-                    console.log('Cliente Novo detectado na integração. Criando...');
                     const novo = {
                       id: 'ped-' + Date.now(),
                       client: payload.nome || 'Cliente Bot',
                       chat_id: payload.chat_id || '',
                       product: 'Pedido via Bot',
-                      dueDate: newDate || '', // Já nasce com o prazo certo
-                      status: newStatus // Já nasce na coluna certa
+                      dueDate: newDate || '',
+                      status: newStatus
                     };
                     db.orders.push(novo);
                  }
