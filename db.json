@@ -40,6 +40,11 @@
       "days": 7,
       "title": "Pronto para entrega"
     },
+    "psvenda_619": {
+      "color": "#00fbff",
+      "days": 0,
+      "title": "Pós venda"
+    },
     "review": {
       "color": "#0052cc",
       "days": 5,
