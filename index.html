@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM Warrior - Auto</title>
+    <title>CRM Warrior</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --bg: #f4f5f7; --card-bg: #fff; --text: #172b4d; }
@@ -20,35 +20,43 @@
             padding: 12px; display: flex; flex-direction: column; max-height: 85vh;
             border-top: 4px solid transparent; position: relative;
         }
-        
-        .column-header { 
-            font-weight: 700; margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; 
-            color: #42526e; display: flex; justify-content: space-between; align-items: center;
-        }
+        .column-header { font-weight: 700; margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; color: #42526e; display: flex; justify-content: space-between; align-items: center;}
 
+        /* Menu de Coluna */
         .col-menu-btn { cursor: pointer; padding: 5px; border-radius: 4px; }
         .col-menu-btn:hover { background: #dcdfe4; }
-        .col-options { 
-            display: none; position: absolute; top: 40px; right: 10px; background: white; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2); border-radius: 6px; z-index: 100; width: 150px; overflow: hidden;
-        }
+        .col-options { display: none; position: absolute; top: 40px; right: 10px; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.2); border-radius: 6px; z-index: 100; width: 150px; overflow: hidden;}
         .col-options div { padding: 10px; cursor: pointer; font-size: 0.9em; color: #333; }
         .col-options div:hover { background: #f4f5f7; color: #0052cc; }
         .col-options.active { display: block; }
         
         .card-list { flex-grow: 1; overflow-y: auto; min-height: 100px; padding-bottom: 10px;}
-
-        .card { 
-            background: var(--card-bg); border-radius: 6px; padding: 12px; margin-bottom: 10px; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: grab; position: relative;
-            transition: transform 0.2s; border-left: 4px solid #ccc;
-        }
+        .card { background: var(--card-bg); border-radius: 6px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: grab; position: relative; transition: transform 0.2s; border-left: 4px solid #ccc;}
         .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
         .card-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; color: #172b4d; }
         .card-meta { font-size: 0.85em; color: #666; display: flex; align-items: center; gap: 6px; margin-top: 6px; }
         .card-actions { margin-top: 12px; border-top: 1px solid #f4f5f7; padding-top: 8px; display: flex; justify-content: flex-end; gap: 8px;}
+        
         .btn-icon { background: #f4f5f7; border: none; cursor: pointer; color: #6b778c; border-radius: 4px; padding: 6px 10px; font-size: 0.8em; }
         .btn-trash:hover { background: #ffebe6; color: #bf2600; }
+        .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
+
+        /* MODAL E TABS */
+        dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); padding: 0; width: 400px; font-family: inherit; overflow: hidden;}
+        dialog::backdrop { background: rgba(0,0,0,0.6); }
+        .modal-header { background: #f4f5f7; padding: 15px 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;}
+        .modal-body { padding: 20px; max-height: 400px; overflow-y: auto; }
+        
+        .tab-btn { background: none; border: none; padding: 10px; cursor: pointer; font-weight: bold; color: #666; border-bottom: 2px solid transparent; width: 48%;}
+        .tab-btn.active { color: #0052cc; border-bottom-color: #0052cc; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .inp-full { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #dfe1e6; border-radius: 4px; box-sizing: border-box; }
+        .btn-primary { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        
+        .col-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f9f9f9; margin-bottom: 5px; border-radius: 4px; border: 1px solid #eee;}
+        .color-dot { width: 20px; height: 20px; border-radius: 50%; }
         
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-thumb { background: #c1c7d0; border-radius: 4px; }
@@ -57,65 +65,105 @@
 <body>
 
     <div class="header">
-        <h1><i class="fa-solid fa-magic"></i> CRM Warrior</h1>
-        <div id="statusMsg" class="status-badge"></div>
+        <h1><i class="fa-solid fa-layer-group"></i> CRM Warrior</h1>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <div id="statusMsg" class="status-badge"></div>
+            <button class="btn-config" onclick="openSettings()" title="Configurações"><i class="fa-solid fa-gear"></i></button>
+        </div>
     </div>
 
     <div class="kanban-board" id="board"></div>
+
+    <dialog id="settingsModal">
+        <div class="modal-header">
+            <h3 style="margin:0">Configurações</h3>
+            <button onclick="document.getElementById('settingsModal').close()" style="border:none; background:none; cursor:pointer; font-size:1.2em;">&times;</button>
+        </div>
+        
+        <div style="padding:10px; display:flex; justify-content:space-between; border-bottom:1px solid #eee;">
+            <button class="tab-btn active" onclick="switchTab('tab-token')">🔐 Acesso</button>
+            <button class="tab-btn" onclick="switchTab('tab-columns')">📊 Colunas</button>
+        </div>
+
+        <div class="modal-body">
+            <div id="tab-token" class="tab-content active">
+                <p style="font-size:0.9em; color:#666">Link com Token (Salvo automaticamente):</p>
+                <input type="text" id="tokenDisplay" class="inp-full" readonly style="background:#eee; color:#888;">
+                <p style="font-size:0.8em; color:#999">Para mudar o token, acesse o site novamente usando ?token=NOVO_TOKEN</p>
+            </div>
+
+            <div id="tab-columns" class="tab-content">
+                <div id="columnsList"></div>
+                
+                <h4 style="margin-top:20px; margin-bottom:10px; border-top:1px solid #eee; padding-top:10px;">Adicionar Nova</h4>
+                <input type="text" id="newColTitle" class="inp-full" placeholder="Nome (Ex: Aguardando Aprov.)">
+                <div style="display:flex; gap:10px;">
+                    <input type="color" id="newColColor" style="height:40px; width:50px; border:none; padding:0;" value="#0052cc">
+                    <input type="number" id="newColDays" class="inp-full" placeholder="Dias de Prazo (0 = Sem)" style="margin:0;">
+                </div>
+                <br>
+                <button class="btn-primary" onclick="addColumn()">+ Adicionar Coluna</button>
+            </div>
+        </div>
+    </dialog>
 
     <script>
         const REPO_OWNER = 'thiagooler';
         const REPO_NAME = 'CRM-NBV';
         
-        const columnsConfig = {
-            'todo':      { title: '📥 Novos',           color: '#ff5630', days: 0 },
-            'doing':     { title: '🔨 Em Produção',     color: '#ffab00', days: 30 },
-            'review':    { title: '👀 Revisão',         color: '#0052cc', days: 5 },
-            'approval':  { title: '👍 Aprovação',       color: '#6554c0', days: 0 },
-            'payment':   { title: '💰 Pagamento',       color: '#36b37e', days: 0 },
-            'done':      { title: '✅ Finalizado',      color: '#42526e', days: 0 }
+        // Config padrão (fallback)
+        let columnsConfig = {
+            'todo': { title: '📥 Novos', color: '#ff5630', days: 0 },
+            'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 },
+            'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }
         };
-
         let orders = [];
 
+        // --- SISTEMA ---
         function getToken() {
-            // 1. Tenta pegar do Link (?token=...)
             const urlParams = new URLSearchParams(window.location.search);
             const tokenFromUrl = urlParams.get('token');
-            
             if (tokenFromUrl) {
-                // Se achou no link, salva na memória pra sempre
                 localStorage.setItem('warrior_gh_token', tokenFromUrl);
                 return tokenFromUrl;
             }
-            
-            // 2. Tenta pegar da Memória do Navegador
             return localStorage.getItem('warrior_gh_token');
         }
 
-        function init() {
+        async function init() {
             const token = getToken();
-            if (!token) {
-                alert("⚠️ ATENÇÃO WARRIOR!\n\nPara o sistema funcionar, você precisa adicionar seu token no final do link pela primeira vez.\n\nExemplo:\n...github.io/CRM-NBV/?token=ghp_SEU_TOKEN_AQUI");
-            }
-            loadOrders();
+            document.getElementById('tokenDisplay').value = token ? token.substring(0,10) + '...' : 'Não configurado';
+            
+            if(!token) alert("⚠️ Configure seu Token no Link (?token=...)");
+            await loadData();
         }
 
-        async function loadOrders() {
+        async function loadData() {
             showStatus('Carregando...', '#0052cc');
             try {
-                const response = await fetch(`db.json?t=${new Date().getTime()}`);
-                if(!response.ok) throw new Error("Erro de leitura");
-                orders = await response.json();
+                const res = await fetch(`db.json?t=${new Date().getTime()}`);
+                if(!res.ok) throw new Error("Erro DB");
+                const data = await res.json();
+
+                // Migração Automática (Array -> Objeto)
+                if (Array.isArray(data)) {
+                    orders = data;
+                    // Mantém colunas padrão
+                } else {
+                    orders = data.orders || [];
+                    if(data.columns) columnsConfig = data.columns;
+                }
+                
                 renderBoard();
                 hideStatus();
             } catch (e) {
                 console.error(e);
-                renderBoard();
+                renderBoard(); // Renderiza mesmo vazio
                 hideStatus();
             }
         }
 
+        // --- RENDER ---
         function renderBoard() {
             const board = document.getElementById('board');
             board.innerHTML = '';
@@ -125,29 +173,33 @@
                 const colDiv = document.createElement('div');
                 colDiv.className = 'column';
                 colDiv.style.borderTopColor = config.color;
+                
+                // Header
                 colDiv.innerHTML = `
                     <div class="column-header" style="color:${config.color}">
                         <span>${config.title} <span id="count-${key}" style="background:#fff; padding:2px 8px; border-radius:10px; font-size:0.8em; color:#333;">0</span></span>
                         <div style="position:relative">
                             <i class="fa-solid fa-ellipsis-vertical col-menu-btn" onclick="toggleMenu('${key}')"></i>
                             <div id="menu-${key}" class="col-options">
-                                <div onclick="sortColumn('${key}', 'date')"><i class="fa-regular fa-clock"></i> Por Prazo</div>
-                                <div onclick="sortColumn('${key}', 'name')"><i class="fa-solid fa-arrow-down-a-z"></i> Por Nome</div>
-                                <div onclick="sortColumn('${key}', 'newest')"><i class="fa-solid fa-layer-group"></i> Chegada</div>
+                                <div onclick="sortColumn('${key}', 'date')">📅 Prazo</div>
+                                <div onclick="sortColumn('${key}', 'name')">🔤 Nome</div>
                             </div>
                         </div>
                     </div>
                     <div class="card-list" id="${key}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
                 `;
                 board.appendChild(colDiv);
+
+                // Cards
+                const listDiv = colDiv.querySelector('.card-list');
                 const colOrders = orders.filter(o => o.status === key);
                 document.getElementById(`count-${key}`).innerText = colOrders.length;
-                const listDiv = colDiv.querySelector('.card-list');
-                colOrders.forEach(order => listDiv.appendChild(createCardElement(order, config.color)));
+
+                colOrders.forEach(order => listDiv.appendChild(createCard(order, config.color)));
             });
         }
 
-        function createCardElement(order, color) {
+        function createCard(order, color) {
             const card = document.createElement('div');
             card.className = 'card';
             card.id = order.id;
@@ -156,83 +208,101 @@
             card.ondragstart = drag;
             
             const dateObj = new Date(order.dueDate);
-            const today = new Date();
-            const isLate = dateObj < today && order.status !== 'done';
-            const dateStyle = isLate ? 'color:#d93025; font-weight:bold;' : '';
-            const clientLink = `${window.location.href.split('?')[0]}?id=${order.id}`;
-
+            const isLate = dateObj < new Date() && order.status !== 'done';
+            
             card.innerHTML = `
                 <div class="card-title">${order.client}</div>
-                <div class="card-meta"><i class="fa-solid fa-box-open"></i> ${order.product}</div>
-                <div class="card-meta" style="${dateStyle}"><i class="fa-regular fa-calendar-check"></i> ${formatDate(order.dueDate)}</div>
+                <div class="card-meta"><i class="fa-solid fa-box"></i> ${order.product}</div>
+                <div class="card-meta" style="${isLate ? 'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(order.dueDate)}</div>
                 <div class="card-actions">
-                    <button class="btn-icon" onclick="copyToClipboard('${clientLink}')"><i class="fa-solid fa-link"></i></button>
+                    <button class="btn-icon" onclick="copyLink('${order.id}')"><i class="fa-solid fa-link"></i></button>
                     <button class="btn-icon btn-trash" onclick="deleteOrder('${order.id}')"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `;
             return card;
         }
 
-        function toggleMenu(key) {
-            document.querySelectorAll('.col-options').forEach(el => el.classList.remove('active'));
-            document.getElementById(`menu-${key}`).classList.toggle('active');
+        // --- GERENCIADOR DE COLUNAS ---
+        function openSettings() {
+            const list = document.getElementById('columnsList');
+            list.innerHTML = '';
+            
+            Object.keys(columnsConfig).forEach(key => {
+                const col = columnsConfig[key];
+                list.innerHTML += `
+                    <div class="col-item">
+                        <div class="color-dot" style="background:${col.color}"></div>
+                        <div style="flex-grow:1">
+                            <b>${col.title}</b><br>
+                            <span style="font-size:0.8em; color:#666">Prazo: ${col.days} dias | ID: ${key}</span>
+                        </div>
+                        <button onclick="removeColumn('${key}')" style="color:red; border:none; background:none; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+            document.getElementById('settingsModal').showModal();
         }
 
-        function sortColumn(status, criteria) {
-            document.querySelectorAll('.col-options').forEach(el => el.classList.remove('active'));
-            let colOrders = orders.filter(o => o.status === status);
-            let otherOrders = orders.filter(o => o.status !== status);
-            if (criteria === 'date') colOrders.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-            else if (criteria === 'name') colOrders.sort((a, b) => a.client.localeCompare(b.client));
-            else if (criteria === 'newest') colOrders.sort((a, b) => b.id.localeCompare(a.id));
-            orders = [...otherOrders, ...colOrders];
+        async function addColumn() {
+            const title = document.getElementById('newColTitle').value;
+            const color = document.getElementById('newColColor').value;
+            const days = parseInt(document.getElementById('newColDays').value) || 0;
+            
+            if(!title) return alert("Digite um nome!");
+
+            // Gera ID único simplificado (ex: "producao_123")
+            const id = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '_' + Math.floor(Math.random()*1000);
+            
+            columnsConfig[id] = { title, color, days };
+            
+            renderBoard(); // Atualiza visualmente
+            await saveColumnsToGitHub();
+            
+            openSettings(); // Recarrega lista
+            document.getElementById('newColTitle').value = '';
+        }
+
+        async function removeColumn(key) {
+            if(!confirm("Remover esta coluna? Os pedidos nela ficarão invisíveis até você movê-los.")) return;
+            delete columnsConfig[key];
             renderBoard();
+            await saveColumnsToGitHub();
+            openSettings();
         }
 
+        async function saveColumnsToGitHub() {
+            showStatus('Salvando Config...', '#6554c0');
+            await sendToGitHub('save_columns', columnsConfig);
+            showStatus('✅ Config Salva!', '#36b37e');
+            setTimeout(hideStatus, 2000);
+        }
+
+        // --- DRAG & ACTIONS ---
         function allowDrop(ev) { ev.preventDefault(); }
         function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
-        
         async function drop(ev) {
             ev.preventDefault();
             const orderId = ev.dataTransfer.getData("text");
             const column = ev.target.closest('.card-list');
             if (!column) return;
-            const newStatus = column.id;
-            const index = orders.findIndex(o => o.id === orderId);
             
-            if (index > -1 && orders[index].status !== newStatus) {
-                const config = columnsConfig[newStatus];
+            const newStatus = column.id;
+            const idx = orders.findIndex(o => o.id === orderId);
+            if(idx === -1) return;
+
+            if (orders[idx].status !== newStatus) {
+                // Regra de Data
                 let newDate = null;
-                if (config.days > 0) {
-                    const date = new Date();
-                    date.setDate(date.getDate() + config.days);
-                    newDate = date.toISOString().split('T')[0];
-                    orders[index].dueDate = newDate;
+                const days = columnsConfig[newStatus]?.days || 0;
+                if(days > 0) {
+                    const d = new Date(); d.setDate(d.getDate() + days);
+                    newDate = d.toISOString().split('T')[0];
+                    orders[idx].dueDate = newDate;
                 }
-                orders[index].status = newStatus;
-                renderBoard(); 
-                await sendToGitHub('update_status', { id: orderId, status: newStatus, newDate: newDate });
-            }
-        }
-
-        async function sendToGitHub(actionType, payload) {
-            const token = getToken();
-            if(!token) { alert("Token inválido! Use o link com ?token=..."); return; }
-
-            showStatus('💾 Salvando...', '#ffab00');
-            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`;
-
-            try {
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ event_type: actionType, client_payload: payload })
-                });
-                if(res.ok) { showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); }
-                else { throw new Error(res.status); }
-            } catch (e) { 
-                showStatus('❌ Erro', '#bf2600'); 
-                if(e.message === '401') alert("Seu Token expirou ou foi revogado! Gere um novo e entre pelo link ?token=...");
+                
+                orders[idx].status = newStatus;
+                renderBoard();
+                await sendToGitHub('update_status', { id: orderId, status: newStatus, newDate });
             }
         }
 
@@ -240,15 +310,39 @@
             if(confirm('Apagar pedido?')) {
                 orders = orders.filter(o => o.id !== id);
                 renderBoard();
-                await sendToGitHub('delete_order', { id: id });
+                await sendToGitHub('delete_order', { id });
             }
         }
 
-        function showStatus(msg, color) { const el = document.getElementById('statusMsg'); el.innerText = msg; el.style.backgroundColor = color; el.style.display = 'block'; }
-        function hideStatus() { document.getElementById('statusMsg').style.display = 'none'; }
-        function formatDate(dateStr) { if(!dateStr) return '--/--'; return dateStr.split('-').reverse().join('/'); }
-        function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => alert("Copiado!")); }
-        document.addEventListener('click', function(event) { if (!event.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el => el.classList.remove('active')); });
+        async function sendToGitHub(action, payload) {
+            const token = getToken();
+            if(!token) return alert("Token não encontrado!");
+            
+            try {
+                await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ event_type: action, client_payload: payload })
+                });
+            } catch (e) {
+                alert("Erro de conexão");
+            }
+        }
+
+        // --- UTIL ---
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+        }
+        function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); }
+        function showStatus(m,c) { const e=document.getElementById('statusMsg'); e.innerText=m; e.style.background=c; e.style.display='block'; }
+        function hideStatus() { document.getElementById('statusMsg').style.display='none'; }
+        function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; }
+        function copyLink(id) { navigator.clipboard.writeText(window.location.href.split('?')[0]+'?id='+id); alert("Link copiado!"); }
+
+        document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
 
         init();
     </script>
