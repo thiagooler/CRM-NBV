@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Warrior</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f5f7; color: #172b4d; padding: 20px; }
+        .kanban-board { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; }
+        .column { background: #ebecf0; border-radius: 8px; width: 300px; min-width: 300px; padding: 10px; }
+        .column-header { font-weight: bold; margin-bottom: 10px; text-transform: uppercase; font-size: 0.85em; color: #5e6c84; }
+        .card { background: white; border-radius: 4px; padding: 10px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .card-title { font-weight: bold; }
+        .card-info { font-size: 0.9em; color: #666; margin-top: 5px; }
+        .tag { display: inline-block; padding: 2px 5px; border-radius: 3px; font-size: 0.7em; margin-top: 5px; background: #eee; }
+        
+        /* Cores das colunas */
+        .col-todo { border-top: 3px solid #ff5630; }
+        .col-doing { border-top: 3px solid #ffab00; }
+        .col-review { border-top: 3px solid #0052cc; }
+        .col-done { border-top: 3px solid #36b37e; }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 CRM Warrior Studio</h1>
+    <p>Pedidos carregados do GitHub.</p>
+
+    <div class="kanban-board" id="board">
+        </div>
+
+    <script>
+        // Configuração das Colunas
+        const columns = {
+            'todo': { title: '📥 A Fazer', class: 'col-todo' },
+            'doing': { title: '🔨 Em Produção', class: 'col-doing' },
+            'review': { title: '👀 Revisão', class: 'col-review' },
+            'done': { title: '✅ Concluído', class: 'col-done' }
+        };
+
+        async function loadCRM() {
+            const board = document.getElementById('board');
+            board.innerHTML = 'Carregando pedidos...';
+
+            try {
+                // Pega os dados do arquivo db.json que criamos
+                // O ?t= garante que não pegue cache antigo
+                const response = await fetch('db.json?t=' + new Date().getTime());
+                const orders = await response.json();
+
+                board.innerHTML = ''; // Limpa a mensagem de carregando
+
+                // Cria as colunas
+                Object.keys(columns).forEach(status => {
+                    const colDiv = document.createElement('div');
+                    colDiv.className = `column ${columns[status].class}`;
+                    
+                    // Filtra pedidos dessa coluna
+                    const colOrders = orders.filter(o => o.status === status);
+                    
+                    let cardsHTML = '';
+                    colOrders.forEach(order => {
+                        const date = order.dueDate.split('-').reverse().join('/');
+                        // Gera o link para o cliente ver
+                        const clientLink = window.location.href.split('?')[0] + '?id=' + order.id;
+
+                        cardsHTML += `
+                            <div class="card">
+                                <div class="card-title">${order.client}</div>
+                                <div class="card-info">📦 ${order.product}</div>
+                                <div class="card-info">📅 Entrega: ${date}</div>
+                                <div class="tag">ID: ${order.id}</div>
+                            </div>
+                        `;
+                    });
+
+                    colDiv.innerHTML = `
+                        <div class="column-header">${columns[status].title} (${colOrders.length})</div>
+                        ${cardsHTML}
+                    `;
+                    board.appendChild(colDiv);
+                });
+
+            } catch (error) {
+                board.innerHTML = 'Erro ao carregar pedidos. Verifique se o arquivo db.json existe.';
+                console.error(error);
+            }
+        }
+
+        loadCRM();
+    </script>
+</body>
+</html>
