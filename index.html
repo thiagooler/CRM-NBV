@@ -3,91 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM Warrior</title>
+    <title>CRM Warrior - Gestão</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; background: #f4f5f7; color: #172b4d; padding: 20px; }
-        .kanban-board { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; }
-        .column { background: #ebecf0; border-radius: 8px; width: 300px; min-width: 300px; padding: 10px; }
-        .column-header { font-weight: bold; margin-bottom: 10px; text-transform: uppercase; font-size: 0.85em; color: #5e6c84; }
-        .card { background: white; border-radius: 4px; padding: 10px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .card-title { font-weight: bold; }
-        .card-info { font-size: 0.9em; color: #666; margin-top: 5px; }
-        .tag { display: inline-block; padding: 2px 5px; border-radius: 3px; font-size: 0.7em; margin-top: 5px; background: #eee; }
+        :root { --bg: #f4f5f7; --card-bg: #fff; --text: #172b4d; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }
         
-        /* Cores das colunas */
-        .col-todo { border-top: 3px solid #ff5630; }
-        .col-doing { border-top: 3px solid #ffab00; }
-        .col-review { border-top: 3px solid #0052cc; }
-        .col-done { border-top: 3px solid #36b37e; }
+        /* Cabeçalho */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .status-badge { padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9em; display: none; color: white;}
+        
+        /* Kanban Layout */
+        .kanban-board { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; align-items: flex-start; }
+        
+        /* Colunas */
+        .column { 
+            background: #ebecf0; 
+            border-radius: 10px; 
+            width: 320px; 
+            min-width: 320px; 
+            padding: 12px; 
+            display: flex; 
+            flex-direction: column;
+            max-height: 85vh;
+        }
+        
+        .column-header { 
+            font-weight: 700; 
+            margin-bottom: 15px; 
+            text-transform: uppercase; 
+            font-size: 0.85em; 
+            color: #5e6c84; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+        
+        .card-list { flex-grow: 1; overflow-y: auto; min-height: 50px; }
+
+        /* Cards */
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 6px; 
+            padding: 12px; 
+            margin-bottom: 10px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+            cursor: grab; 
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 4px solid transparent;
+        }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .card:active { cursor: grabbing; }
+
+        .card-title { font-weight: 700; font-size: 1em; margin-bottom: 5px; padding-right: 20px;}
+        .card-meta { font-size: 0.85em; color: #666; display: flex; align-items: center; gap: 5px; margin-top: 5px; }
+        
+        /* Botões do Card */
+        .card-actions { 
+            margin-top: 10px; 
+            border-top: 1px solid #eee; 
+            padding-top: 8px; 
+            display: flex; 
+            justify-content: space-between; 
+        }
+        
+        .btn-icon { background: none; border: none; cursor: pointer; color: #888; transition: 0.2s; font-size: 0.9em;}
+        .btn-icon:hover { color: #0052cc; transform: scale(1.1); }
+        .btn-trash:hover { color: #ff5630; }
+
+        /* Feedback Visual */
+        .processing { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
+        
+        /* Scrollbar bonita */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-thumb { background: #c1c7d0; border-radius: 4px; }
     </style>
 </head>
 <body>
 
-    <h1>🚀 CRM Warrior Studio</h1>
-    <p>Pedidos carregados do GitHub.</p>
+    <div class="header">
+        <h1><i class="fa-solid fa-kanban"></i> CRM Warrior</h1>
+        <div id="statusMsg" class="status-badge"></div>
+    </div>
 
     <div class="kanban-board" id="board">
         </div>
 
     <script>
-        // Configuração das Colunas
-        const columns = {
-            'todo': { title: '📥 A Fazer', class: 'col-todo' },
-            'doing': { title: '🔨 Em Produção', class: 'col-doing' },
-            'review': { title: '👀 Revisão', class: 'col-review' },
-            'done': { title: '✅ Concluído', class: 'col-done' }
+        // ==========================================
+        // ⚙️ CONFIGURAÇÃO DE COLUNAS (GRUPOS)
+        // ==========================================
+        // Para adicionar um novo grupo, basta adicionar uma linha aqui embaixo:
+        // 'chave': { title: 'Nome Bonito', color: 'Cor Hexadecimal' }
+        const columnsConfig = {
+            'todo':    { title: '📥 A Fazer', color: '#ff5630' },
+            'doing':   { title: '🔨 Em Produção', color: '#ffab00' },
+            'review':  { title: '👀 Revisão', color: '#0052cc' },
+            'payment': { title: '💰 Aguardando Pagto', color: '#6554c0' }, // Exemplo de coluna nova
+            'done':    { title: '✅ Concluído', color: '#36b37e' }
         };
 
-        async function loadCRM() {
-            const board = document.getElementById('board');
-            board.innerHTML = 'Carregando pedidos...';
+        // 🚨 CONFIGURAÇÃO DE ACESSO
+        const REPO_OWNER = 'thiagooler';
+        const REPO_NAME = 'CRM-NBV';
+        const GITHUB_TOKEN = 'SEU_TOKEN_GHP_AQUI'; // <--- COLE SEU TOKEN AQUI
 
+        // ==========================================
+        // LÓGICA DO SISTEMA
+        // ==========================================
+        let orders = [];
+
+        async function init() {
+            showStatus('Carregando...', '#0052cc');
             try {
-                // Pega os dados do arquivo db.json que criamos
-                // O ?t= garante que não pegue cache antigo
-                const response = await fetch('db.json?t=' + new Date().getTime());
-                const orders = await response.json();
-
-                board.innerHTML = ''; // Limpa a mensagem de carregando
-
-                // Cria as colunas
-                Object.keys(columns).forEach(status => {
-                    const colDiv = document.createElement('div');
-                    colDiv.className = `column ${columns[status].class}`;
-                    
-                    // Filtra pedidos dessa coluna
-                    const colOrders = orders.filter(o => o.status === status);
-                    
-                    let cardsHTML = '';
-                    colOrders.forEach(order => {
-                        const date = order.dueDate.split('-').reverse().join('/');
-                        // Gera o link para o cliente ver
-                        const clientLink = window.location.href.split('?')[0] + '?id=' + order.id;
-
-                        cardsHTML += `
-                            <div class="card">
-                                <div class="card-title">${order.client}</div>
-                                <div class="card-info">📦 ${order.product}</div>
-                                <div class="card-info">📅 Entrega: ${date}</div>
-                                <div class="tag">ID: ${order.id}</div>
-                            </div>
-                        `;
-                    });
-
-                    colDiv.innerHTML = `
-                        <div class="column-header">${columns[status].title} (${colOrders.length})</div>
-                        ${cardsHTML}
-                    `;
-                    board.appendChild(colDiv);
-                });
-
-            } catch (error) {
-                board.innerHTML = 'Erro ao carregar pedidos. Verifique se o arquivo db.json existe.';
-                console.error(error);
+                const response = await fetch(`db.json?t=${new Date().getTime()}`);
+                if(!response.ok) throw new Error("Erro ao ler db.json");
+                orders = await response.json();
+                renderBoard();
+                hideStatus();
+            } catch (e) {
+                console.error(e);
+                // Se der erro (ex: arquivo vazio), inicia vazio
+                renderBoard();
+                hideStatus();
             }
         }
 
-        loadCRM();
+        function renderBoard() {
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+
+            Object.keys(columnsConfig).forEach(key => {
+                const config = columnsConfig[key];
+                
+                // Cria a Coluna
+                const colDiv = document.createElement('div');
+                colDiv.className = 'column';
+                colDiv.innerHTML = `
+                    <div class="column-header" style="color:${config.color}">
+                        ${config.title} <span id="count-${key}">0</span>
+                    </div>
+                    <div class="card-list" id="${key}" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        </div>
+                `;
+                board.appendChild(colDiv);
+
+                // Preenche os Cards
+                const colOrders = orders.filter(o => o.status === key);
+                document.getElementById(`count-${key}`).innerText = colOrders.length; // Atualiza contador
+
+                const listDiv = colDiv.querySelector('.card-list');
+                
+                colOrders.forEach(order => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.id = order.id;
+                    card.draggable = true;
+                    card.style.borderLeftColor = config.color;
+                    card.ondragstart = drag;
+                    
+                    // Link para o cliente
+                    const clientLink = `${window.location.href.split('?')[0]}?id=${order.id}`;
+
+                    card.innerHTML = `
+                        <div class="card-title">${order.client}</div>
+                        <div class="card-meta"><i class="fa-solid fa-box"></i> ${order.product}</div>
+                        <div class="card-meta"><i class="fa-regular fa-calendar"></i> ${formatDate(order.dueDate)}</div>
+                        
+                        <div class="card-actions">
+                            <button class="btn-icon" title="Copiar Link" onclick="copyToClipboard('${clientLink}')">
+                                <i class="fa-solid fa-link"></i>
+                            </button>
+                            <button class="btn-icon btn-trash" title="Excluir" onclick="deleteOrder('${order.id}')">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    listDiv.appendChild(card);
+                });
+            });
+        }
+
+        // --- AÇÕES DO USUÁRIO ---
+
+        // 1. Arrastar e Soltar (Atualizar Status)
+        function allowDrop(ev) { ev.preventDefault(); }
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+        
+        async function drop(ev) {
+            ev.preventDefault();
+            const orderId = ev.dataTransfer.getData("text");
+            // O target pode ser a coluna ou um card dentro dela, precisamos achar a coluna pai
+            const column = ev.target.closest('.card-list'); 
+            
+            if (!column) return;
+            const newStatus = column.id;
+
+            // Atualiza Localmente (Visual)
+            const index = orders.findIndex(o => o.id === orderId);
+            if (orders[index].status === newStatus) return;
+            
+            orders[index].status = newStatus;
+            renderBoard(); // Re-renderiza para ordenar tudo
+
+            // Salva no Servidor
+            await sendToGitHub('update_status', { id: orderId, status: newStatus });
+        }
+
+        // 2. Deletar Pedido
+        async function deleteOrder(id) {
+            if(confirm('Tem certeza que deseja apagar este pedido permanentemente?')) {
+                // Remove visualmente
+                orders = orders.filter(o => o.id !== id);
+                renderBoard();
+
+                // Remove no servidor
+                await sendToGitHub('delete_order', { id: id });
+            }
+        }
+
+        // --- CONEXÃO COM GITHUB ---
+        async function sendToGitHub(actionType, payload) {
+            showStatus('💾 Salvando alterações...', '#ffab00');
+            
+            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        event_type: actionType, // O tipo de evento
+                        client_payload: payload // Os dados
+                    })
+                });
+
+                if (response.ok) {
+                    showStatus('✅ Salvo com sucesso!', '#36b37e');
+                    setTimeout(hideStatus, 2000);
+                } else {
+                    throw new Error("Erro GitHub: " + response.status);
+                }
+            } catch (error) {
+                console.error(error);
+                showStatus('❌ Erro ao salvar! Verifique o Token.', '#ff5630');
+            }
+        }
+
+        // --- UTILITÁRIOS ---
+        function showStatus(msg, color) {
+            const el = document.getElementById('statusMsg');
+            el.innerText = msg;
+            el.style.backgroundColor = color;
+            el.style.display = 'block';
+        }
+        function hideStatus() { document.getElementById('statusMsg').style.display = 'none'; }
+        
+        function formatDate(dateStr) {
+            if(!dateStr) return '--/--';
+            return dateStr.split('-').reverse().join('/');
+        }
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => alert("Link copiado!"));
+        }
+
+        init();
     </script>
 </body>
 </html>
