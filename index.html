@@ -63,7 +63,7 @@
         .inp-mini { width: 70px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; }
         .btn-primary { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;}
         
-        .code-block { background: #172b4d; color: #a5adba; padding: 15px; border-radius: 6px; font-family: monospace; white-space: pre-wrap; margin-bottom: 10px; position: relative;}
+        .code-block { background: #172b4d; color: #a5adba; padding: 15px; border-radius: 6px; font-family: monospace; white-space: pre-wrap; margin-bottom: 10px; position: relative; word-break: break-all;}
         .btn-copy { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8em; }
         .btn-copy:hover { background: rgba(255,255,255,0.4); }
 
@@ -104,31 +104,35 @@
             <button onclick="closeModal('integratorModal')" style="border:none; background:none; cursor:pointer;">&times;</button>
         </div>
         <div class="modal-body">
-            <p style="margin-top:0; color:#666; font-size:0.9em;">Selecione para qual coluna você quer mover o cliente quando ele passar pelo fluxo do BotConversa:</p>
             
-            <label>Mover para a Coluna:</label>
+            <label style="color:#0052cc">Seu Token (GitHub):</label>
+            <input type="text" id="integrationToken" class="inp-full" placeholder="Cole seu token ghp_ aqui..." oninput="updateIntegratorCode()">
+            
+            <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+
+            <label>Mover cliente para:</label>
             <select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select>
             
             <div style="background:#fff3cd; padding:10px; border-radius:4px; font-size:0.85em; color:#856404; margin-bottom:15px;">
-                💡 <b>Dica:</b> Copie os dados abaixo e cole no bloco "Integração" do BotConversa.
+                💡 <b>Dica:</b> Copie os dados abaixo e cole no BotConversa. O Token e a Coluna já estão configurados no código.
             </div>
 
-            <label>1. URL (Método POST)</label>
+            <label>1. URL</label>
             <div class="code-block" id="codeUrl">
                 https://api.github.com/repos/thiagooler/CRM-NBV/dispatches
                 <button class="btn-copy" onclick="copyText('codeUrl')">Copiar</button>
             </div>
 
-            <label>2. Headers (Cabeçalhos)</label>
+            <label>2. Headers (Token incluído)</label>
             <div class="code-block" id="codeHeaders">
-Authorization: token ghp_SEU_TOKEN_AQUI
+Authorization: token SEU_TOKEN_AQUI
 Accept: application/vnd.github.v3+json
 User-Agent: WarriorBot
 Content-Type: application/json
                 <button class="btn-copy" onclick="copyText('codeHeaders')">Copiar</button>
             </div>
 
-            <label>3. Body (Corpo JSON)</label>
+            <label>3. Body (JSON)</label>
             <div class="code-block" id="codeBody">
                 <button class="btn-copy" onclick="copyText('codeBody')">Copiar</button>
             </div>
@@ -148,7 +152,7 @@ Content-Type: application/json
 
         <div class="modal-body">
             <div id="tab-token" class="tab-content active">
-                <p style="font-size:0.9em; color:#666">Token Atual:</p>
+                <p style="font-size:0.9em; color:#666">Token Atual (Salvo):</p>
                 <input type="text" id="tokenDisplay" class="inp-full" readonly style="background:#eee; color:#888;">
             </div>
 
@@ -212,7 +216,7 @@ Content-Type: application/json
         async function init() {
             const token = getToken();
             document.getElementById('tokenDisplay').value = token ? token.substring(0,10) + '...' : 'Não configurado';
-            if(!token) alert("Configure seu Token no Link (?token=...)");
+            if(!token) alert("Configure seu Token no Link (?token=...) ou na Integração.");
             await loadData();
         }
 
@@ -281,8 +285,14 @@ Content-Type: application/json
             return card;
         }
 
-        // --- INTEGRADOR BOTCONVERSA ---
+        // --- INTEGRADOR BOTCONVERSA (ATUALIZADO) ---
         function openIntegrator() {
+            // Carrega token salvo
+            const savedToken = localStorage.getItem('warrior_gh_token');
+            if(savedToken) {
+                document.getElementById('integrationToken').value = savedToken;
+            }
+
             const select = document.getElementById('integrationColSelect');
             select.innerHTML = '';
             Object.keys(columnsConfig).forEach(key => {
@@ -296,12 +306,24 @@ Content-Type: application/json
         }
 
         function updateIntegratorCode() {
+            // Pega token do input
+            const token = document.getElementById('integrationToken').value.trim();
+            // Salva no storage para não precisar digitar de novo
+            if(token) localStorage.setItem('warrior_gh_token', token);
+
+            // Atualiza Headers
+            const headers = `Authorization: token ${token || 'ghp_SEU_TOKEN_AQUI'}\nAccept: application/vnd.github.v3+json\nUser-Agent: WarriorBot\nContent-Type: application/json`;
+            document.getElementById('codeHeaders').innerText = headers;
+
+            // Atualiza Body
             const colId = document.getElementById('integrationColSelect').value;
             const json = {
                 "event_type": "move_card_external",
                 "client_payload": {
-                    "chat_id": "{codigo-indicacao}",
-                    "status": colId
+                    "chat_id": "{codigo-indicacao}", 
+                    "status": colId,
+                    "nome": "{nome-completo}",
+                    "telefone": "{telefone}"
                 }
             };
             document.getElementById('codeBody').innerText = JSON.stringify(json, null, 2);
@@ -313,7 +335,7 @@ Content-Type: application/json
         }
 
 
-        // --- CRIAR MANUALMENTE ---
+        // --- MANUAIS / EDITAR / CONFIG (Mesmo código) ---
         function openNewOrderModal() {
             document.getElementById('manualName').value = '';
             document.getElementById('manualProduct').value = '';
@@ -333,7 +355,6 @@ Content-Type: application/json
             showStatus('✅ Criado!', '#36b37e'); setTimeout(hideStatus, 2000);
         }
 
-        // --- EDIÇÃO ---
         function openEditOrder(id) {
             const order = orders.find(o => o.id === id); if(!order) return;
             document.getElementById('editOrderId').value = order.id;
@@ -354,7 +375,6 @@ Content-Type: application/json
             showStatus('✅ Editado!', '#36b37e'); setTimeout(hideStatus, 2000);
         }
 
-        // --- CONFIG ---
         function openSettings() {
             const list = document.getElementById('columnsList'); list.innerHTML = '';
             Object.keys(columnsConfig).forEach(key => {
