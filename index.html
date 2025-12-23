@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM Warrior - Automação</title>
+    <title>CRM Warrior - Modo Direto</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --bg: #f4f5f7; --card-bg: #fff; --text: #172b4d; }
@@ -11,9 +11,7 @@
         
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .header h1 { margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; color: #0052cc; }
-        .header-controls { display: flex; gap: 10px; align-items: center; }
-        .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .status-badge { padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 0.9em; display: none; color: white;}
+        .status-badge { padding: 8px 16px; border-radius: 4px; font-weight: bold; font-size: 0.9em; display: none; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
         
         /* Kanban */
         .kanban-board { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; align-items: flex-start; }
@@ -29,7 +27,7 @@
             color: #42526e; display: flex; justify-content: space-between; align-items: center;
         }
 
-        /* Menu de Ordenação da Coluna */
+        /* Menu de Ordenação */
         .col-menu-btn { cursor: pointer; padding: 5px; border-radius: 4px; }
         .col-menu-btn:hover { background: #dcdfe4; }
         .col-options { 
@@ -54,12 +52,6 @@
         .card-actions { margin-top: 12px; border-top: 1px solid #f4f5f7; padding-top: 8px; display: flex; justify-content: flex-end; gap: 8px;}
         .btn-icon { background: #f4f5f7; border: none; cursor: pointer; color: #6b778c; border-radius: 4px; padding: 6px 10px; font-size: 0.8em; }
         .btn-trash:hover { background: #ffebe6; color: #bf2600; }
-
-        /* Dialogs */
-        dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); padding: 25px; width: 350px; font-family: inherit;}
-        dialog::backdrop { background: rgba(0,0,0,0.6); }
-        .inp-token { width: 100%; padding: 12px; margin: 15px 0; border: 2px solid #dfe1e6; border-radius: 6px; }
-        .btn-save { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
         
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-thumb { background: #c1c7d0; border-radius: 4px; }
@@ -68,37 +60,30 @@
 <body>
 
     <div class="header">
-        <h1><i class="fa-solid fa-robot"></i> CRM Warrior</h1>
-        <div class="header-controls">
-            <div id="statusMsg" class="status-badge"></div>
-            <button class="btn-config" onclick="openConfig()" title="Configurar Token"><i class="fa-solid fa-gear"></i></button>
-        </div>
+        <h1><i class="fa-solid fa-bolt"></i> CRM Warrior</h1>
+        <div id="statusMsg" class="status-badge"></div>
     </div>
 
     <div class="kanban-board" id="board"></div>
 
-    <dialog id="configModal">
-        <h3 style="margin-top:0; color:#0052cc;">⚙️ Acesso</h3>
-        <input type="password" id="tokenInput" class="inp-token" placeholder="Token GitHub (ghp_...)">
-        <button class="btn-save" onclick="saveToken()">Salvar</button>
-    </dialog>
-
     <script>
         // =================================================================
-        // 🛠️ CONFIGURAÇÃO INTELIGENTE
+        // 🚨 ÁREA DE CONFIGURAÇÃO OBRIGATÓRIA 🚨
         // =================================================================
+        
         const REPO_OWNER = 'thiagooler';
         const REPO_NAME = 'CRM-NBV';
-
-        // Aqui você define os prazos automáticos!
-        // 'days': Quantos dias somar ao prazo quando o card cai aqui.
-        // Se 'days' for 0 ou não existir, a data não muda.
         
+        // 👇 COLOQUE SEU TOKEN ABAIXO (Mantenha as aspas simples)
+        const GITHUB_TOKEN = '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'; 
+
+        // Configuração das Colunas e Prazos (days)
         const columnsConfig = {
             'todo':      { title: '📥 Novos',           color: '#ff5630', days: 0 },
-            'doing':     { title: '🔨 Em Produção',     color: '#ffab00', days: 30 }, // <-- Regra de 30 dias
-            'review':    { title: '👀 Revisão',         color: '#0052cc', days: 5 },  // <-- Regra de 5 dias
+            'doing':     { title: '🔨 Em Produção',     color: '#ffab00', days: 30 },
+            'review':    { title: '👀 Revisão',         color: '#0052cc', days: 5 },
             'approval':  { title: '👍 Aprovação',       color: '#6554c0', days: 0 },
+            'payment':   { title: '💰 Pagamento',       color: '#36b37e', days: 0 },
             'done':      { title: '✅ Finalizado',      color: '#42526e', days: 0 }
         };
 
@@ -108,8 +93,10 @@
         let orders = [];
 
         function init() {
-            const token = localStorage.getItem('warrior_gh_token');
-            if(!token) setTimeout(openConfig, 800);
+            if (GITHUB_TOKEN === 'COLE_SEU_TOKEN_AQUI') {
+                alert("⚠️ PARE! Você esqueceu de colocar o Token no código HTML. Edite o arquivo e coloque seu token na linha 76.");
+                return;
+            }
             loadOrders();
         }
 
@@ -171,7 +158,6 @@
             card.style.borderLeftColor = color;
             card.ondragstart = drag;
 
-            // Formatação da data com aviso visual de atraso
             const dateObj = new Date(order.dueDate);
             const today = new Date();
             const isLate = dateObj < today && order.status !== 'done';
@@ -199,27 +185,19 @@
         }
 
         function sortColumn(status, criteria) {
-            // Fecha menus
             document.querySelectorAll('.col-options').forEach(el => el.classList.remove('active'));
-            
-            // Separa os cards da coluna e os outros
             let colOrders = orders.filter(o => o.status === status);
             let otherOrders = orders.filter(o => o.status !== status);
 
-            if (criteria === 'date') {
-                colOrders.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-            } else if (criteria === 'name') {
-                colOrders.sort((a, b) => a.client.localeCompare(b.client));
-            } else if (criteria === 'newest') {
-                colOrders.sort((a, b) => b.id.localeCompare(a.id)); // ID baseado em timestamp
-            }
+            if (criteria === 'date') colOrders.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+            else if (criteria === 'name') colOrders.sort((a, b) => a.client.localeCompare(b.client));
+            else if (criteria === 'newest') colOrders.sort((a, b) => b.id.localeCompare(a.id));
 
-            // Junta tudo de novo
             orders = [...otherOrders, ...colOrders];
             renderBoard();
         }
 
-        // --- ARRASTAR E DATAS AUTOMÁTICAS ---
+        // --- DRAG DROP ---
         function allowDrop(ev) { ev.preventDefault(); }
         function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
         
@@ -233,23 +211,19 @@
             const index = orders.findIndex(o => o.id === orderId);
             
             if (index > -1 && orders[index].status !== newStatus) {
-                // Lógica de Data Automática
                 const config = columnsConfig[newStatus];
                 let newDate = null;
 
                 if (config.days > 0) {
                     const date = new Date();
                     date.setDate(date.getDate() + config.days);
-                    newDate = date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+                    newDate = date.toISOString().split('T')[0];
                     orders[index].dueDate = newDate;
-                    // Visualmente mostra que alterou
-                    alert(`📅 Prazo atualizado automaticamente para: ${formatDate(newDate)} (+${config.days} dias)`);
                 }
 
                 orders[index].status = newStatus;
                 renderBoard(); 
                 
-                // Envia para o GitHub (Status + Nova Data)
                 await sendToGitHub('update_status', { 
                     id: orderId, 
                     status: newStatus,
@@ -258,34 +232,23 @@
             }
         }
 
-        // --- UTILITÁRIOS E GITHUB ---
-        function openConfig() { document.getElementById('configModal').showModal(); }
-        function saveToken() {
-            const val = document.getElementById('tokenInput').value.trim();
-            if(val.startsWith('ghp_')) {
-                localStorage.setItem('warrior_gh_token', val);
-                document.getElementById('configModal').close();
-                alert("Salvo!");
-            } else { alert("Token inválido"); }
-        }
-        function getToken() { return localStorage.getItem('warrior_gh_token'); }
-
+        // --- GITHUB ---
         async function sendToGitHub(actionType, payload) {
-            const token = getToken();
-            if(!token) return openConfig();
-
             showStatus('💾 Salvando...', '#ffab00');
             const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`;
 
             try {
                 const res = await fetch(url, {
                     method: 'POST',
-                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+                    headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
                     body: JSON.stringify({ event_type: actionType, client_payload: payload })
                 });
                 if(res.ok) { showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); }
                 else { throw new Error(res.status); }
-            } catch (e) { showStatus('❌ Erro', '#bf2600'); }
+            } catch (e) { 
+                showStatus('❌ Erro: ' + e.message, '#bf2600'); 
+                alert("Erro ao salvar! Verifique se o TOKEN no código HTML está correto.");
+            }
         }
 
         async function deleteOrder(id) {
@@ -310,7 +273,6 @@
             navigator.clipboard.writeText(text).then(() => alert("Copiado!"));
         }
 
-        // Fecha menu se clicar fora
         document.addEventListener('click', function(event) {
             if (!event.target.closest('.col-menu-btn')) {
                 document.querySelectorAll('.col-options').forEach(el => el.classList.remove('active'));
