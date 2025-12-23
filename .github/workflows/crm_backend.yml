@@ -7,11 +7,12 @@ on:
 jobs:
   gerenciar-crm:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - name: Baixar código
+      - name: Baixar código (Com Permissão de Chefe)
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_PAT }} 
+          # 👆 AQUI ESTÁ A MÁGICA: Usando o Token Pessoal, o push dispara o site!
 
       - name: Processar Dados e Salvar
         id: logica
@@ -19,11 +20,9 @@ jobs:
           git config --global user.name 'CRM Robot'
           git config --global user.email 'bot@warrior.com'
 
-          # Script Node.js para manipular o banco de dados JSON
           node -e "
             const fs = require('fs');
             const action = '${{ github.event.action }}';
-            // Pega os dados enviados
             const payload = ${{ toJson(github.event.client_payload) }};
             
             try {
@@ -35,51 +34,33 @@ jobs:
               let chatIdToNotify = '';
               let statusToNotify = '';
 
-              // --- 1. NOVO PEDIDO (Vindo do BotConversa) ---
               if (action === 'novo_pedido') {
                 const novo = {
                   id: 'ped-' + Date.now(),
                   client: payload.nome || 'Cliente Sem Nome',
-                  chat_id: payload.chat_id || '', // Guarda o ID para notificar depois
+                  chat_id: payload.chat_id || '',
                   product: payload.produto || 'Pedido',
                   dueDate: payload.prazo || '',
-                  status: 'todo' // Sempre começa em 'A Fazer'
+                  status: 'todo'
                 };
                 db.push(novo);
-                console.log('Novo pedido criado:', novo.client);
               }
 
-              // --- 2. ATUALIZAR STATUS E DATA (Vindo do Site) ---
               else if (action === 'update_status') {
                 const index = db.findIndex(o => o.id === payload.id);
                 if (index > -1) {
-                  // Atualiza Status
                   db[index].status = payload.status;
-                  
-                  // Atualiza Data (se a regra automática mandou uma nova data)
-                  if (payload.newDate) {
-                     db[index].dueDate = payload.newDate;
-                  }
-
-                  // Prepara dados para a notificação do BotConversa
+                  if (payload.newDate) { db[index].dueDate = payload.newDate; }
                   chatIdToNotify = db[index].chat_id || '';
                   statusToNotify = payload.status;
-                  
-                  console.log('Atualizado:', payload.status);
                 }
               }
 
-              // --- 3. DELETAR PEDIDO ---
               else if (action === 'delete_order') {
                 db = db.filter(o => o.id !== payload.id);
-                console.log('Pedido deletado');
               }
 
-              // Salva o JSON atualizado
               fs.writeFileSync('db.json', JSON.stringify(db, null, 2));
-              
-              // Cria um arquivo temporário com dados para o passo de notificação
-              // Formato: ID|STATUS
               fs.writeFileSync('notify.txt', chatIdToNotify + '|' + statusToNotify);
 
             } catch (e) {
@@ -88,35 +69,24 @@ jobs:
             }
           "
 
-          # Git Commit e Push
           git add db.json
-          git commit -m "CRM Action: ${{ github.event.action }}" || echo "Sem alterações para commitar"
+          git commit -m "CRM Action: ${{ github.event.action }}" || echo "Sem alterações"
           git push
 
-      - name: Notificar BotConversa (Integração)
+      - name: Notificar BotConversa
         env:
           API_KEY: ${{ secrets.BOTCONVERSA_KEY }}
         run: |
-          # Verifica se tem arquivo de notificação
           if [ -f notify.txt ]; then
             CONTENT=$(cat notify.txt)
             CHAT_ID=$(echo "$CONTENT" | cut -d'|' -f1)
             STATUS=$(echo "$CONTENT" | cut -d'|' -f2)
             
-            # --- REGRAS DE NOTIFICAÇÃO ---
-            # Aqui definimos quando avisar o cliente.
-            
-            # REGRA: Se o status virou 'doing' (Produção) E temos o ID do cliente
             if [ ! -z "$CHAT_ID" ] && [ "$STATUS" == "doing" ]; then
-              echo "Enviando etiqueta de Produção para o ID: $CHAT_ID"
-              
+              echo "Notificando ID: $CHAT_ID"
               curl -X POST "https://backend.botconversa.com.br/api/v1/subscriber/$CHAT_ID/tags" \
               -H "api-key: $API_KEY" \
               -H "Content-Type: application/json" \
               -d '{"tag_id": "Status: Produção"}'
-              
-              echo "✅ Etiqueta enviada com sucesso!"
-            else
-              echo "ℹ️ Nenhuma notificação necessária para este status ou cliente sem ID."
             fi
           fi
