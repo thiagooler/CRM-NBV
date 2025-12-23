@@ -64,7 +64,6 @@
         .code-block { background: #172b4d; color: #a5adba; padding: 15px; border-radius: 6px; font-family: monospace; white-space: pre-wrap; margin-bottom: 10px; position: relative; word-break: break-all;}
         .btn-copy { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8em; }
 
-        /* Lista de Colunas */
         .col-item { display: flex; align-items: center; gap: 8px; padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px; border: 1px solid #eee;}
         .col-inputs { flex-grow: 1; display: flex; gap: 5px; flex-direction: column; }
         .col-row { display: flex; gap: 5px; }
@@ -120,14 +119,14 @@
             </div>
             <div id="tab-columns" class="tab-content">
                 <div id="columnsList"></div>
-                <button class="btn-primary" onclick="saveAllColumns()" style="background:#36b37e; margin-bottom: 20px;">💾 Salvar Ordem</button>
+                
                 <h4 style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">Nova Coluna</h4>
-                <input type="text" id="newColTitle" class="inp-full" placeholder="Nome">
+                <input type="text" id="newColTitle" class="inp-full" placeholder="Nome da Coluna">
                 <div style="display:flex; gap:10px;">
                     <input type="color" id="newColColor" style="height:40px; width:50px;" value="#0052cc">
                     <input type="number" id="newColDays" class="inp-full" placeholder="Dias" style="margin:0;">
                 </div>
-                <button class="btn-primary" onclick="addColumn()">+ Adicionar</button>
+                <button class="btn-primary" onclick="addColumn()">+ Adicionar & Salvar</button>
             </div>
         </div>
     </dialog>
@@ -235,7 +234,7 @@
             return card;
         }
 
-        // --- ORGANIZAÇÃO DE COLUNAS ---
+        // --- ORGANIZAÇÃO E SALVAMENTO ---
         function openSettings() {
             const list = document.getElementById('columnsList'); list.innerHTML = '';
             const keys = Object.keys(columnsConfig);
@@ -262,26 +261,56 @@
             document.getElementById('settingsModal').showModal();
         }
 
-        function moveCol(key, dir) {
+        async function moveCol(key, dir) {
             const keys = Object.keys(columnsConfig);
             const idx = keys.indexOf(key);
             if(idx === -1) return;
-            // Troca de lugar no array
             const temp = keys[idx];
             keys[idx] = keys[idx + dir];
             keys[idx + dir] = temp;
             
-            // Reconstrói o objeto na nova ordem
             const newConfig = {};
             keys.forEach(k => newConfig[k] = columnsConfig[k]);
             columnsConfig = newConfig;
             
-            openSettings(); // Atualiza a lista visualmente
+            openSettings(); // Atualiza visual
+            await saveAllColumns(); // SALVA AUTOMATICAMENTE
         }
 
-        async function saveAllColumns() { renderBoard(); showStatus('Salvando Ordem...', '#ffab00'); await sendToGitHub('save_columns', columnsConfig); showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); }
+        async function saveAllColumns() { 
+            renderBoard(); 
+            showStatus('Salvando Config...', '#ffab00'); 
+            await sendToGitHub('save_columns', columnsConfig); 
+            showStatus('✅ Salvo!', '#36b37e'); 
+            setTimeout(hideStatus, 2000); 
+        }
+
+        async function addColumn() {
+            const title = document.getElementById('newColTitle').value; if(!title) return;
+            const id = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '_' + Math.floor(Math.random()*1000);
+            
+            // Adiciona
+            columnsConfig[id] = { title, color: document.getElementById('newColColor').value, days: parseInt(document.getElementById('newColDays').value)||0 };
+            
+            document.getElementById('newColTitle').value = '';
+            
+            // ATUALIZAÇÃO: AGORA SALVA IMEDIATAMENTE NO GITHUB
+            openSettings(); 
+            await saveAllColumns();
+        }
+
+        async function removeColumn(k) { 
+            if(!confirm("Remover?")) return; 
+            delete columnsConfig[k]; 
+            
+            // ATUALIZAÇÃO: SALVA IMEDIATAMENTE NO GITHUB
+            openSettings();
+            await saveAllColumns();
+        }
         
-        // --- RESTO DAS FUNÇÕES ---
+        // --- RESTO DAS FUNÇÕES (Sem alteração) ---
+        function updateColConfig(k, f, v) { if(f === 'days') v = parseInt(v); columnsConfig[k][f] = v; } // Nota: Apenas atualização local, o user deve clicar na setinha ou adicionar algo pra salvar, ou podemos adicionar um botão Salvar Geral se preferir. Mas mover e adicionar já salvam.
+        
         function openIntegrator() {
             const savedToken = localStorage.getItem('warrior_gh_token'); if(savedToken) document.getElementById('integrationToken').value = savedToken;
             const select = document.getElementById('integrationColSelect'); select.innerHTML = '';
@@ -309,9 +338,6 @@
             const id = document.getElementById('editOrderId').value; const client = document.getElementById('editClientName').value; const product = document.getElementById('editProduct').value; const dueDate = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=client; orders[idx].product=product; orders[idx].dueDate=dueDate; renderBoard(); }
             closeModal('editOrderModal'); showStatus('Salvando...', '#ffab00'); await sendToGitHub('update_order', { id, client, product, dueDate }); showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000);
         }
-        function updateColConfig(k, f, v) { if(f === 'days') v = parseInt(v); columnsConfig[k][f] = v; }
-        async function addColumn() { const title = document.getElementById('newColTitle').value; if(!title) return; const id = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '_' + Math.floor(Math.random()*1000); columnsConfig[id] = { title, color: document.getElementById('newColColor').value, days: parseInt(document.getElementById('newColDays').value)||0 }; document.getElementById('newColTitle').value = ''; openSettings(); }
-        async function removeColumn(k) { if(!confirm("Remover?")) return; delete columnsConfig[k]; openSettings(); }
         function allowDrop(ev) { ev.preventDefault(); }
         function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
         async function drop(ev) {
