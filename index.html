@@ -9,54 +9,26 @@
         :root { --bg: #f4f5f7; --card-bg: #fff; --text: #172b4d; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }
         
-        /* HEADER RESPONSIVO */
+        /* HEADER */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
         .header h1 { margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; color: #0052cc; }
         .header-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        
         .status-badge { padding: 8px 16px; border-radius: 4px; font-weight: bold; font-size: 0.9em; display: none; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
         
-        /* KANBAN RESPONSIVO */
-        .kanban-board { 
-            display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; 
-            align-items: flex-start; scroll-behavior: smooth; 
-            -webkit-overflow-scrolling: touch; /* Rolagem suave no iOS */
-        }
-        
-        .column { 
-            background: #ebecf0; border-radius: 10px; 
-            width: 320px; min-width: 320px; /* Desktop */
-            padding: 12px; display: flex; flex-direction: column; max-height: 85vh; 
-            border-top: 4px solid transparent; position: relative; 
-        }
+        /* KANBAN */
+        .kanban-board { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; align-items: flex-start; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .column { background: #ebecf0; border-radius: 10px; width: 320px; min-width: 320px; padding: 12px; display: flex; flex-direction: column; max-height: 85vh; border-top: 4px solid transparent; position: relative; }
 
-        /* CELULAR (TELA PEQUENA) */
         @media (max-width: 768px) {
             body { padding: 10px; }
-            .header h1 { font-size: 1.2rem; }
             .header-controls { width: 100%; justify-content: flex-end; }
-            
-            /* Colunas ocupam quase a tela toda e 'grudam' (Snap) */
-            .kanban-board { 
-                gap: 10px; 
-                scroll-snap-type: x mandatory; 
-                padding-bottom: 20px;
-            }
-            .column { 
-                min-width: 85vw; /* 85% da largura da tela */
-                width: 85vw;
-                scroll-snap-align: center; /* Centraliza ao soltar */
-            }
-            
-            /* Ajuste de Modais para celular */
+            .kanban-board { gap: 10px; scroll-snap-type: x mandatory; padding-bottom: 20px; }
+            .column { min-width: 85vw; width: 85vw; scroll-snap-align: center; }
             dialog { width: 95% !important; max-height: 90vh; margin: auto; }
-            .btn-icon { padding: 10px; } /* Botões maiores para toque */
+            .btn-icon { padding: 10px; }
         }
 
-        /* ITENS PADRÃO */
         .column-header { font-weight: 700; margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; color: #42526e; display: flex; justify-content: space-between; align-items: center;}
-
-        /* Menu de Coluna */
         .col-menu-btn { cursor: pointer; padding: 5px; border-radius: 4px; }
         .col-menu-btn:hover { background: #dcdfe4; }
         .col-options { display: none; position: absolute; top: 40px; right: 10px; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.2); border-radius: 6px; z-index: 100; width: 150px; overflow: hidden;}
@@ -64,7 +36,6 @@
         .col-options div:hover { background: #f4f5f7; color: #0052cc; }
         .col-options.active { display: block; }
         
-        /* Cards */
         .card-list { flex-grow: 1; overflow-y: auto; min-height: 100px; padding-bottom: 10px;}
         .card { background: var(--card-bg); border-radius: 6px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: grab; position: relative; transition: transform 0.2s; border-left: 4px solid #ccc;}
         .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
@@ -72,13 +43,11 @@
         .card-meta { font-size: 0.85em; color: #666; display: flex; align-items: center; gap: 6px; margin-top: 6px; }
         .card-actions { margin-top: 12px; border-top: 1px solid #f4f5f7; padding-top: 8px; display: flex; justify-content: flex-end; gap: 8px;}
         
-        /* Botões */
         .btn-icon { background: #f4f5f7; border: none; cursor: pointer; color: #6b778c; border-radius: 4px; padding: 6px 10px; font-size: 0.8em; margin-left: 5px;}
         .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; margin-left:5px;}
         .btn-add-new { background: #36b37e; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
         .btn-bot { background: #6554c0; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
 
-        /* MODAIS */
         dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); padding: 0; width: 500px; font-family: inherit; overflow: hidden;}
         dialog::backdrop { background: rgba(0,0,0,0.6); }
         .modal-header { background: #f4f5f7; padding: 15px 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;}
@@ -92,7 +61,6 @@
         .inp-full { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #dfe1e6; border-radius: 4px; box-sizing: border-box; }
         .inp-mini { width: 70px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; }
         .btn-primary { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;}
-        
         .code-block { background: #172b4d; color: #a5adba; padding: 15px; border-radius: 6px; font-family: monospace; white-space: pre-wrap; margin-bottom: 10px; position: relative; word-break: break-all;}
         .btn-copy { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8em; }
 
@@ -100,8 +68,10 @@
         .col-item { display: flex; align-items: center; gap: 8px; padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px; border: 1px solid #eee;}
         .col-inputs { flex-grow: 1; display: flex; gap: 5px; flex-direction: column; }
         .col-row { display: flex; gap: 5px; }
-        label { font-size: 0.9em; font-weight: bold; color: #444; }
+        .btn-move { border: none; background: none; cursor: pointer; color: #666; font-size: 1.1em; padding: 5px;}
+        .btn-move:hover { color: #0052cc; background: #eee; border-radius: 4px; }
 
+        label { font-size: 0.9em; font-weight: bold; color: #444; }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-thumb { background: #c1c7d0; border-radius: 4px; }
     </style>
@@ -112,21 +82,13 @@
         <h1><i class="fa-solid fa-layer-group"></i> CRM Warrior</h1>
         <div class="header-controls">
             <div id="statusMsg" class="status-badge"></div>
-            
-            <button class="btn-bot" onclick="openIntegrator()">
-                <i class="fa-solid fa-robot"></i> <span style="display:none; @media(min-width:768px){display:inline;}">Integração</span>
-            </button>
-
-            <button class="btn-add-new" onclick="openNewOrderModal()">
-                <i class="fa-solid fa-plus"></i> <span style="display:none; @media(min-width:768px){display:inline;}">Novo</span>
-            </button>
-            
+            <button class="btn-bot" onclick="openIntegrator()"><i class="fa-solid fa-robot"></i> <span style="display:none; @media(min-width:768px){display:inline;}">Integração</span></button>
+            <button class="btn-add-new" onclick="openNewOrderModal()"><i class="fa-solid fa-plus"></i> <span style="display:none; @media(min-width:768px){display:inline;}">Novo</span></button>
             <button class="btn-config" onclick="openSettings()" title="Configurações"><i class="fa-solid fa-gear"></i></button>
         </div>
     </div>
 
-    <div class="kanban-board" id="board">
-        </div>
+    <div class="kanban-board" id="board"></div>
 
     <dialog id="integratorModal">
         <div class="modal-header">
@@ -134,20 +96,15 @@
             <button onclick="closeModal('integratorModal')" style="border:none; background:none; cursor:pointer;">&times;</button>
         </div>
         <div class="modal-body">
-            <label style="color:#0052cc">Seu Token (GitHub):</label>
-            <input type="text" id="integrationToken" class="inp-full" placeholder="Cole seu token ghp_ aqui..." oninput="updateIntegratorCode()">
+            <label style="color:#0052cc">Seu Token:</label>
+            <input type="text" id="integrationToken" class="inp-full" placeholder="Cole ghp_..." oninput="updateIntegratorCode()">
             <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-            <label>Mover cliente para:</label>
+            <label>Mover para:</label>
             <select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select>
-            <div style="background:#fff3cd; padding:10px; border-radius:4px; font-size:0.85em; color:#856404; margin-bottom:15px;">
-                💡 Copie e cole no BotConversa.
-            </div>
-            <label>1. URL</label>
-            <div class="code-block" id="codeUrl">https://api.github.com/repos/thiagooler/CRM-NBV/dispatches<button class="btn-copy" onclick="copyText('codeUrl')">Copiar</button></div>
-            <label>2. Headers</label>
-            <div class="code-block" id="codeHeaders">...<button class="btn-copy" onclick="copyText('codeHeaders')">Copiar</button></div>
-            <label>3. Body</label>
-            <div class="code-block" id="codeBody">...<button class="btn-copy" onclick="copyText('codeBody')">Copiar</button></div>
+            <div style="background:#fff3cd; padding:10px; border-radius:4px; font-size:0.85em; color:#856404; margin-bottom:15px;">💡 Copie e cole no BotConversa.</div>
+            <label>1. URL</label><div class="code-block" id="codeUrl">https://api.github.com/repos/thiagooler/CRM-NBV/dispatches<button class="btn-copy" onclick="copyText('codeUrl')">Copiar</button></div>
+            <label>2. Headers</label><div class="code-block" id="codeHeaders">...<button class="btn-copy" onclick="copyText('codeHeaders')">Copiar</button></div>
+            <label>3. Body</label><div class="code-block" id="codeBody">...<button class="btn-copy" onclick="copyText('codeBody')">Copiar</button></div>
         </div>
     </dialog>
 
@@ -163,7 +120,7 @@
             </div>
             <div id="tab-columns" class="tab-content">
                 <div id="columnsList"></div>
-                <button class="btn-primary" onclick="saveAllColumns()" style="background:#36b37e; margin-bottom: 20px;">💾 Salvar</button>
+                <button class="btn-primary" onclick="saveAllColumns()" style="background:#36b37e; margin-bottom: 20px;">💾 Salvar Ordem</button>
                 <h4 style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">Nova Coluna</h4>
                 <input type="text" id="newColTitle" class="inp-full" placeholder="Nome">
                 <div style="display:flex; gap:10px;">
@@ -200,7 +157,6 @@
         const REPO_OWNER = 'thiagooler';
         const REPO_NAME = 'CRM-NBV';
         
-        // --- 1. CONFIGURAÇÃO PADRÃO (Trava de Segurança) ---
         let columnsConfig = {
             'todo': { title: '📥 Novos', color: '#ff5630', days: 0 },
             'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 },
@@ -211,63 +167,38 @@
         function getToken() {
             const urlParams = new URLSearchParams(window.location.search);
             const tokenFromUrl = urlParams.get('token');
-            if (tokenFromUrl) {
-                localStorage.setItem('warrior_gh_token', tokenFromUrl);
-                return tokenFromUrl;
-            }
+            if (tokenFromUrl) { localStorage.setItem('warrior_gh_token', tokenFromUrl); return tokenFromUrl; }
             return localStorage.getItem('warrior_gh_token');
         }
 
         async function init() {
             const token = getToken();
             document.getElementById('tokenDisplay').value = token ? token.substring(0,10) + '...' : 'Não configurado';
-            if(!token) alert("⚠️ Configure seu Token no Link (?token=...) ou no menu Integração!");
+            if(!token) alert("Configure seu Token!");
             await loadData();
         }
 
         async function loadData() {
             showStatus('Carregando...', '#0052cc');
             try {
-                // Adiciona timestamp para evitar Cache
                 const res = await fetch(`db.json?t=${new Date().getTime()}`);
                 if(!res.ok) throw new Error("Erro DB");
                 const data = await res.json();
-                
-                if (Array.isArray(data)) { 
-                    orders = data; 
-                } else { 
+                if (Array.isArray(data)) { orders = data; } 
+                else { 
                     orders = data.orders || []; 
-                    // --- TRAVA DE SEGURANÇA: Só atualiza se tiver colunas válidas ---
-                    if(data.columns && Object.keys(data.columns).length > 0) {
-                        columnsConfig = data.columns; 
-                    }
+                    if(data.columns && Object.keys(data.columns).length > 0) columnsConfig = data.columns; 
                 }
-                renderBoard();
-                hideStatus();
-            } catch (e) { 
-                console.error(e); 
-                // Se der erro, renderiza com o padrão para não ficar tela branca
-                renderBoard(); 
-                hideStatus(); 
-            }
+                renderBoard(); hideStatus();
+            } catch (e) { renderBoard(); hideStatus(); }
         }
 
         function renderBoard() {
-            const board = document.getElementById('board');
-            board.innerHTML = '';
-            
-            // Verifica se tem colunas para renderizar
-            const keys = Object.keys(columnsConfig);
-            if(keys.length === 0) {
-                board.innerHTML = '<p style="padding:20px; color:#666;">Nenhuma coluna encontrada. Verifique as configurações.</p>';
-                return;
-            }
-
-            keys.forEach(key => {
+            const board = document.getElementById('board'); board.innerHTML = '';
+            Object.keys(columnsConfig).forEach(key => {
                 const config = columnsConfig[key];
                 const colDiv = document.createElement('div');
-                colDiv.className = 'column';
-                colDiv.style.borderTopColor = config.color;
+                colDiv.className = 'column'; colDiv.style.borderTopColor = config.color;
                 colDiv.innerHTML = `
                     <div class="column-header" style="color:${config.color}">
                         <span>${config.title} <span id="count-${key}" style="background:#fff; padding:2px 8px; border-radius:10px; font-size:0.8em; color:#333;">0</span></span>
@@ -279,8 +210,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-list" id="${key}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                `;
+                    <div class="card-list" id="${key}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>`;
                 board.appendChild(colDiv);
                 const listDiv = colDiv.querySelector('.card-list');
                 const colOrders = orders.filter(o => o.status === key);
@@ -291,14 +221,8 @@
 
         function createCard(order, color) {
             const card = document.createElement('div');
-            card.className = 'card';
-            card.id = order.id;
-            card.draggable = true;
-            card.style.borderLeftColor = color;
-            card.ondragstart = drag;
-            const dateObj = new Date(order.dueDate);
-            const isLate = dateObj < new Date() && order.status !== 'done';
-            
+            card.className = 'card'; card.id = order.id; card.draggable = true; card.style.borderLeftColor = color; card.ondragstart = drag;
+            const dateObj = new Date(order.dueDate); const isLate = dateObj < new Date() && order.status !== 'done';
             card.innerHTML = `
                 <div class="card-title">${order.client}</div>
                 <div class="card-meta"><i class="fa-solid fa-box"></i> ${order.product}</div>
@@ -307,81 +231,23 @@
                     <button class="btn-icon" title="Link" onclick="copyLink('${order.id}')"><i class="fa-solid fa-link"></i></button>
                     <button class="btn-icon" title="Editar" onclick="openEditOrder('${order.id}')"><i class="fa-solid fa-pen"></i></button>
                     <button class="btn-icon btn-trash" title="Excluir" onclick="deleteOrder('${order.id}')"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            `;
+                </div>`;
             return card;
         }
 
-        // --- INTEGRADOR ---
-        function openIntegrator() {
-            const savedToken = localStorage.getItem('warrior_gh_token');
-            if(savedToken) document.getElementById('integrationToken').value = savedToken;
-            const select = document.getElementById('integrationColSelect');
-            select.innerHTML = '';
-            Object.keys(columnsConfig).forEach(key => {
-                const opt = document.createElement('option');
-                opt.value = key; opt.text = columnsConfig[key].title; select.appendChild(opt);
-            });
-            updateIntegratorCode();
-            document.getElementById('integratorModal').showModal();
-        }
-
-        function updateIntegratorCode() {
-            const token = document.getElementById('integrationToken').value.trim();
-            if(token) localStorage.setItem('warrior_gh_token', token);
-            const headers = `Authorization: token ${token || 'ghp_SEU_TOKEN'}\nAccept: application/vnd.github.v3+json\nUser-Agent: WarriorBot\nContent-Type: application/json`;
-            document.getElementById('codeHeaders').innerText = headers;
-            const colId = document.getElementById('integrationColSelect').value;
-            const json = {
-                "event_type": "move_card_external",
-                "client_payload": { "chat_id": "{codigo-indicacao}", "status": colId, "nome": "{nome-completo}", "telefone": "{telefone}" }
-            };
-            document.getElementById('codeBody').innerText = JSON.stringify(json, null, 2);
-        }
-        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); }
-
-        // --- MANUAIS / CONFIG ---
-        function openNewOrderModal() {
-            document.getElementById('manualName').value = ''; document.getElementById('manualProduct').value = '';
-            document.getElementById('manualDate').valueAsDate = new Date(); document.getElementById('newOrderModal').showModal();
-        }
-        async function createManualOrder() {
-            const nome = document.getElementById('manualName').value;
-            const produto = document.getElementById('manualProduct').value;
-            const prazo = document.getElementById('manualDate').value;
-            if(!nome) return alert("Nome obrigatório!");
-            const payload = { nome, produto: produto || 'Manual', prazo, chat_id: '' };
-            const firstCol = Object.keys(columnsConfig)[0];
-            orders.push({ id: 'ped-'+Date.now(), client: nome, product: payload.produto, dueDate: prazo, status: firstCol });
-            renderBoard(); closeModal('newOrderModal');
-            showStatus('Criando...', '#36b37e'); await sendToGitHub('novo_pedido', payload);
-            showStatus('✅ Criado!', '#36b37e'); setTimeout(hideStatus, 2000);
-        }
-
-        function openEditOrder(id) {
-            const order = orders.find(o => o.id === id); if(!order) return;
-            document.getElementById('editOrderId').value = order.id; document.getElementById('editClientName').value = order.client;
-            document.getElementById('editProduct').value = order.product; document.getElementById('editDueDate').value = order.dueDate;
-            document.getElementById('editOrderModal').showModal();
-        }
-        async function saveOrderEdits() {
-            const id = document.getElementById('editOrderId').value;
-            const client = document.getElementById('editClientName').value;
-            const product = document.getElementById('editProduct').value;
-            const dueDate = document.getElementById('editDueDate').value;
-            const idx = orders.findIndex(o => o.id === id);
-            if(idx > -1) { orders[idx].client=client; orders[idx].product=product; orders[idx].dueDate=dueDate; renderBoard(); }
-            closeModal('editOrderModal'); showStatus('Salvando...', '#ffab00');
-            await sendToGitHub('update_order', { id, client, product, dueDate });
-            showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000);
-        }
-
+        // --- ORGANIZAÇÃO DE COLUNAS ---
         function openSettings() {
             const list = document.getElementById('columnsList'); list.innerHTML = '';
-            Object.keys(columnsConfig).forEach(key => {
+            const keys = Object.keys(columnsConfig);
+            
+            keys.forEach((key, index) => {
                 const col = columnsConfig[key];
                 list.innerHTML += `
                     <div class="col-item" id="row-${key}">
+                        <div style="display:flex; flex-direction:column; gap:2px;">
+                            ${index > 0 ? `<button class="btn-move" onclick="moveCol('${key}', -1)">⬆️</button>` : '<div style="height:20px"></div>'}
+                            ${index < keys.length - 1 ? `<button class="btn-move" onclick="moveCol('${key}', 1)">⬇️</button>` : '<div style="height:20px"></div>'}
+                        </div>
                         <div class="color-dot" style="background:${col.color}"></div>
                         <div class="col-inputs">
                             <input type="text" class="inp-full" style="margin:0; padding:5px;" value="${col.title}" onchange="updateColConfig('${key}', 'title', this.value)">
@@ -390,42 +256,74 @@
                                 <input type="color" style="height:30px;" value="${col.color}" onchange="updateColConfig('${key}', 'color', this.value)">
                             </div>
                         </div>
-                        <button onclick="removeColumn('${key}')" style="color:red; border:none; background:none;"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="removeColumn('${key}')" style="color:red; border:none; background:none; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
                     </div>`;
             });
             document.getElementById('settingsModal').showModal();
         }
-        function updateColConfig(k, f, v) { if(f === 'days') v = parseInt(v); columnsConfig[k][f] = v; }
-        async function saveAllColumns() { renderBoard(); showStatus('Salvando...', '#ffab00'); await sendToGitHub('save_columns', columnsConfig); showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); }
-        async function addColumn() {
-            const title = document.getElementById('newColTitle').value; if(!title) return;
-            const id = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '_' + Math.floor(Math.random()*1000);
-            columnsConfig[id] = { title, color: document.getElementById('newColColor').value, days: parseInt(document.getElementById('newColDays').value)||0 };
-            document.getElementById('newColTitle').value = ''; openSettings();
-        }
-        async function removeColumn(k) { if(!confirm("Remover?")) return; delete columnsConfig[k]; const r=document.getElementById('row-'+k); if(r) r.remove(); }
 
-        // --- CORE ---
+        function moveCol(key, dir) {
+            const keys = Object.keys(columnsConfig);
+            const idx = keys.indexOf(key);
+            if(idx === -1) return;
+            // Troca de lugar no array
+            const temp = keys[idx];
+            keys[idx] = keys[idx + dir];
+            keys[idx + dir] = temp;
+            
+            // Reconstrói o objeto na nova ordem
+            const newConfig = {};
+            keys.forEach(k => newConfig[k] = columnsConfig[k]);
+            columnsConfig = newConfig;
+            
+            openSettings(); // Atualiza a lista visualmente
+        }
+
+        async function saveAllColumns() { renderBoard(); showStatus('Salvando Ordem...', '#ffab00'); await sendToGitHub('save_columns', columnsConfig); showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); }
+        
+        // --- RESTO DAS FUNÇÕES ---
+        function openIntegrator() {
+            const savedToken = localStorage.getItem('warrior_gh_token'); if(savedToken) document.getElementById('integrationToken').value = savedToken;
+            const select = document.getElementById('integrationColSelect'); select.innerHTML = '';
+            Object.keys(columnsConfig).forEach(key => { const opt = document.createElement('option'); opt.value = key; opt.text = columnsConfig[key].title; select.appendChild(opt); });
+            updateIntegratorCode(); document.getElementById('integratorModal').showModal();
+        }
+        function updateIntegratorCode() {
+            const token = document.getElementById('integrationToken').value.trim(); if(token) localStorage.setItem('warrior_gh_token', token);
+            document.getElementById('codeHeaders').innerText = `Authorization: token ${token || 'ghp_SEU_TOKEN'}\nAccept: application/vnd.github.v3+json\nUser-Agent: WarriorBot\nContent-Type: application/json`;
+            const colId = document.getElementById('integrationColSelect').value;
+            const json = { "event_type": "move_card_external", "client_payload": { "chat_id": "{codigo-indicacao}", "status": colId, "nome": "{nome-completo}", "telefone": "{telefone}" } };
+            document.getElementById('codeBody').innerText = JSON.stringify(json, null, 2);
+        }
+        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); }
+        function openNewOrderModal() { document.getElementById('manualName').value = ''; document.getElementById('manualProduct').value = ''; document.getElementById('manualDate').valueAsDate = new Date(); document.getElementById('newOrderModal').showModal(); }
+        async function createManualOrder() {
+            const nome = document.getElementById('manualName').value; const produto = document.getElementById('manualProduct').value; const prazo = document.getElementById('manualDate').value;
+            if(!nome) return alert("Nome obrigatório!");
+            const payload = { nome, produto: produto || 'Manual', prazo, chat_id: '' }; const firstCol = Object.keys(columnsConfig)[0];
+            orders.push({ id: 'ped-'+Date.now(), client: nome, product: payload.produto, dueDate: prazo, status: firstCol });
+            renderBoard(); closeModal('newOrderModal'); showStatus('Criando...', '#36b37e'); await sendToGitHub('novo_pedido', payload); showStatus('✅ Criado!', '#36b37e'); setTimeout(hideStatus, 2000);
+        }
+        function openEditOrder(id) { const order = orders.find(o => o.id === id); if(!order) return; document.getElementById('editOrderId').value = order.id; document.getElementById('editClientName').value = order.client; document.getElementById('editProduct').value = order.product; document.getElementById('editDueDate').value = order.dueDate; document.getElementById('editOrderModal').showModal(); }
+        async function saveOrderEdits() {
+            const id = document.getElementById('editOrderId').value; const client = document.getElementById('editClientName').value; const product = document.getElementById('editProduct').value; const dueDate = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=client; orders[idx].product=product; orders[idx].dueDate=dueDate; renderBoard(); }
+            closeModal('editOrderModal'); showStatus('Salvando...', '#ffab00'); await sendToGitHub('update_order', { id, client, product, dueDate }); showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000);
+        }
+        function updateColConfig(k, f, v) { if(f === 'days') v = parseInt(v); columnsConfig[k][f] = v; }
+        async function addColumn() { const title = document.getElementById('newColTitle').value; if(!title) return; const id = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '_' + Math.floor(Math.random()*1000); columnsConfig[id] = { title, color: document.getElementById('newColColor').value, days: parseInt(document.getElementById('newColDays').value)||0 }; document.getElementById('newColTitle').value = ''; openSettings(); }
+        async function removeColumn(k) { if(!confirm("Remover?")) return; delete columnsConfig[k]; openSettings(); }
         function allowDrop(ev) { ev.preventDefault(); }
         function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
         async function drop(ev) {
-            ev.preventDefault(); const id = ev.dataTransfer.getData("text");
-            const col = ev.target.closest('.card-list'); if (!col) return;
-            const newSt = col.id; const idx = orders.findIndex(o => o.id === id); if(idx === -1) return;
+            ev.preventDefault(); const id = ev.dataTransfer.getData("text"); const col = ev.target.closest('.card-list'); if (!col) return; const newSt = col.id; const idx = orders.findIndex(o => o.id === id); if(idx === -1) return;
             if (orders[idx].status !== newSt) {
-                const days = columnsConfig[newSt]?.days || 0;
-                let newDate = null;
+                const days = columnsConfig[newSt]?.days || 0; let newDate = null;
                 if(days > 0) { const d = new Date(); d.setDate(d.getDate() + days); newDate = d.toISOString().split('T')[0]; orders[idx].dueDate = newDate; }
-                orders[idx].status = newSt; renderBoard();
-                await sendToGitHub('update_status', { id, status: newSt, newDate });
+                orders[idx].status = newSt; renderBoard(); await sendToGitHub('update_status', { id, status: newSt, newDate });
             }
         }
         async function deleteOrder(id) { if(confirm('Apagar?')) { orders = orders.filter(o => o.id !== id); renderBoard(); await sendToGitHub('delete_order', { id }); } }
-        async function sendToGitHub(act, pay) {
-            const token = getToken(); if(!token) return alert("Sem Token!");
-            try { await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, { method: 'POST', headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify({ event_type: act, client_payload: pay }) }); } catch (e) { alert("Erro Conexão"); }
-        }
-
+        async function sendToGitHub(act, pay) { const token = getToken(); if(!token) return alert("Sem Token!"); try { await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, { method: 'POST', headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify({ event_type: act, client_payload: pay }) }); } catch (e) { alert("Erro Conexão"); } }
         function switchTab(id) { document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active')); document.getElementById(id).classList.add('active'); event.target.classList.add('active'); }
         function closeModal(id) { document.getElementById(id).close(); }
         function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); }
@@ -433,13 +331,7 @@
         function hideStatus() { document.getElementById('statusMsg').style.display='none'; }
         function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; }
         function copyLink(id) { navigator.clipboard.writeText(window.location.href.split('?')[0]+'?id='+id); alert("Copiado!"); }
-        function sortColumn(k, type) {
-            let colOrders = orders.filter(o => o.status === k);
-            let others = orders.filter(o => o.status !== k);
-            if (type === 'date') colOrders.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate));
-            else colOrders.sort((a,b) => a.client.localeCompare(b.client));
-            orders = [...others, ...colOrders]; renderBoard();
-        }
+        function sortColumn(k, type) { let c = orders.filter(o => o.status === k); let o = orders.filter(o => o.status !== k); if (type === 'date') c.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); else c.sort((a,b) => a.client.localeCompare(b.client)); orders = [...o, ...c]; renderBoard(); }
         document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
 
         init();
