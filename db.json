@@ -1,30 +1,57 @@
-[
-  {
-    "id": "pedido1",
-    "client": "Cliente Exemplo",
-    "product": "Ensaio Fotográfico",
-    "dueDate": "2025-12-30",
-    "status": "todo"
+{
+  "columns": {
+    "todo": {
+      "title": "📥 Novos",
+      "color": "#ff5630",
+      "days": 0
+    },
+    "doing": {
+      "title": "🔨 Em Produção",
+      "color": "#ffab00",
+      "days": 30
+    },
+    "review": {
+      "title": "👀 Revisão",
+      "color": "#0052cc",
+      "days": 5
+    },
+    "approval": {
+      "title": "👍 Aprovação",
+      "color": "#6554c0",
+      "days": 0
+    },
+    "payment": {
+      "title": "💰 Pagamento",
+      "color": "#36b37e",
+      "days": 0
+    },
+    "done": {
+      "title": "✅ Finalizado",
+      "color": "#42526e",
+      "days": 0
+    }
   },
-  {
-    "id": "ped-1766509811",
-    "client": "{{first_name}} {{last_name}}",
-    "product": "Novo Pedido",
-    "dueDate": "2025-12-30",
-    "status": "todo"
-  },
-  {
-    "id": "ped-1766509838",
-    "client": "{{first_name}} {{last_name}}",
-    "product": "Novo Pedido",
-    "dueDate": "2025-12-30",
-    "status": "todo"
-  },
-  {
-    "id": "ped-1766510219",
-    "client": "Thiago",
-    "product": "Novo Pedido",
-    "dueDate": "2025-12-30",
-    "status": "todo"
-  }
-]
+  "orders": [
+    {
+      "id": "ped-1766509811",
+      "client": "{{first_name}} {{last_name}}",
+      "product": "Novo Pedido",
+      "dueDate": "2025-12-30",
+      "status": "todo"
+    },
+    {
+      "id": "ped-1766509838",
+      "client": "{{first_name}} {{last_name}}",
+      "product": "Novo Pedido",
+      "dueDate": "2025-12-30",
+      "status": "todo"
+    },
+    {
+      "id": "ped-1766510219",
+      "client": "Thiago",
+      "product": "Novo Pedido",
+      "dueDate": "2025-12-30",
+      "status": "todo"
+    }
+  ]
+}
