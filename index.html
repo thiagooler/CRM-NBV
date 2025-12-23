@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM Warrior - Modo Direto</title>
+    <title>CRM Warrior - Auto</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --bg: #f4f5f7; --card-bg: #fff; --text: #172b4d; }
@@ -13,7 +13,6 @@
         .header h1 { margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; color: #0052cc; }
         .status-badge { padding: 8px 16px; border-radius: 4px; font-weight: bold; font-size: 0.9em; display: none; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
         
-        /* Kanban */
         .kanban-board { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; align-items: flex-start; }
         
         .column { 
@@ -27,7 +26,6 @@
             color: #42526e; display: flex; justify-content: space-between; align-items: center;
         }
 
-        /* Menu de Ordenação */
         .col-menu-btn { cursor: pointer; padding: 5px; border-radius: 4px; }
         .col-menu-btn:hover { background: #dcdfe4; }
         .col-options { 
@@ -40,7 +38,6 @@
         
         .card-list { flex-grow: 1; overflow-y: auto; min-height: 100px; padding-bottom: 10px;}
 
-        /* Cards */
         .card { 
             background: var(--card-bg); border-radius: 6px; padding: 12px; margin-bottom: 10px; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: grab; position: relative;
@@ -60,24 +57,16 @@
 <body>
 
     <div class="header">
-        <h1><i class="fa-solid fa-bolt"></i> CRM Warrior</h1>
+        <h1><i class="fa-solid fa-magic"></i> CRM Warrior</h1>
         <div id="statusMsg" class="status-badge"></div>
     </div>
 
     <div class="kanban-board" id="board"></div>
 
     <script>
-        // =================================================================
-        // 🚨 ÁREA DE CONFIGURAÇÃO OBRIGATÓRIA 🚨
-        // =================================================================
-        
         const REPO_OWNER = 'thiagooler';
         const REPO_NAME = 'CRM-NBV';
         
-        // 👇 COLOQUE SEU TOKEN ABAIXO (Mantenha as aspas simples)
-        const GITHUB_TOKEN = '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'; 
-
-        // Configuração das Colunas e Prazos (days)
         const columnsConfig = {
             'todo':      { title: '📥 Novos',           color: '#ff5630', days: 0 },
             'doing':     { title: '🔨 Em Produção',     color: '#ffab00', days: 30 },
@@ -87,15 +76,27 @@
             'done':      { title: '✅ Finalizado',      color: '#42526e', days: 0 }
         };
 
-        // =================================================================
-        // LÓGICA DO SISTEMA
-        // =================================================================
         let orders = [];
 
+        function getToken() {
+            // 1. Tenta pegar do Link (?token=...)
+            const urlParams = new URLSearchParams(window.location.search);
+            const tokenFromUrl = urlParams.get('token');
+            
+            if (tokenFromUrl) {
+                // Se achou no link, salva na memória pra sempre
+                localStorage.setItem('warrior_gh_token', tokenFromUrl);
+                return tokenFromUrl;
+            }
+            
+            // 2. Tenta pegar da Memória do Navegador
+            return localStorage.getItem('warrior_gh_token');
+        }
+
         function init() {
-            if (GITHUB_TOKEN === 'COLE_SEU_TOKEN_AQUI') {
-                alert("⚠️ PARE! Você esqueceu de colocar o Token no código HTML. Edite o arquivo e coloque seu token na linha 76.");
-                return;
+            const token = getToken();
+            if (!token) {
+                alert("⚠️ ATENÇÃO WARRIOR!\n\nPara o sistema funcionar, você precisa adicionar seu token no final do link pela primeira vez.\n\nExemplo:\n...github.io/CRM-NBV/?token=ghp_SEU_TOKEN_AQUI");
             }
             loadOrders();
         }
@@ -121,14 +122,12 @@
 
             Object.keys(columnsConfig).forEach(key => {
                 const config = columnsConfig[key];
-                
                 const colDiv = document.createElement('div');
                 colDiv.className = 'column';
                 colDiv.style.borderTopColor = config.color;
                 colDiv.innerHTML = `
                     <div class="column-header" style="color:${config.color}">
                         <span>${config.title} <span id="count-${key}" style="background:#fff; padding:2px 8px; border-radius:10px; font-size:0.8em; color:#333;">0</span></span>
-                        
                         <div style="position:relative">
                             <i class="fa-solid fa-ellipsis-vertical col-menu-btn" onclick="toggleMenu('${key}')"></i>
                             <div id="menu-${key}" class="col-options">
@@ -141,10 +140,8 @@
                     <div class="card-list" id="${key}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
                 `;
                 board.appendChild(colDiv);
-
                 const colOrders = orders.filter(o => o.status === key);
                 document.getElementById(`count-${key}`).innerText = colOrders.length;
-                
                 const listDiv = colDiv.querySelector('.card-list');
                 colOrders.forEach(order => listDiv.appendChild(createCardElement(order, config.color)));
             });
@@ -157,19 +154,17 @@
             card.draggable = true;
             card.style.borderLeftColor = color;
             card.ondragstart = drag;
-
+            
             const dateObj = new Date(order.dueDate);
             const today = new Date();
             const isLate = dateObj < today && order.status !== 'done';
             const dateStyle = isLate ? 'color:#d93025; font-weight:bold;' : '';
-
             const clientLink = `${window.location.href.split('?')[0]}?id=${order.id}`;
 
             card.innerHTML = `
                 <div class="card-title">${order.client}</div>
                 <div class="card-meta"><i class="fa-solid fa-box-open"></i> ${order.product}</div>
                 <div class="card-meta" style="${dateStyle}"><i class="fa-regular fa-calendar-check"></i> ${formatDate(order.dueDate)}</div>
-                
                 <div class="card-actions">
                     <button class="btn-icon" onclick="copyToClipboard('${clientLink}')"><i class="fa-solid fa-link"></i></button>
                     <button class="btn-icon btn-trash" onclick="deleteOrder('${order.id}')"><i class="fa-solid fa-trash"></i></button>
@@ -178,7 +173,6 @@
             return card;
         }
 
-        // --- ORDENAÇÃO ---
         function toggleMenu(key) {
             document.querySelectorAll('.col-options').forEach(el => el.classList.remove('active'));
             document.getElementById(`menu-${key}`).classList.toggle('active');
@@ -188,16 +182,13 @@
             document.querySelectorAll('.col-options').forEach(el => el.classList.remove('active'));
             let colOrders = orders.filter(o => o.status === status);
             let otherOrders = orders.filter(o => o.status !== status);
-
             if (criteria === 'date') colOrders.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
             else if (criteria === 'name') colOrders.sort((a, b) => a.client.localeCompare(b.client));
             else if (criteria === 'newest') colOrders.sort((a, b) => b.id.localeCompare(a.id));
-
             orders = [...otherOrders, ...colOrders];
             renderBoard();
         }
 
-        // --- DRAG DROP ---
         function allowDrop(ev) { ev.preventDefault(); }
         function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
         
@@ -206,48 +197,42 @@
             const orderId = ev.dataTransfer.getData("text");
             const column = ev.target.closest('.card-list');
             if (!column) return;
-            
             const newStatus = column.id;
             const index = orders.findIndex(o => o.id === orderId);
             
             if (index > -1 && orders[index].status !== newStatus) {
                 const config = columnsConfig[newStatus];
                 let newDate = null;
-
                 if (config.days > 0) {
                     const date = new Date();
                     date.setDate(date.getDate() + config.days);
                     newDate = date.toISOString().split('T')[0];
                     orders[index].dueDate = newDate;
                 }
-
                 orders[index].status = newStatus;
                 renderBoard(); 
-                
-                await sendToGitHub('update_status', { 
-                    id: orderId, 
-                    status: newStatus,
-                    newDate: newDate 
-                });
+                await sendToGitHub('update_status', { id: orderId, status: newStatus, newDate: newDate });
             }
         }
 
-        // --- GITHUB ---
         async function sendToGitHub(actionType, payload) {
+            const token = getToken();
+            if(!token) { alert("Token inválido! Use o link com ?token=..."); return; }
+
             showStatus('💾 Salvando...', '#ffab00');
             const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`;
 
             try {
                 const res = await fetch(url, {
                     method: 'POST',
-                    headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
                     body: JSON.stringify({ event_type: actionType, client_payload: payload })
                 });
                 if(res.ok) { showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); }
                 else { throw new Error(res.status); }
             } catch (e) { 
-                showStatus('❌ Erro: ' + e.message, '#bf2600'); 
-                alert("Erro ao salvar! Verifique se o TOKEN no código HTML está correto.");
+                showStatus('❌ Erro', '#bf2600'); 
+                if(e.message === '401') alert("Seu Token expirou ou foi revogado! Gere um novo e entre pelo link ?token=...");
             }
         }
 
@@ -259,25 +244,11 @@
             }
         }
 
-        function showStatus(msg, color) {
-            const el = document.getElementById('statusMsg');
-            el.innerText = msg; el.style.backgroundColor = color; el.style.display = 'block';
-        }
+        function showStatus(msg, color) { const el = document.getElementById('statusMsg'); el.innerText = msg; el.style.backgroundColor = color; el.style.display = 'block'; }
         function hideStatus() { document.getElementById('statusMsg').style.display = 'none'; }
-        
-        function formatDate(dateStr) {
-            if(!dateStr) return '--/--';
-            return dateStr.split('-').reverse().join('/');
-        }
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => alert("Copiado!"));
-        }
-
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.col-menu-btn')) {
-                document.querySelectorAll('.col-options').forEach(el => el.classList.remove('active'));
-            }
-        });
+        function formatDate(dateStr) { if(!dateStr) return '--/--'; return dateStr.split('-').reverse().join('/'); }
+        function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => alert("Copiado!")); }
+        document.addEventListener('click', function(event) { if (!event.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el => el.classList.remove('active')); });
 
         init();
     </script>
