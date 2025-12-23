@@ -8,12 +8,24 @@
     <style>
         :root { --bg: #f4f5f7; --card-bg: #fff; --text: #172b4d; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }
+        
+        /* HEADER */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
         .header h1 { margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; color: #0052cc; }
         .header-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        
         .status-badge { padding: 8px 16px; border-radius: 4px; font-weight: bold; font-size: 0.9em; display: none; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
+        
+        /* ÍCONE DE SYNC */
+        .sync-icon { color: #aaa; font-size: 1.2rem; transition: color 0.3s; margin-right: 10px; }
+        .sync-icon.loading { animation: spin 1s linear infinite; color: #0052cc; }
+        .sync-icon.success { color: #36b37e; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* KANBAN */
         .kanban-board { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; align-items: flex-start; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
         .column { background: #ebecf0; border-radius: 10px; width: 320px; min-width: 320px; padding: 12px; display: flex; flex-direction: column; max-height: 85vh; border-top: 4px solid transparent; position: relative; }
+        
         @media (max-width: 768px) {
             body { padding: 10px; }
             .header-controls { width: 100%; justify-content: flex-end; }
@@ -22,6 +34,7 @@
             dialog { width: 95% !important; max-height: 90vh; margin: auto; }
             .btn-icon { padding: 10px; }
         }
+
         .column-header { font-weight: 700; margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; color: #42526e; display: flex; justify-content: space-between; align-items: center;}
         .col-menu-btn { cursor: pointer; padding: 5px; border-radius: 4px; }
         .col-menu-btn:hover { background: #dcdfe4; }
@@ -29,31 +42,36 @@
         .col-options div { padding: 10px; cursor: pointer; font-size: 0.9em; color: #333; }
         .col-options div:hover { background: #f4f5f7; color: #0052cc; }
         .col-options.active { display: block; }
+        
         .card-list { flex-grow: 1; overflow-y: auto; min-height: 100px; padding-bottom: 10px;}
         .card { background: var(--card-bg); border-radius: 6px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: grab; position: relative; transition: transform 0.2s; border-left: 4px solid #ccc;}
         .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
         .card-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; color: #172b4d; }
         .card-meta { font-size: 0.85em; color: #666; display: flex; align-items: center; gap: 6px; margin-top: 6px; }
         .card-actions { margin-top: 12px; border-top: 1px solid #f4f5f7; padding-top: 8px; display: flex; justify-content: flex-end; gap: 8px;}
+        
         .btn-icon { background: #f4f5f7; border: none; cursor: pointer; color: #6b778c; border-radius: 4px; padding: 6px 10px; font-size: 0.8em; margin-left: 5px;}
         .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; margin-left:5px;}
         .btn-add-new { background: #36b37e; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
         .btn-bot { background: #6554c0; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
+
         dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); padding: 0; width: 500px; font-family: inherit; overflow: hidden;}
         dialog::backdrop { background: rgba(0,0,0,0.6); }
         .modal-header { background: #f4f5f7; padding: 15px 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;}
         .modal-body { padding: 20px; max-height: 500px; overflow-y: auto; }
+        
         .tab-btn { background: none; border: none; padding: 10px; cursor: pointer; font-weight: bold; color: #666; border-bottom: 2px solid transparent; width: 48%;}
         .tab-btn.active { color: #0052cc; border-bottom-color: #0052cc; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+
         .inp-full { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #dfe1e6; border-radius: 4px; box-sizing: border-box; }
         .inp-mini { width: 70px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; }
         .btn-primary { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;}
         .code-block { background: #172b4d; color: #a5adba; padding: 15px; border-radius: 6px; font-family: monospace; white-space: pre-wrap; margin-bottom: 10px; position: relative; word-break: break-all;}
         .btn-copy { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8em; }
         
-        /* ESTILO DO DRAG & DROP NA CONFIG */
+        /* DRAG & DROP CONFIG */
         .col-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px; border: 1px solid #eee; transition: background 0.2s;}
         .col-item.dragging { opacity: 0.5; background: #e3f2fd; border: 2px dashed #0052cc; }
         .col-inputs { flex-grow: 1; display: flex; gap: 5px; flex-direction: column; }
@@ -68,7 +86,10 @@
 </head>
 <body>
     <div class="header">
-        <h1><i class="fa-solid fa-layer-group"></i> CRM Warrior</h1>
+        <h1>
+            <i class="fa-solid fa-cloud sync-icon" id="syncIcon" title="Auto-Sync: Ativo"></i>
+            CRM Warrior
+        </h1>
         <div class="header-controls">
             <div id="statusMsg" class="status-badge"></div>
             <button class="btn-bot" onclick="openIntegrator()"><i class="fa-solid fa-robot"></i> <span style="display:none; @media(min-width:768px){display:inline;}">Integração</span></button>
@@ -100,14 +121,9 @@
         <div class="modal-body">
             <div id="tab-token" class="tab-content active"><p style="font-size:0.9em; color:#666">Token Salvo:</p><input type="text" id="tokenDisplay" class="inp-full" readonly style="background:#eee; color:#888;"></div>
             <div id="tab-columns" class="tab-content">
-                <div style="background:#e3f2fd; color:#0d47a1; padding:10px; border-radius:4px; font-size:0.9em; margin-bottom:15px;">
-                    ✋ <b>Dica:</b> Arraste as colunas para organizar. As mudanças só serão salvas quando clicar no botão verde lá embaixo.
-                </div>
-                
+                <div style="background:#e3f2fd; color:#0d47a1; padding:10px; border-radius:4px; font-size:0.9em; margin-bottom:15px;">✋ <b>Dica:</b> Arraste as colunas para organizar. Clique em Salvar no final.</div>
                 <div id="columnsList"></div>
-                
                 <button class="btn-primary" onclick="saveAllColumns()" style="background:#36b37e; margin-bottom: 20px;">💾 Salvar Ordem e Alterações</button>
-                
                 <h4 style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">Nova Coluna</h4>
                 <input type="text" id="newColTitle" class="inp-full" placeholder="Nome">
                 <div style="display:flex; gap:10px;">
@@ -146,17 +162,38 @@
         let columnsConfig = {'todo': { title: '📥 Novos', color: '#ff5630', days: 0 }, 'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 }, 'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }};
         let columnOrder = ['todo', 'doing', 'done'];
         let orders = [];
-        let dragSrcEl = null; // Para guardar quem está sendo arrastado na config
+        let dragSrcEl = null; 
+        let lastDataHash = ''; // Para detectar mudanças
 
         function getToken() { const p = new URLSearchParams(window.location.search); const t = p.get('token'); if (t) { localStorage.setItem('warrior_gh_token', t); return t; } return localStorage.getItem('warrior_gh_token'); }
-        async function init() { const t = getToken(); document.getElementById('tokenDisplay').value = t ? t.substring(0,10) + '...' : 'Não configurado'; if(!t) alert("Configure seu Token!"); await loadData(); }
+        async function init() { 
+            const t = getToken(); 
+            document.getElementById('tokenDisplay').value = t ? t.substring(0,10) + '...' : 'Não configurado'; 
+            if(!t) alert("Configure seu Token!"); 
+            await loadData();
+            
+            // --- INICIA O RADAR AUTOMÁTICO (A CADA 15s) ---
+            setInterval(() => loadData(true), 15000);
+        }
         
-        async function loadData() { 
-            showStatus('Carregando...', '#0052cc'); 
+        async function loadData(isAuto = false) { 
+            const syncIcon = document.getElementById('syncIcon');
+            if(isAuto) syncIcon.classList.add('loading');
+            else showStatus('Carregando...', '#0052cc'); 
+            
             try { 
                 const r = await fetch(`db.json?t=${new Date().getTime()}`); 
                 if(!r.ok) throw new Error("Erro"); 
                 const d = await r.json(); 
+                
+                // VERIFICA SE HOUVE MUDANÇA (Para não piscar a tela sem motivo)
+                const currentHash = JSON.stringify(d);
+                if (isAuto && currentHash === lastDataHash) {
+                    syncIcon.classList.remove('loading');
+                    return; // Nada mudou, sai quietinho
+                }
+                lastDataHash = currentHash;
+
                 if (Array.isArray(d)) orders = d; 
                 else { 
                     orders = d.orders||[]; 
@@ -164,8 +201,19 @@
                     if(d.columnOrder && Array.isArray(d.columnOrder)) columnOrder = d.columnOrder;
                     else columnOrder = Object.keys(columnsConfig);
                 } 
-                renderBoard(); hideStatus(); 
-            } catch (e) { renderBoard(); hideStatus(); } 
+                renderBoard(); 
+                
+                if(isAuto) {
+                    syncIcon.classList.remove('loading');
+                    syncIcon.classList.add('success');
+                    setTimeout(() => syncIcon.classList.remove('success'), 2000);
+                } else {
+                    hideStatus();
+                }
+            } catch (e) { 
+                if(!isAuto) hideStatus(); 
+                syncIcon.classList.remove('loading');
+            } 
         }
         
         function renderBoard() {
@@ -192,121 +240,43 @@
             const l = document.getElementById('columnsList'); l.innerHTML = ''; 
             columnOrder.forEach((key) => { 
                 const c = columnsConfig[key]; if(!c) return;
-                // Item arrastável
-                const div = document.createElement('div');
-                div.className = 'col-item';
-                div.draggable = true;
-                div.dataset.key = key; // Guarda o ID da coluna
-                div.innerHTML = `
-                    <div class="drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
-                    <div class="color-dot" style="background:${c.color}"></div>
-                    <div class="col-inputs">
-                        <input type="text" class="inp-full" style="margin:0; padding:5px;" value="${c.title}" onchange="updateColConfig('${key}','title',this.value)">
-                        <div class="col-row">
-                            <input type="number" class="inp-mini" value="${c.days}" onchange="updateColConfig('${key}','days',this.value)">
-                            <input type="color" style="height:30px;" value="${c.color}" onchange="updateColConfig('${key}','color',this.value)">
-                        </div>
-                    </div>
-                    <button onclick="removeColumn('${key}')" style="color:red; border:none; background:none; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
-                `;
-                
-                // Eventos de Arrastar
-                div.addEventListener('dragstart', handleDragStart, false);
-                div.addEventListener('dragenter', handleDragEnter, false);
-                div.addEventListener('dragover', handleDragOver, false);
-                div.addEventListener('dragleave', handleDragLeave, false);
-                div.addEventListener('drop', handleDrop, false);
-                div.addEventListener('dragend', handleDragEnd, false);
-                
+                const div = document.createElement('div'); div.className = 'col-item'; div.draggable = true; div.dataset.key = key; 
+                div.innerHTML = `<div class="drag-handle"><i class="fa-solid fa-grip-lines"></i></div><div class="color-dot" style="background:${c.color}"></div><div class="col-inputs"><input type="text" class="inp-full" style="margin:0; padding:5px;" value="${c.title}" onchange="updateColConfig('${key}','title',this.value)"><div class="col-row"><input type="number" class="inp-mini" value="${c.days}" onchange="updateColConfig('${key}','days',this.value)"><input type="color" style="height:30px;" value="${c.color}" onchange="updateColConfig('${key}','color',this.value)"></div></div><button onclick="removeColumn('${key}')" style="color:red; border:none; background:none; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>`;
+                div.addEventListener('dragstart', handleDragStart, false); div.addEventListener('dragenter', handleDragEnter, false); div.addEventListener('dragover', handleDragOver, false); div.addEventListener('dragleave', handleDragLeave, false); div.addEventListener('drop', handleDrop, false); div.addEventListener('dragend', handleDragEnd, false);
                 l.appendChild(div);
             }); 
             document.getElementById('settingsModal').showModal(); 
         }
 
-        function handleDragStart(e) {
-            this.style.opacity = '0.4';
-            dragSrcEl = this;
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/html', this.innerHTML);
-        }
-
-        function handleDragOver(e) {
-            if (e.preventDefault) { e.preventDefault(); }
-            e.dataTransfer.dropEffect = 'move';
-            return false;
-        }
-
+        function handleDragStart(e) { this.style.opacity = '0.4'; dragSrcEl = this; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/html', this.innerHTML); }
+        function handleDragOver(e) { if (e.preventDefault) { e.preventDefault(); } e.dataTransfer.dropEffect = 'move'; return false; }
         function handleDragEnter(e) { this.classList.add('dragging'); }
         function handleDragLeave(e) { this.classList.remove('dragging'); }
-
         function handleDrop(e) {
-            if (e.stopPropagation) { e.stopPropagation(); } // Pára redirecionamentos
-            
+            if (e.stopPropagation) { e.stopPropagation(); }
             if (dragSrcEl !== this) {
-                // Descobre quem foi arrastado e quem é o alvo
-                const srcKey = dragSrcEl.dataset.key;
-                const targetKey = this.dataset.key;
-                
-                const srcIdx = columnOrder.indexOf(srcKey);
-                const targetIdx = columnOrder.indexOf(targetKey);
-                
-                if (srcIdx > -1 && targetIdx > -1) {
-                    // Remove do lugar velho e põe no novo (Reordena Array)
-                    columnOrder.splice(srcIdx, 1);
-                    columnOrder.splice(targetIdx, 0, srcKey);
-                    
-                    // Re-renderiza a lista localmente (SEM SALVAR NO GITHUB AINDA)
-                    openSettings();
-                }
+                const srcKey = dragSrcEl.dataset.key; const targetKey = this.dataset.key;
+                const srcIdx = columnOrder.indexOf(srcKey); const targetIdx = columnOrder.indexOf(targetKey);
+                if (srcIdx > -1 && targetIdx > -1) { columnOrder.splice(srcIdx, 1); columnOrder.splice(targetIdx, 0, srcKey); openSettings(); }
             }
             return false;
         }
-
-        function handleDragEnd(e) {
-            this.style.opacity = '1';
-            document.querySelectorAll('.col-item').forEach(col => col.classList.remove('dragging'));
-        }
-
+        function handleDragEnd(e) { this.style.opacity = '1'; document.querySelectorAll('.col-item').forEach(col => col.classList.remove('dragging')); }
         function updateColConfig(k, f, v) { if(f === 'days') v = parseInt(v); columnsConfig[k][f] = v; }
 
         // --- AÇÕES DO USUÁRIO ---
-
         async function addColumn() { 
             const t = document.getElementById('newColTitle').value; if(!t) return; 
             const id = t.toLowerCase().replace(/[^a-z0-9]/g, '') + '_' + Math.floor(Math.random()*1000); 
             columnsConfig[id] = { title: t, color: document.getElementById('newColColor').value, days: parseInt(document.getElementById('newColDays').value)||0 }; 
-            columnOrder.push(id); // Adiciona ao final
-            document.getElementById('newColTitle').value = ''; 
-            openSettings(); // Atualiza tela (LOCAL)
+            columnOrder.push(id); document.getElementById('newColTitle').value = ''; openSettings(); 
         }
-        
-        async function removeColumn(k) { 
-            if(!confirm("Remover?")) return; 
-            delete columnsConfig[k]; 
-            columnOrder = columnOrder.filter(id => id !== k);
-            openSettings(); // Atualiza tela (LOCAL)
-        }
-        
-        async function saveAllColumns() { 
-            // SÓ AQUI ENVIA PRO GITHUB
-            renderBoard(); 
-            showStatus('Salvando...', '#ffab00'); 
-            try { 
-                await sendToGitHub('save_columns', { columns: columnsConfig, order: columnOrder }); 
-                showStatus('✅ Salvo!', '#36b37e'); 
-                setTimeout(hideStatus, 2000); 
-            } catch(e) { showStatus('❌ Erro!', '#bf2600'); } 
-        }
+        async function removeColumn(k) { if(!confirm("Remover?")) return; delete columnsConfig[k]; columnOrder = columnOrder.filter(id => id !== k); openSettings(); }
+        async function saveAllColumns() { renderBoard(); showStatus('Salvando...', '#ffab00'); try { await sendToGitHub('save_columns', { columns: columnsConfig, order: columnOrder }); showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); } }
 
         // --- RESTO ---
         function openIntegrator() { const t = localStorage.getItem('warrior_gh_token'); if(t) document.getElementById('integrationToken').value = t; const s = document.getElementById('integrationColSelect'); s.innerHTML = ''; columnOrder.forEach(k => { const o = document.createElement('option'); o.value = k; o.text = columnsConfig[k].title; s.appendChild(o); }); updateIntegratorCode(); document.getElementById('integratorModal').showModal(); }
-        function updateIntegratorCode() {
-            const t = document.getElementById('integrationToken').value.trim(); if(t) localStorage.setItem('warrior_gh_token', t);
-            document.getElementById('codeHeaders').innerText = `Authorization: token ${t || 'ghp_SEU_TOKEN'}\nAccept: application/vnd.github.v3+json\nUser-Agent: WarriorBot\nContent-Type: application/json`;
-            const col = document.getElementById('integrationColSelect').value;
-            const json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}" } };
-            document.getElementById('codeBody').innerText = JSON.stringify(json, null, 2);
-        }
+        function updateIntegratorCode() { const t = document.getElementById('integrationToken').value.trim(); if(t) localStorage.setItem('warrior_gh_token', t); document.getElementById('codeHeaders').innerText = `Authorization: token ${t || 'ghp_SEU_TOKEN'}\nAccept: application/vnd.github.v3+json\nUser-Agent: WarriorBot\nContent-Type: application/json`; const col = document.getElementById('integrationColSelect').value; const json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}" } }; document.getElementById('codeBody').innerText = JSON.stringify(json, null, 2); }
         function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); }
         function openNewOrderModal() { document.getElementById('manualName').value = ''; document.getElementById('manualProduct').value = ''; document.getElementById('manualDate').valueAsDate = new Date(); document.getElementById('newOrderModal').showModal(); }
         async function createManualOrder() { const n = document.getElementById('manualName').value; const p = document.getElementById('manualProduct').value; const pr = document.getElementById('manualDate').value; if(!n) return alert("Nome obrigatório!"); const pay = { nome: n, produto: p || 'Manual', prazo: pr, chat_id: '' }; const c = columnOrder[0]; orders.push({ id: 'ped-'+Date.now(), client: n, product: pay.produto, dueDate: pr, status: c }); renderBoard(); closeModal('newOrderModal'); showStatus('Criando...', '#36b37e'); try { await sendToGitHub('novo_pedido', pay); showStatus('✅ Criado!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); } }
