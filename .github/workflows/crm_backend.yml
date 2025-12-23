@@ -1,4 +1,4 @@
-name: CRM Backend (Final)
+name: CRM Backend (Cria ou Move)
 
 on:
   repository_dispatch:
@@ -23,7 +23,6 @@ jobs:
           git config --global user.name 'CRM Robot'
           git config --global user.email 'bot@warrior.com'
           
-          # Previne conflito de atualizações
           git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}
           git pull origin main || echo "Já atualizado"
 
@@ -32,7 +31,6 @@ jobs:
             const action = process.env.ACTION_TYPE;
             const payload = JSON.parse(process.env.PAYLOAD_JSON);
             
-            // Colunas Padrão
             const defaultColumns = {
               'todo': { title: '📥 Novos', color: '#ff5630', days: 0 },
               'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 },
@@ -54,6 +52,8 @@ jobs:
               }
 
               let notify = '';
+
+              // --- AÇÕES ---
 
               if (action === 'save_columns') {
                 db.columns = payload;
@@ -89,23 +89,36 @@ jobs:
                 db.orders = db.orders.filter(o => o.id !== payload.id);
               }
               
-              // >>> AQUI ESTÁ A INTEGRAÇÃO COM BOTCONVERSA <<<
+              // >>> LÓGICA INTELIGENTE: MOVE OU CRIA <<<
               else if (action === 'move_card_external') {
-                 // Procura pelo chat_id
+                 const newStatus = payload.status;
                  const index = db.orders.findIndex(o => o.chat_id === payload.chat_id);
                  
+                 // Calcula Prazo da Coluna
+                 let newDate = '';
+                 const colConfig = db.columns[newStatus];
+                 if (colConfig && colConfig.days > 0) {
+                    const d = new Date(); d.setDate(d.getDate() + colConfig.days);
+                    newDate = d.toISOString().split('T')[0];
+                 }
+
                  if (index > -1) {
-                    const newStatus = payload.status;
+                    // Cenario 1: EXISTE -> MOVE
                     db.orders[index].status = newStatus;
-                    
-                    // Atualiza prazo se necessário
-                    const colConfig = db.columns[newStatus];
-                    if (colConfig && colConfig.days > 0) {
-                        const d = new Date(); d.setDate(d.getDate() + colConfig.days);
-                        db.orders[index].dueDate = d.toISOString().split('T')[0];
-                    }
+                    if (newDate) db.orders[index].dueDate = newDate;
+                    console.log('Cliente Movido');
                  } else {
-                    console.log('Cliente não encontrado para ID: ' + payload.chat_id);
+                    // Cenario 2: NÃO EXISTE -> CRIA NOVO NA COLUNA CERTA
+                    console.log('Cliente Novo detectado na integração. Criando...');
+                    const novo = {
+                      id: 'ped-' + Date.now(),
+                      client: payload.nome || 'Cliente Bot',
+                      chat_id: payload.chat_id || '',
+                      product: 'Pedido via Bot',
+                      dueDate: newDate || '', // Já nasce com o prazo certo
+                      status: newStatus // Já nasce na coluna certa
+                    };
+                    db.orders.push(novo);
                  }
               }
 
