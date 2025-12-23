@@ -1,4 +1,4 @@
-name: CRM Backend (Completo)
+name: CRM Backend (Blindado)
 
 on:
   repository_dispatch:
@@ -8,18 +8,21 @@ jobs:
   gerenciar-crm:
     runs-on: ubuntu-latest
     steps:
-      - name: Baixar código (Com Permissão de Chefe)
+      - name: Baixar código
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_PAT }} 
-          # 👆 AQUI ESTÁ A MÁGICA: Usando o Token Pessoal, o push dispara o site!
+          persist-credentials: false # Desativa o login padrão para usarmos o nosso
 
-      - name: Processar Dados e Salvar
-        id: logica
+      - name: Processar e Salvar (Modo Seguro)
+        env:
+          MY_TOKEN: ${{ secrets.GH_PAT }} 
+          # 👆 O robô vai ler a chave aqui
         run: |
+          # 1. Configura quem é o robô
           git config --global user.name 'CRM Robot'
           git config --global user.email 'bot@warrior.com'
 
+          # 2. Executa a lógica do banco de dados
           node -e "
             const fs = require('fs');
             const action = '${{ github.event.action }}';
@@ -27,8 +30,12 @@ jobs:
             
             try {
               let db = [];
+              // Proteção contra arquivo corrompido ou vazio
               if (fs.existsSync('db.json')) {
-                db = JSON.parse(fs.readFileSync('db.json', 'utf8'));
+                try {
+                  const content = fs.readFileSync('db.json', 'utf8');
+                  if (content.trim()) db = JSON.parse(content);
+                } catch (err) { db = []; }
               }
 
               let chatIdToNotify = '';
@@ -37,7 +44,7 @@ jobs:
               if (action === 'novo_pedido') {
                 const novo = {
                   id: 'ped-' + Date.now(),
-                  client: payload.nome || 'Cliente Sem Nome',
+                  client: payload.nome || 'Cliente',
                   chat_id: payload.chat_id || '',
                   product: payload.produto || 'Pedido',
                   dueDate: payload.prazo || '',
@@ -64,13 +71,17 @@ jobs:
               fs.writeFileSync('notify.txt', chatIdToNotify + '|' + statusToNotify);
 
             } catch (e) {
-              console.error('Erro crítico:', e);
+              console.error('Erro crítico no Node:', e);
               process.exit(1); 
             }
           "
 
+          # 3. Força o envio usando a Chave Mestra
           git add db.json
-          git commit -m "CRM Action: ${{ github.event.action }}" || echo "Sem alterações"
+          git commit -m "CRM Action: ${{ github.event.action }}" || echo "Nada mudou"
+          
+          # AQUI ESTÁ O TRUQUE: Autenticação via URL
+          git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}
           git push
 
       - name: Notificar BotConversa
@@ -83,7 +94,6 @@ jobs:
             STATUS=$(echo "$CONTENT" | cut -d'|' -f2)
             
             if [ ! -z "$CHAT_ID" ] && [ "$STATUS" == "doing" ]; then
-              echo "Notificando ID: $CHAT_ID"
               curl -X POST "https://backend.botconversa.com.br/api/v1/subscriber/$CHAT_ID/tags" \
               -H "api-key: $API_KEY" \
               -H "Content-Type: application/json" \
