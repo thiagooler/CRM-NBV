@@ -3,37 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM Warrior - Gestão</title>
+    <title>CRM Warrior - Automação</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --bg: #f4f5f7; --card-bg: #fff; --text: #172b4d; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }
         
-        /* Cabeçalho */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .header h1 { margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; color: #0052cc; }
-        
         .header-controls { display: flex; gap: 10px; align-items: center; }
-        
         .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .btn-config:hover { background: #ebecf0; transform: rotate(90deg); }
-
         .status-badge { padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 0.9em; display: none; color: white;}
         
-        /* Kanban Layout */
+        /* Kanban */
         .kanban-board { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; align-items: flex-start; }
         
-        /* Colunas */
         .column { 
             background: #ebecf0; border-radius: 10px; width: 320px; min-width: 320px; 
             padding: 12px; display: flex; flex-direction: column; max-height: 85vh;
-            border-top: 4px solid transparent; /* Cor da borda definida via JS */
+            border-top: 4px solid transparent; position: relative;
         }
         
         .column-header { 
             font-weight: 700; margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; 
             color: #42526e; display: flex; justify-content: space-between; align-items: center;
         }
+
+        /* Menu de Ordenação da Coluna */
+        .col-menu-btn { cursor: pointer; padding: 5px; border-radius: 4px; }
+        .col-menu-btn:hover { background: #dcdfe4; }
+        .col-options { 
+            display: none; position: absolute; top: 40px; right: 10px; background: white; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); border-radius: 6px; z-index: 100; width: 150px; overflow: hidden;
+        }
+        .col-options div { padding: 10px; cursor: pointer; font-size: 0.9em; color: #333; }
+        .col-options div:hover { background: #f4f5f7; color: #0052cc; }
+        .col-options.active { display: block; }
         
         .card-list { flex-grow: 1; overflow-y: auto; min-height: 100px; padding-bottom: 10px;}
 
@@ -41,105 +46,76 @@
         .card { 
             background: var(--card-bg); border-radius: 6px; padding: 12px; margin-bottom: 10px; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: grab; position: relative;
-            transition: transform 0.2s, box-shadow 0.2s; border-left: 4px solid #ccc;
+            transition: transform 0.2s; border-left: 4px solid #ccc;
         }
         .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
-        .card:active { cursor: grabbing; }
-
         .card-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; color: #172b4d; }
         .card-meta { font-size: 0.85em; color: #666; display: flex; align-items: center; gap: 6px; margin-top: 6px; }
-        
-        /* Ações do Card */
-        .card-actions { 
-            margin-top: 12px; border-top: 1px solid #f4f5f7; padding-top: 8px; 
-            display: flex; justify-content: flex-end; gap: 8px;
-        }
-        
-        .btn-icon { 
-            background: #f4f5f7; border: none; cursor: pointer; color: #6b778c; 
-            border-radius: 4px; padding: 6px 10px; font-size: 0.8em; transition: 0.2s; 
-        }
-        .btn-icon:hover { background: #dfe1e6; color: #0052cc; }
+        .card-actions { margin-top: 12px; border-top: 1px solid #f4f5f7; padding-top: 8px; display: flex; justify-content: flex-end; gap: 8px;}
+        .btn-icon { background: #f4f5f7; border: none; cursor: pointer; color: #6b778c; border-radius: 4px; padding: 6px 10px; font-size: 0.8em; }
         .btn-trash:hover { background: #ffebe6; color: #bf2600; }
 
-        /* Modal */
+        /* Dialogs */
         dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); padding: 25px; width: 350px; font-family: inherit;}
         dialog::backdrop { background: rgba(0,0,0,0.6); }
-        .inp-token { width: 100%; padding: 12px; margin: 15px 0; border: 2px solid #dfe1e6; border-radius: 6px; box-sizing: border-box; font-size: 14px;}
-        .inp-token:focus { border-color: #0052cc; outline: none; }
-        .btn-save { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem;}
-        .btn-save:hover { background: #0047b3; }
+        .inp-token { width: 100%; padding: 12px; margin: 15px 0; border: 2px solid #dfe1e6; border-radius: 6px; }
+        .btn-save { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
         
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-thumb { background: #c1c7d0; border-radius: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1><i class="fa-solid fa-layer-group"></i> CRM Warrior</h1>
+        <h1><i class="fa-solid fa-robot"></i> CRM Warrior</h1>
         <div class="header-controls">
             <div id="statusMsg" class="status-badge"></div>
-            <button class="btn-config" onclick="openConfig()" title="Configurar Token">
-                <i class="fa-solid fa-gear"></i>
-            </button>
+            <button class="btn-config" onclick="openConfig()" title="Configurar Token"><i class="fa-solid fa-gear"></i></button>
         </div>
     </div>
 
-    <div class="kanban-board" id="board">
-        </div>
+    <div class="kanban-board" id="board"></div>
 
     <dialog id="configModal">
-        <h3 style="margin-top:0; color:#0052cc;">⚙️ Acesso Seguro</h3>
-        <p style="font-size:0.9em; color:#666; line-height: 1.5;">
-            Para salvar alterações, insira seu Token do GitHub (começa com <code>ghp_</code>).
-        </p>
-        <input type="password" id="tokenInput" class="inp-token" placeholder="Cole seu token aqui...">
-        <button class="btn-save" onclick="saveToken()">Salvar Acesso</button>
-        <p style="font-size:0.75em; color:#999; text-align:center; margin-top:15px; margin-bottom: 0;">
-            Salvo apenas no seu navegador.
-        </p>
+        <h3 style="margin-top:0; color:#0052cc;">⚙️ Acesso</h3>
+        <input type="password" id="tokenInput" class="inp-token" placeholder="Token GitHub (ghp_...)">
+        <button class="btn-save" onclick="saveToken()">Salvar</button>
     </dialog>
 
     <script>
         // =================================================================
-        // 🛠️ ÁREA DE CONFIGURAÇÃO (Edite aqui para mudar as colunas)
+        // 🛠️ CONFIGURAÇÃO INTELIGENTE
         // =================================================================
-        
         const REPO_OWNER = 'thiagooler';
         const REPO_NAME = 'CRM-NBV';
 
-        // Para ADICIONAR uma coluna: crie uma nova linha seguindo o modelo.
-        // Para RENOMEAR: mude apenas o texto dentro de 'title'.
+        // Aqui você define os prazos automáticos!
+        // 'days': Quantos dias somar ao prazo quando o card cai aqui.
+        // Se 'days' for 0 ou não existir, a data não muda.
+        
         const columnsConfig = {
-            'todo':      { title: '📥 Novos Pedidos',    color: '#ff5630' }, // Laranja
-            'doing':     { title: '🔨 Em Produção',      color: '#ffab00' }, // Amarelo
-            'review':    { title: '👀 Revisão',          color: '#0052cc' }, // Azul
-            'approval':  { title: '👍 Aprovação Cliente',color: '#6554c0' }, // Roxo
-            'payment':   { title: '💰 Aguardando Pagto', color: '#36b37e' }, // Verde
-            'done':      { title: '✅ Finalizado / Arq', color: '#42526e' }  // Cinza
+            'todo':      { title: '📥 Novos',           color: '#ff5630', days: 0 },
+            'doing':     { title: '🔨 Em Produção',     color: '#ffab00', days: 30 }, // <-- Regra de 30 dias
+            'review':    { title: '👀 Revisão',         color: '#0052cc', days: 5 },  // <-- Regra de 5 dias
+            'approval':  { title: '👍 Aprovação',       color: '#6554c0', days: 0 },
+            'done':      { title: '✅ Finalizado',      color: '#42526e', days: 0 }
         };
 
         // =================================================================
-        // 🧠 LÓGICA DO SISTEMA (Não precisa mexer abaixo)
+        // LÓGICA DO SISTEMA
         // =================================================================
-        
         let orders = [];
 
         function init() {
-            // Verifica Token
             const token = localStorage.getItem('warrior_gh_token');
             if(!token) setTimeout(openConfig, 800);
-            
             loadOrders();
         }
 
         async function loadOrders() {
             showStatus('Carregando...', '#0052cc');
             try {
-                // Adiciona timestamp para ignorar cache
                 const response = await fetch(`db.json?t=${new Date().getTime()}`);
                 if(!response.ok) throw new Error("Erro de leitura");
                 orders = await response.json();
@@ -159,27 +135,31 @@
             Object.keys(columnsConfig).forEach(key => {
                 const config = columnsConfig[key];
                 
-                // Estrutura da Coluna
                 const colDiv = document.createElement('div');
                 colDiv.className = 'column';
                 colDiv.style.borderTopColor = config.color;
                 colDiv.innerHTML = `
                     <div class="column-header" style="color:${config.color}">
-                        ${config.title} <span id="count-${key}" style="background:#fff; padding:2px 8px; border-radius:10px; font-size:0.8em; color:#333;">0</span>
+                        <span>${config.title} <span id="count-${key}" style="background:#fff; padding:2px 8px; border-radius:10px; font-size:0.8em; color:#333;">0</span></span>
+                        
+                        <div style="position:relative">
+                            <i class="fa-solid fa-ellipsis-vertical col-menu-btn" onclick="toggleMenu('${key}')"></i>
+                            <div id="menu-${key}" class="col-options">
+                                <div onclick="sortColumn('${key}', 'date')"><i class="fa-regular fa-clock"></i> Por Prazo</div>
+                                <div onclick="sortColumn('${key}', 'name')"><i class="fa-solid fa-arrow-down-a-z"></i> Por Nome</div>
+                                <div onclick="sortColumn('${key}', 'newest')"><i class="fa-solid fa-layer-group"></i> Chegada</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-list" id="${key}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
                 `;
                 board.appendChild(colDiv);
 
-                // Filtrar e Criar Cards
                 const colOrders = orders.filter(o => o.status === key);
                 document.getElementById(`count-${key}`).innerText = colOrders.length;
-                const listDiv = colDiv.querySelector('.card-list');
                 
-                colOrders.forEach(order => {
-                    const card = createCardElement(order, config.color);
-                    listDiv.appendChild(card);
-                });
+                const listDiv = colDiv.querySelector('.card-list');
+                colOrders.forEach(order => listDiv.appendChild(createCardElement(order, config.color)));
             });
         }
 
@@ -191,42 +171,55 @@
             card.style.borderLeftColor = color;
             card.ondragstart = drag;
 
+            // Formatação da data com aviso visual de atraso
+            const dateObj = new Date(order.dueDate);
+            const today = new Date();
+            const isLate = dateObj < today && order.status !== 'done';
+            const dateStyle = isLate ? 'color:#d93025; font-weight:bold;' : '';
+
             const clientLink = `${window.location.href.split('?')[0]}?id=${order.id}`;
 
             card.innerHTML = `
                 <div class="card-title">${order.client}</div>
                 <div class="card-meta"><i class="fa-solid fa-box-open"></i> ${order.product}</div>
-                <div class="card-meta"><i class="fa-regular fa-calendar-check"></i> ${formatDate(order.dueDate)}</div>
-                <div class="card-meta" style="font-size:0.7em; color:#999; margin-top:4px;">ID: ${order.id}</div>
+                <div class="card-meta" style="${dateStyle}"><i class="fa-regular fa-calendar-check"></i> ${formatDate(order.dueDate)}</div>
                 
                 <div class="card-actions">
-                    <button class="btn-icon" title="Link do Cliente" onclick="copyToClipboard('${clientLink}')">
-                        <i class="fa-solid fa-link"></i> Link
-                    </button>
-                    <button class="btn-icon btn-trash" title="Excluir Pedido" onclick="deleteOrder('${order.id}')">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
+                    <button class="btn-icon" onclick="copyToClipboard('${clientLink}')"><i class="fa-solid fa-link"></i></button>
+                    <button class="btn-icon btn-trash" onclick="deleteOrder('${order.id}')"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `;
             return card;
         }
 
-        // --- SISTEMA DE TOKEN ---
-        function openConfig() { document.getElementById('configModal').showModal(); }
-        
-        function saveToken() {
-            const val = document.getElementById('tokenInput').value.trim();
-            if(val.startsWith('ghp_')) {
-                localStorage.setItem('warrior_gh_token', val);
-                document.getElementById('configModal').close();
-                alert("Token salvo com sucesso! Agora você pode gerenciar o CRM.");
-            } else {
-                alert("Token inválido. Ele deve começar com 'ghp_'.");
-            }
+        // --- ORDENAÇÃO ---
+        function toggleMenu(key) {
+            document.querySelectorAll('.col-options').forEach(el => el.classList.remove('active'));
+            document.getElementById(`menu-${key}`).classList.toggle('active');
         }
-        function getToken() { return localStorage.getItem('warrior_gh_token'); }
 
-        // --- DRAG AND DROP ---
+        function sortColumn(status, criteria) {
+            // Fecha menus
+            document.querySelectorAll('.col-options').forEach(el => el.classList.remove('active'));
+            
+            // Separa os cards da coluna e os outros
+            let colOrders = orders.filter(o => o.status === status);
+            let otherOrders = orders.filter(o => o.status !== status);
+
+            if (criteria === 'date') {
+                colOrders.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+            } else if (criteria === 'name') {
+                colOrders.sort((a, b) => a.client.localeCompare(b.client));
+            } else if (criteria === 'newest') {
+                colOrders.sort((a, b) => b.id.localeCompare(a.id)); // ID baseado em timestamp
+            }
+
+            // Junta tudo de novo
+            orders = [...otherOrders, ...colOrders];
+            renderBoard();
+        }
+
+        // --- ARRASTAR E DATAS AUTOMÁTICAS ---
         function allowDrop(ev) { ev.preventDefault(); }
         function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
         
@@ -240,64 +233,72 @@
             const index = orders.findIndex(o => o.id === orderId);
             
             if (index > -1 && orders[index].status !== newStatus) {
-                // Atualiza tela imediatamente (sem lag)
+                // Lógica de Data Automática
+                const config = columnsConfig[newStatus];
+                let newDate = null;
+
+                if (config.days > 0) {
+                    const date = new Date();
+                    date.setDate(date.getDate() + config.days);
+                    newDate = date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+                    orders[index].dueDate = newDate;
+                    // Visualmente mostra que alterou
+                    alert(`📅 Prazo atualizado automaticamente para: ${formatDate(newDate)} (+${config.days} dias)`);
+                }
+
                 orders[index].status = newStatus;
                 renderBoard(); 
-                // Envia para o GitHub
-                await sendToGitHub('update_status', { id: orderId, status: newStatus });
+                
+                // Envia para o GitHub (Status + Nova Data)
+                await sendToGitHub('update_status', { 
+                    id: orderId, 
+                    status: newStatus,
+                    newDate: newDate 
+                });
             }
         }
 
-        // --- AÇÕES ---
+        // --- UTILITÁRIOS E GITHUB ---
+        function openConfig() { document.getElementById('configModal').showModal(); }
+        function saveToken() {
+            const val = document.getElementById('tokenInput').value.trim();
+            if(val.startsWith('ghp_')) {
+                localStorage.setItem('warrior_gh_token', val);
+                document.getElementById('configModal').close();
+                alert("Salvo!");
+            } else { alert("Token inválido"); }
+        }
+        function getToken() { return localStorage.getItem('warrior_gh_token'); }
+
+        async function sendToGitHub(actionType, payload) {
+            const token = getToken();
+            if(!token) return openConfig();
+
+            showStatus('💾 Salvando...', '#ffab00');
+            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`;
+
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ event_type: actionType, client_payload: payload })
+                });
+                if(res.ok) { showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); }
+                else { throw new Error(res.status); }
+            } catch (e) { showStatus('❌ Erro', '#bf2600'); }
+        }
+
         async function deleteOrder(id) {
-            if(confirm('Tem certeza que deseja apagar este pedido?')) {
+            if(confirm('Apagar pedido?')) {
                 orders = orders.filter(o => o.id !== id);
                 renderBoard();
                 await sendToGitHub('delete_order', { id: id });
             }
         }
 
-        async function sendToGitHub(actionType, payload) {
-            const token = getToken();
-            if(!token) {
-                alert("Token não configurado!");
-                openConfig();
-                return;
-            }
-
-            showStatus('💾 Salvando alterações...', '#ffab00');
-            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`;
-
-            try {
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ event_type: actionType, client_payload: payload })
-                });
-
-                if(res.ok) {
-                    showStatus('✅ Salvo!', '#36b37e');
-                    setTimeout(hideStatus, 2000);
-                } else {
-                    throw new Error(res.status);
-                }
-            } catch (e) {
-                showStatus('❌ Erro de conexão', '#bf2600');
-                if(e.message === '401') alert("Token expirado ou inválido.");
-                console.error(e);
-            }
-        }
-
-        // --- UTILITÁRIOS ---
         function showStatus(msg, color) {
             const el = document.getElementById('statusMsg');
-            el.innerText = msg;
-            el.style.backgroundColor = color;
-            el.style.display = 'block';
+            el.innerText = msg; el.style.backgroundColor = color; el.style.display = 'block';
         }
         function hideStatus() { document.getElementById('statusMsg').style.display = 'none'; }
         
@@ -306,8 +307,15 @@
             return dateStr.split('-').reverse().join('/');
         }
         function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => alert("Link copiado para a área de transferência!"));
+            navigator.clipboard.writeText(text).then(() => alert("Copiado!"));
         }
+
+        // Fecha menu se clicar fora
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.col-menu-btn')) {
+                document.querySelectorAll('.col-options').forEach(el => el.classList.remove('active'));
+            }
+        });
 
         init();
     </script>
