@@ -1,0 +1,16 @@
+[
+  {
+    "id": "pedido1",
+    "client": "Cliente Exemplo",
+    "product": "Ensaio Fotográfico",
+    "dueDate": "2025-12-30",
+    "status": "todo"
+  },
+  {
+    "id": "pedido2",
+    "client": "Maria Fotos",
+    "product": "Formatura",
+    "dueDate": "2025-12-28",
+    "status": "doing"
+  }
+]
