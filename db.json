@@ -6,7 +6,7 @@
       "title": "Aguardando resposta"
     },
     "disponivelpararetirada_769": {
-      "color": "#22e015",
+      "color": "#1e9816",
       "days": 0,
       "title": "Disponivel para retirada"
     },
@@ -46,7 +46,7 @@
       "title": "Pronto para entrega"
     },
     "psvenda_619": {
-      "color": "#00fbff",
+      "color": "#0ea7aa",
       "days": 0,
       "title": "Pós venda"
     },
