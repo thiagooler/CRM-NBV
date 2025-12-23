@@ -25,6 +25,11 @@
       "days": 20,
       "title": "Em produção"
     },
+    "filadeatendimento_988": {
+      "color": "#cc0000",
+      "days": 3,
+      "title": "Fila de Atendimento"
+    },
     "filadeproduo_612": {
       "color": "#0052cc",
       "days": 10,
@@ -61,6 +66,7 @@
     "payment",
     "prontoparaentrega_2",
     "psvenda_619",
+    "filadeatendimento_988",
     "review"
   ],
   "orders": [
