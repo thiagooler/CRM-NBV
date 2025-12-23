@@ -1,8 +1,8 @@
-name: CRM Backend (Mestre)
+name: CRM Backend (Porta Aberta)
 
 on:
   repository_dispatch:
-    types: [novo_pedido, update_status, delete_order, save_columns, update_order, move_card_external]
+    # REMOVEMOS A LISTA DE TYPES. AGORA ELE ACEITA TUDO!
 
 jobs:
   gerenciar-crm:
@@ -28,9 +28,16 @@ jobs:
 
           node -e "
             const fs = require('fs');
-            const action = process.env.ACTION_TYPE;
-            const payload = JSON.parse(process.env.PAYLOAD_JSON);
+            // Proteção: Se o action vier vazio, define um padrão para não quebrar
+            const action = process.env.ACTION_TYPE || 'unknown';
             
+            let payload = {};
+            try {
+                payload = JSON.parse(process.env.PAYLOAD_JSON);
+            } catch (e) { console.log('Payload vazio ou inválido'); }
+            
+            console.log('--- COMANDO RECEBIDO: ' + action + ' ---');
+
             const defaultColumns = {
               'todo': { title: '📥 Novos', color: '#ff5630', days: 0 },
               'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 },
@@ -53,13 +60,12 @@ jobs:
 
               let notify = '';
 
-              // --- AÇÕES ---
+              // --- ROTEADOR DE COMANDOS ---
 
               if (action === 'save_columns') {
-                // Aqui estava o segredo: garantimos que columns seja um objeto válido
-                if (typeof payload === 'object') {
+                if (payload && typeof payload === 'object') {
                     db.columns = payload;
-                    console.log('Colunas salvas com sucesso');
+                    console.log('✅ Colunas Atualizadas');
                 }
               }
               
@@ -100,12 +106,16 @@ jobs:
               else if (action === 'move_card_external') {
                  const newStatus = payload.status;
                  const index = db.orders.findIndex(o => o.chat_id === payload.chat_id);
+                 
                  let newDate = '';
-                 const colConfig = db.columns[newStatus];
-                 if (colConfig && colConfig.days > 0) {
+                 // Tenta pegar dias da coluna, se não existir usa 0
+                 const colConfig = db.columns && db.columns[newStatus] ? db.columns[newStatus] : { days: 0 };
+                 
+                 if (colConfig.days > 0) {
                     const d = new Date(); d.setDate(d.getDate() + colConfig.days);
                     newDate = d.toISOString().split('T')[0];
                  }
+
                  if (index > -1) {
                     db.orders[index].status = newStatus;
                     if (newDate) db.orders[index].dueDate = newDate;
@@ -126,7 +136,7 @@ jobs:
               fs.writeFileSync('notify.txt', notify);
 
             } catch (e) {
-              console.error('Erro Fatal:', e);
+              console.error('ERRO CRÍTICO NO SCRIPT:', e);
               process.exit(1); 
             }
           "
