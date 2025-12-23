@@ -1,4 +1,4 @@
-name: CRM Backend (Blindado)
+name: CRM Backend (Blindado v2)
 
 on:
   repository_dispatch:
@@ -11,26 +11,31 @@ jobs:
       - name: Baixar código
         uses: actions/checkout@v3
         with:
-          persist-credentials: false # Desativa o login padrão para usarmos o nosso
+          persist-credentials: false
 
-      - name: Processar e Salvar (Modo Seguro)
+      - name: Processar e Salvar
         env:
+          # AQUI ESTÁ A CORREÇÃO: Passamos os dados via envelope (ENV), não direto no texto
           MY_TOKEN: ${{ secrets.GH_PAT }} 
-          # 👆 O robô vai ler a chave aqui
+          PAYLOAD_JSON: ${{ toJson(github.event.client_payload) }}
+          ACTION_TYPE: ${{ github.event.action }}
+          API_KEY: ${{ secrets.BOTCONVERSA_KEY }}
         run: |
-          # 1. Configura quem é o robô
           git config --global user.name 'CRM Robot'
           git config --global user.email 'bot@warrior.com'
 
-          # 2. Executa a lógica do banco de dados
+          # Executa o Node.js lendo o envelope seguro
           node -e "
             const fs = require('fs');
-            const action = '${{ github.event.action }}';
-            const payload = ${{ toJson(github.event.client_payload) }};
+            
+            // Lê as variáveis de ambiente (Seguro contra erros de aspas)
+            const action = process.env.ACTION_TYPE;
+            const payload = JSON.parse(process.env.PAYLOAD_JSON);
+            
+            console.log('Ação:', action);
             
             try {
               let db = [];
-              // Proteção contra arquivo corrompido ou vazio
               if (fs.existsSync('db.json')) {
                 try {
                   const content = fs.readFileSync('db.json', 'utf8');
@@ -38,8 +43,7 @@ jobs:
                 } catch (err) { db = []; }
               }
 
-              let chatIdToNotify = '';
-              let statusToNotify = '';
+              let notify = '';
 
               if (action === 'novo_pedido') {
                 const novo = {
@@ -52,37 +56,35 @@ jobs:
                 };
                 db.push(novo);
               }
-
               else if (action === 'update_status') {
                 const index = db.findIndex(o => o.id === payload.id);
                 if (index > -1) {
                   db[index].status = payload.status;
-                  if (payload.newDate) { db[index].dueDate = payload.newDate; }
-                  chatIdToNotify = db[index].chat_id || '';
-                  statusToNotify = payload.status;
+                  if (payload.newDate) db[index].dueDate = payload.newDate;
+                  notify = (db[index].chat_id || '') + '|' + payload.status;
                 }
               }
-
               else if (action === 'delete_order') {
                 db = db.filter(o => o.id !== payload.id);
+                console.log('Pedido deletado.');
               }
 
               fs.writeFileSync('db.json', JSON.stringify(db, null, 2));
-              fs.writeFileSync('notify.txt', chatIdToNotify + '|' + statusToNotify);
+              fs.writeFileSync('notify.txt', notify);
 
             } catch (e) {
-              console.error('Erro crítico no Node:', e);
+              console.error('Erro no script:', e);
               process.exit(1); 
             }
           "
 
-          # 3. Força o envio usando a Chave Mestra
+          # Salva no GitHub
           git add db.json
           git commit -m "CRM Action: ${{ github.event.action }}" || echo "Nada mudou"
           
-          # AQUI ESTÁ O TRUQUE: Autenticação via URL
+          # Autentica e Envia
           git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}
-          git push
+          git push origin main
 
       - name: Notificar BotConversa
         env:
@@ -90,13 +92,16 @@ jobs:
         run: |
           if [ -f notify.txt ]; then
             CONTENT=$(cat notify.txt)
-            CHAT_ID=$(echo "$CONTENT" | cut -d'|' -f1)
-            STATUS=$(echo "$CONTENT" | cut -d'|' -f2)
-            
-            if [ ! -z "$CHAT_ID" ] && [ "$STATUS" == "doing" ]; then
-              curl -X POST "https://backend.botconversa.com.br/api/v1/subscriber/$CHAT_ID/tags" \
-              -H "api-key: $API_KEY" \
-              -H "Content-Type: application/json" \
-              -d '{"tag_id": "Status: Produção"}'
+            if [ ! -z "$CONTENT" ]; then
+              CHAT_ID=$(echo "$CONTENT" | cut -d'|' -f1)
+              STATUS=$(echo "$CONTENT" | cut -d'|' -f2)
+              
+              if [ ! -z "$CHAT_ID" ] && [ "$STATUS" == "doing" ]; then
+                 echo "Notificando BotConversa..."
+                 curl -s -X POST "https://backend.botconversa.com.br/api/v1/subscriber/$CHAT_ID/tags" \
+                 -H "api-key: $API_KEY" \
+                 -H "Content-Type: application/json" \
+                 -d '{"tag_id": "Status: Produção"}'
+              fi
             fi
           fi
