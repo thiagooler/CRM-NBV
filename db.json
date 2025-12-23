@@ -7,13 +7,6 @@
     "status": "todo"
   },
   {
-    "id": "pedido2",
-    "client": "Maria Fotos",
-    "product": "Formatura",
-    "dueDate": "2025-12-28",
-    "status": "doing"
-  },
-  {
     "id": "ped-1766509782",
     "client": "{{first_name}} {{last_name}}",
     "product": "Novo Pedido",
