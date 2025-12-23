@@ -2,22 +2,59 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CRM Warrior</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --bg: #f4f5f7; --card-bg: #fff; --text: #172b4d; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }
         
-        /* Layout */
+        /* --- LAYOUT DESKTOP (Padrão) --- */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .header h1 { margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; color: #0052cc; }
+        .header-controls { display: flex; gap: 10px; align-items: center; }
+        
         .status-badge { padding: 8px 16px; border-radius: 4px; font-weight: bold; font-size: 0.9em; display: none; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
         
-        .kanban-board { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; align-items: flex-start; }
+        .kanban-board { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; align-items: flex-start; scroll-behavior: smooth; }
         
-        /* Colunas */
-        .column { background: #ebecf0; border-radius: 10px; width: 320px; min-width: 320px; padding: 12px; display: flex; flex-direction: column; max-height: 85vh; border-top: 4px solid transparent; position: relative; }
+        .column { 
+            background: #ebecf0; border-radius: 10px; 
+            width: 320px; min-width: 320px; /* Tamanho fixo desktop */
+            padding: 12px; display: flex; flex-direction: column; max-height: 85vh; 
+            border-top: 4px solid transparent; position: relative; 
+        }
+        
+        /* --- RESPONSIVIDADE (MOBILE) --- */
+        @media (max-width: 768px) {
+            body { padding: 15px 10px; } /* Menos borda */
+            
+            .header { flex-direction: column; gap: 15px; align-items: flex-start; }
+            .header-controls { width: 100%; justify-content: space-between; flex-wrap: wrap; }
+            .header h1 { font-size: 1.3rem; }
+
+            /* Kanban Mobile com Snap (Efeito Magnético) */
+            .kanban-board { 
+                gap: 10px; 
+                scroll-snap-type: x mandatory; /* Ativa o imã horizontal */
+                padding-bottom: 20px;
+            }
+            
+            .column { 
+                min-width: 85vw; /* Ocupa 85% da tela do celular */
+                scroll-snap-align: center; /* Centraliza a coluna ao soltar */
+                max-height: 80vh;
+            }
+
+            /* Modais Mobile */
+            dialog { width: 95% !important; max-height: 90vh; }
+            
+            /* Botões maiores para o dedo */
+            .btn-icon { padding: 10px 12px; }
+            .card-actions { gap: 10px; }
+        }
+
+        /* Resto do CSS */
         .column-header { font-weight: 700; margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; color: #42526e; display: flex; justify-content: space-between; align-items: center;}
 
         /* Menu de Coluna */
@@ -81,15 +118,15 @@
 
     <div class="header">
         <h1><i class="fa-solid fa-layer-group"></i> CRM Warrior</h1>
-        <div style="display:flex; gap:10px; align-items:center;">
+        <div class="header-controls">
             <div id="statusMsg" class="status-badge"></div>
             
             <button class="btn-bot" onclick="openIntegrator()">
-                <i class="fa-solid fa-robot"></i> Integração
+                <i class="fa-solid fa-robot"></i> <span style="display:none; @media(min-width:768px){display:inline;}">Integração</span>
             </button>
 
             <button class="btn-add-new" onclick="openNewOrderModal()">
-                <i class="fa-solid fa-plus"></i> Novo
+                <i class="fa-solid fa-plus"></i> <span style="display:none; @media(min-width:768px){display:inline;}">Novo</span>
             </button>
             
             <button class="btn-config" onclick="openSettings()" title="Configurações"><i class="fa-solid fa-gear"></i></button>
@@ -100,67 +137,42 @@
 
     <dialog id="integratorModal">
         <div class="modal-header">
-            <h3 style="margin:0">🤖 Gerador de Webhook</h3>
+            <h3 style="margin:0">🤖 Webhook</h3>
             <button onclick="closeModal('integratorModal')" style="border:none; background:none; cursor:pointer;">&times;</button>
         </div>
         <div class="modal-body">
-            
             <label style="color:#0052cc">Seu Token (GitHub):</label>
             <input type="text" id="integrationToken" class="inp-full" placeholder="Cole seu token ghp_ aqui..." oninput="updateIntegratorCode()">
-            
             <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-
             <label>Mover cliente para:</label>
             <select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select>
-            
             <div style="background:#fff3cd; padding:10px; border-radius:4px; font-size:0.85em; color:#856404; margin-bottom:15px;">
-                💡 <b>Dica:</b> Copie os dados abaixo e cole no BotConversa. O Token e a Coluna já estão configurados no código.
+                💡 Copie e cole no BotConversa.
             </div>
-
             <label>1. URL</label>
-            <div class="code-block" id="codeUrl">
-                https://api.github.com/repos/thiagooler/CRM-NBV/dispatches
-                <button class="btn-copy" onclick="copyText('codeUrl')">Copiar</button>
-            </div>
-
-            <label>2. Headers (Token incluído)</label>
-            <div class="code-block" id="codeHeaders">
-Authorization: token SEU_TOKEN_AQUI
-Accept: application/vnd.github.v3+json
-User-Agent: WarriorBot
-Content-Type: application/json
-                <button class="btn-copy" onclick="copyText('codeHeaders')">Copiar</button>
-            </div>
-
-            <label>3. Body (JSON)</label>
-            <div class="code-block" id="codeBody">
-                <button class="btn-copy" onclick="copyText('codeBody')">Copiar</button>
-            </div>
+            <div class="code-block" id="codeUrl">https://api.github.com/repos/thiagooler/CRM-NBV/dispatches<button class="btn-copy" onclick="copyText('codeUrl')">Copiar</button></div>
+            <label>2. Headers</label>
+            <div class="code-block" id="codeHeaders">...<button class="btn-copy" onclick="copyText('codeHeaders')">Copiar</button></div>
+            <label>3. Body</label>
+            <div class="code-block" id="codeBody">...<button class="btn-copy" onclick="copyText('codeBody')">Copiar</button></div>
         </div>
     </dialog>
 
     <dialog id="settingsModal">
-        <div class="modal-header">
-            <h3 style="margin:0">Configurações</h3>
-            <button onclick="closeModal('settingsModal')" style="border:none; background:none; cursor:pointer;">&times;</button>
-        </div>
-        
+        <div class="modal-header"><h3 style="margin:0">Configurações</h3><button onclick="closeModal('settingsModal')" style="border:none; background:none; cursor:pointer;">&times;</button></div>
         <div style="padding:10px; display:flex; justify-content:space-between; border-bottom:1px solid #eee;">
             <button class="tab-btn active" onclick="switchTab('tab-token')">🔐 Acesso</button>
             <button class="tab-btn" onclick="switchTab('tab-columns')">📊 Colunas</button>
         </div>
-
         <div class="modal-body">
             <div id="tab-token" class="tab-content active">
-                <p style="font-size:0.9em; color:#666">Token Atual (Salvo):</p>
-                <input type="text" id="tokenDisplay" class="inp-full" readonly style="background:#eee; color:#888;">
+                <p style="font-size:0.9em; color:#666">Token Salvo:</p><input type="text" id="tokenDisplay" class="inp-full" readonly style="background:#eee; color:#888;">
             </div>
-
             <div id="tab-columns" class="tab-content">
                 <div id="columnsList"></div>
-                <button class="btn-primary" onclick="saveAllColumns()" style="background:#36b37e; margin-bottom: 20px;">💾 Salvar Alterações</button>
+                <button class="btn-primary" onclick="saveAllColumns()" style="background:#36b37e; margin-bottom: 20px;">💾 Salvar</button>
                 <h4 style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">Nova Coluna</h4>
-                <input type="text" id="newColTitle" class="inp-full" placeholder="Nome (Ex: Aguardando)">
+                <input type="text" id="newColTitle" class="inp-full" placeholder="Nome">
                 <div style="display:flex; gap:10px;">
                     <input type="color" id="newColColor" style="height:40px; width:50px;" value="#0052cc">
                     <input type="number" id="newColDays" class="inp-full" placeholder="Dias" style="margin:0;">
@@ -171,9 +183,9 @@ Content-Type: application/json
     </dialog>
 
     <dialog id="newOrderModal">
-        <div class="modal-header"><h3 style="margin:0">Novo Pedido Manual</h3><button onclick="closeModal('newOrderModal')" style="border:none; background:none; cursor:pointer;">&times;</button></div>
+        <div class="modal-header"><h3 style="margin:0">Novo Pedido</h3><button onclick="closeModal('newOrderModal')" style="border:none; background:none; cursor:pointer;">&times;</button></div>
         <div class="modal-body">
-            <label>Nome do Cliente *</label><input type="text" id="manualName" class="inp-full">
+            <label>Cliente *</label><input type="text" id="manualName" class="inp-full">
             <label>Produto</label><input type="text" id="manualProduct" class="inp-full">
             <label>Prazo</label><input type="date" id="manualDate" class="inp-full">
             <button class="btn-primary" onclick="createManualOrder()">Criar</button>
@@ -181,7 +193,7 @@ Content-Type: application/json
     </dialog>
 
     <dialog id="editOrderModal">
-        <div class="modal-header"><h3 style="margin:0">Editar Pedido</h3><button onclick="closeModal('editOrderModal')" style="border:none; background:none; cursor:pointer;">&times;</button></div>
+        <div class="modal-header"><h3 style="margin:0">Editar</h3><button onclick="closeModal('editOrderModal')" style="border:none; background:none; cursor:pointer;">&times;</button></div>
         <div class="modal-body">
             <input type="hidden" id="editOrderId">
             <label>Nome</label><input type="text" id="editClientName" class="inp-full">
@@ -202,7 +214,6 @@ Content-Type: application/json
         };
         let orders = [];
 
-        // --- SISTEMA ---
         function getToken() {
             const urlParams = new URLSearchParams(window.location.search);
             const tokenFromUrl = urlParams.get('token');
@@ -216,7 +227,7 @@ Content-Type: application/json
         async function init() {
             const token = getToken();
             document.getElementById('tokenDisplay').value = token ? token.substring(0,10) + '...' : 'Não configurado';
-            if(!token) alert("Configure seu Token no Link (?token=...) ou na Integração.");
+            if(!token) alert("Configure seu Token no Link (?token=...)");
             await loadData();
         }
 
@@ -277,7 +288,7 @@ Content-Type: application/json
                 <div class="card-meta"><i class="fa-solid fa-box"></i> ${order.product}</div>
                 <div class="card-meta" style="${isLate ? 'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(order.dueDate)}</div>
                 <div class="card-actions">
-                    <button class="btn-icon" title="Link Cliente" onclick="copyLink('${order.id}')"><i class="fa-solid fa-link"></i></button>
+                    <button class="btn-icon" title="Link" onclick="copyLink('${order.id}')"><i class="fa-solid fa-link"></i></button>
                     <button class="btn-icon" title="Editar" onclick="openEditOrder('${order.id}')"><i class="fa-solid fa-pen"></i></button>
                     <button class="btn-icon btn-trash" title="Excluir" onclick="deleteOrder('${order.id}')"><i class="fa-solid fa-trash"></i></button>
                 </div>
@@ -285,160 +296,10 @@ Content-Type: application/json
             return card;
         }
 
-        // --- INTEGRADOR BOTCONVERSA (ATUALIZADO) ---
+        // --- INTEGRADOR ---
         function openIntegrator() {
-            // Carrega token salvo
             const savedToken = localStorage.getItem('warrior_gh_token');
-            if(savedToken) {
-                document.getElementById('integrationToken').value = savedToken;
-            }
-
+            if(savedToken) document.getElementById('integrationToken').value = savedToken;
             const select = document.getElementById('integrationColSelect');
             select.innerHTML = '';
-            Object.keys(columnsConfig).forEach(key => {
-                const opt = document.createElement('option');
-                opt.value = key;
-                opt.text = columnsConfig[key].title;
-                select.appendChild(opt);
-            });
-            updateIntegratorCode();
-            document.getElementById('integratorModal').showModal();
-        }
-
-        function updateIntegratorCode() {
-            // Pega token do input
-            const token = document.getElementById('integrationToken').value.trim();
-            // Salva no storage para não precisar digitar de novo
-            if(token) localStorage.setItem('warrior_gh_token', token);
-
-            // Atualiza Headers
-            const headers = `Authorization: token ${token || 'ghp_SEU_TOKEN_AQUI'}\nAccept: application/vnd.github.v3+json\nUser-Agent: WarriorBot\nContent-Type: application/json`;
-            document.getElementById('codeHeaders').innerText = headers;
-
-            // Atualiza Body
-            const colId = document.getElementById('integrationColSelect').value;
-            const json = {
-                "event_type": "move_card_external",
-                "client_payload": {
-                    "chat_id": "{codigo-indicacao}", 
-                    "status": colId,
-                    "nome": "{nome-completo}",
-                    "telefone": "{telefone}"
-                }
-            };
-            document.getElementById('codeBody').innerText = JSON.stringify(json, null, 2);
-        }
-
-        function copyText(elementId) {
-            const text = document.getElementById(elementId).innerText.replace('Copiar', '').trim();
-            navigator.clipboard.writeText(text).then(() => alert("Copiado!"));
-        }
-
-
-        // --- MANUAIS / EDITAR / CONFIG (Mesmo código) ---
-        function openNewOrderModal() {
-            document.getElementById('manualName').value = '';
-            document.getElementById('manualProduct').value = '';
-            document.getElementById('manualDate').valueAsDate = new Date();
-            document.getElementById('newOrderModal').showModal();
-        }
-        async function createManualOrder() {
-            const nome = document.getElementById('manualName').value;
-            const produto = document.getElementById('manualProduct').value;
-            const prazo = document.getElementById('manualDate').value;
-            if(!nome) return alert("Nome obrigatório!");
-            const payload = { nome, produto: produto || 'Pedido Manual', prazo, chat_id: '' };
-            const firstCol = Object.keys(columnsConfig)[0];
-            orders.push({ id: 'ped-' + Date.now(), client: nome, product: payload.produto, dueDate: prazo, status: firstCol });
-            renderBoard(); closeModal('newOrderModal');
-            showStatus('Criando...', '#36b37e'); await sendToGitHub('novo_pedido', payload);
-            showStatus('✅ Criado!', '#36b37e'); setTimeout(hideStatus, 2000);
-        }
-
-        function openEditOrder(id) {
-            const order = orders.find(o => o.id === id); if(!order) return;
-            document.getElementById('editOrderId').value = order.id;
-            document.getElementById('editClientName').value = order.client;
-            document.getElementById('editProduct').value = order.product;
-            document.getElementById('editDueDate').value = order.dueDate;
-            document.getElementById('editOrderModal').showModal();
-        }
-        async function saveOrderEdits() {
-            const id = document.getElementById('editOrderId').value;
-            const client = document.getElementById('editClientName').value;
-            const product = document.getElementById('editProduct').value;
-            const dueDate = document.getElementById('editDueDate').value;
-            const idx = orders.findIndex(o => o.id === id);
-            if(idx > -1) { orders[idx].client=client; orders[idx].product=product; orders[idx].dueDate=dueDate; renderBoard(); }
-            closeModal('editOrderModal'); showStatus('Salvando...', '#ffab00');
-            await sendToGitHub('update_order', { id, client, product, dueDate });
-            showStatus('✅ Editado!', '#36b37e'); setTimeout(hideStatus, 2000);
-        }
-
-        function openSettings() {
-            const list = document.getElementById('columnsList'); list.innerHTML = '';
-            Object.keys(columnsConfig).forEach(key => {
-                const col = columnsConfig[key];
-                list.innerHTML += `
-                    <div class="col-item" id="row-${key}">
-                        <div class="color-dot" style="background:${col.color}"></div>
-                        <div class="col-inputs">
-                            <input type="text" class="inp-full" style="margin:0; padding:5px;" value="${col.title}" onchange="updateColConfig('${key}', 'title', this.value)">
-                            <div class="col-row">
-                                <input type="number" class="inp-mini" value="${col.days}" onchange="updateColConfig('${key}', 'days', this.value)" title="Dias">
-                                <input type="color" style="height:30px;" value="${col.color}" onchange="updateColConfig('${key}', 'color', this.value)">
-                            </div>
-                        </div>
-                        <button onclick="removeColumn('${key}')" style="color:red; border:none; background:none; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
-                    </div>`;
-            });
-            document.getElementById('settingsModal').showModal();
-        }
-        function updateColConfig(key, field, value) { if(field === 'days') value = parseInt(value); columnsConfig[key][field] = value; }
-        async function saveAllColumns() { renderBoard(); showStatus('Salvando...', '#ffab00'); await sendToGitHub('save_columns', columnsConfig); showStatus('✅ Config Salva!', '#36b37e'); setTimeout(hideStatus, 2000); }
-        async function addColumn() {
-            const title = document.getElementById('newColTitle').value;
-            const color = document.getElementById('newColColor').value;
-            const days = parseInt(document.getElementById('newColDays').value) || 0;
-            if(!title) return alert("Digite um nome!");
-            const id = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '_' + Math.floor(Math.random()*1000);
-            columnsConfig[id] = { title, color, days }; document.getElementById('newColTitle').value = ''; openSettings();
-        }
-        async function removeColumn(key) { if(!confirm("Remover?")) return; delete columnsConfig[key]; const row = document.getElementById('row-'+key); if(row) row.remove(); }
-
-        // --- CORE ---
-        function allowDrop(ev) { ev.preventDefault(); }
-        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
-        async function drop(ev) {
-            ev.preventDefault();
-            const orderId = ev.dataTransfer.getData("text");
-            const column = ev.target.closest('.card-list'); if (!column) return;
-            const newStatus = column.id;
-            const idx = orders.findIndex(o => o.id === orderId); if(idx === -1) return;
-            if (orders[idx].status !== newStatus) {
-                let newDate = null;
-                const days = columnsConfig[newStatus]?.days || 0;
-                if(days > 0) { const d = new Date(); d.setDate(d.getDate() + days); newDate = d.toISOString().split('T')[0]; orders[idx].dueDate = newDate; }
-                orders[idx].status = newStatus; renderBoard();
-                await sendToGitHub('update_status', { id: orderId, status: newStatus, newDate });
-            }
-        }
-        async function deleteOrder(id) { if(confirm('Apagar?')) { orders = orders.filter(o => o.id !== id); renderBoard(); await sendToGitHub('delete_order', { id }); } }
-        async function sendToGitHub(action, payload) {
-            const token = getToken(); if(!token) return alert("Token não encontrado!");
-            try { await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, { method: 'POST', headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' }, body: JSON.stringify({ event_type: action, client_payload: payload }) }); } catch (e) { alert("Erro de conexão"); }
-        }
-
-        function switchTab(id) { document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active')); document.getElementById(id).classList.add('active'); event.target.classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).close(); }
-        function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); }
-        function showStatus(m,c) { const e=document.getElementById('statusMsg'); e.innerText=m; e.style.background=c; e.style.display='block'; }
-        function hideStatus() { document.getElementById('statusMsg').style.display='none'; }
-        function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; }
-        function copyLink(id) { navigator.clipboard.writeText(window.location.href.split('?')[0]+'?id='+id); alert("Link copiado!"); }
-        document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
-
-        init();
-    </script>
-</body>
-</html>
+            Object.keys(columns
