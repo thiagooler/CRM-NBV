@@ -1,8 +1,8 @@
-name: CRM Backend (Anti-Conflito)
+name: CRM Backend (Gestão Total)
 
 on:
   repository_dispatch:
-    types: [novo_pedido, update_status, delete_order, save_columns]
+    types: [novo_pedido, update_status, delete_order, save_columns, update_order]
 
 jobs:
   gerenciar-crm:
@@ -20,23 +20,19 @@ jobs:
           ACTION_TYPE: ${{ github.event.action }}
           API_KEY: ${{ secrets.BOTCONVERSA_KEY }}
         run: |
-          # 1. Configura Identidade
           git config --global user.name 'CRM Robot'
           git config --global user.email 'bot@warrior.com'
           
-          # 2. Prepara Autenticação (Importante fazer antes do pull)
+          # Prepara URL e Atualiza para evitar conflitos
           git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}
+          git pull origin main || echo "Já atualizado"
 
-          # 3. Garante que estamos na versão mais recente antes de começar
-          git pull origin main || echo "Já estava atualizado"
-
-          # 4. Executa a Lógica (Node.js)
           node -e "
             const fs = require('fs');
             const action = process.env.ACTION_TYPE;
             const payload = JSON.parse(process.env.PAYLOAD_JSON);
             
-            // Colunas Padrão
+            // Colunas Padrão de Segurança
             const defaultColumns = {
               'todo': { title: '📥 Novos', color: '#ff5630', days: 0 },
               'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 },
@@ -59,9 +55,13 @@ jobs:
 
               let notify = '';
 
+              // --- AÇÕES ---
+              
               if (action === 'save_columns') {
                 db.columns = payload;
+                console.log('Colunas reconfiguradas');
               }
+
               else if (action === 'novo_pedido') {
                 const novo = {
                   id: 'ped-' + Date.now(),
@@ -73,6 +73,7 @@ jobs:
                 };
                 db.orders.push(novo);
               }
+
               else if (action === 'update_status') {
                 const index = db.orders.findIndex(o => o.id === payload.id);
                 if (index > -1) {
@@ -81,6 +82,18 @@ jobs:
                   notify = (db.orders[index].chat_id || '') + '|' + payload.status;
                 }
               }
+
+              // >>> NOVA AÇÃO: EDITAR DETALHES <<<
+              else if (action === 'update_order') {
+                const index = db.orders.findIndex(o => o.id === payload.id);
+                if (index > -1) {
+                    if (payload.client) db.orders[index].client = payload.client;
+                    if (payload.product) db.orders[index].product = payload.product;
+                    if (payload.dueDate) db.orders[index].dueDate = payload.dueDate;
+                    console.log('Pedido editado:', payload.id);
+                }
+              }
+
               else if (action === 'delete_order') {
                 db.orders = db.orders.filter(o => o.id !== payload.id);
               }
@@ -94,11 +107,8 @@ jobs:
             }
           "
 
-          # 5. Salva e Envia (Com Proteção Anti-Erro)
           git add db.json
           git commit -m "CRM: ${{ github.event.action }}" || echo "Nada mudou"
-          
-          # O TRUQUE: Tenta enviar. Se falhar (conflito), puxa de novo e reenvia.
           git push origin main || (git pull --rebase origin main && git push origin main)
 
       - name: Notificar BotConversa
