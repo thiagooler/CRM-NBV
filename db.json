@@ -5,6 +5,11 @@
       "days": 0,
       "title": "Aguardando resposta"
     },
+    "disponivelpararetirada_769": {
+      "color": "#22e015",
+      "days": 0,
+      "title": "Disponivel para retirada"
+    },
     "doing": {
       "color": "#ffab00",
       "days": 30,
@@ -15,10 +20,25 @@
       "days": 0,
       "title": "Em diagramação"
     },
+    "emproduo_216": {
+      "color": "#178410",
+      "days": 20,
+      "title": "Em produção"
+    },
+    "filadeproduo_612": {
+      "color": "#0052cc",
+      "days": 10,
+      "title": "Fila de Produção"
+    },
     "payment": {
       "color": "#36b37e",
       "days": 0,
       "title": "Aguardando pagamento"
+    },
+    "prontoparaentrega_2": {
+      "color": "#fd26b9",
+      "days": 7,
+      "title": "Pronto para entrega"
     },
     "review": {
       "color": "#0052cc",
