@@ -9,7 +9,7 @@
         :root { --bg: #f4f5f7; --card-bg: #fff; --text: #172b4d; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }
         
-        /* Layout Principal */
+        /* Layout */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .header h1 { margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; color: #0052cc; }
         .status-badge { padding: 8px 16px; border-radius: 4px; font-weight: bold; font-size: 0.9em; display: none; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
@@ -17,11 +17,7 @@
         .kanban-board { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; align-items: flex-start; }
         
         /* Colunas */
-        .column { 
-            background: #ebecf0; border-radius: 10px; width: 320px; min-width: 320px; 
-            padding: 12px; display: flex; flex-direction: column; max-height: 85vh;
-            border-top: 4px solid transparent; position: relative;
-        }
+        .column { background: #ebecf0; border-radius: 10px; width: 320px; min-width: 320px; padding: 12px; display: flex; flex-direction: column; max-height: 85vh; border-top: 4px solid transparent; position: relative; }
         .column-header { font-weight: 700; margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; color: #42526e; display: flex; justify-content: space-between; align-items: center;}
 
         /* Menu de Coluna */
@@ -44,14 +40,16 @@
         .btn-icon { background: #f4f5f7; border: none; cursor: pointer; color: #6b778c; border-radius: 4px; padding: 6px 10px; font-size: 0.8em; margin-left: 5px;}
         .btn-icon:hover { background: #dfe1e6; color: #0052cc; }
         .btn-trash:hover { background: #ffebe6; color: #bf2600; }
-        .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
+        .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; margin-left:5px;}
         
-        /* BOTÃO NOVO PEDIDO */
         .btn-add-new { background: #36b37e; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
         .btn-add-new:hover { background: #2d9668; }
 
+        .btn-bot { background: #6554c0; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
+        .btn-bot:hover { background: #5243aa; }
+
         /* MODAIS */
-        dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); padding: 0; width: 450px; font-family: inherit; overflow: hidden;}
+        dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); padding: 0; width: 500px; font-family: inherit; overflow: hidden;}
         dialog::backdrop { background: rgba(0,0,0,0.6); }
         .modal-header { background: #f4f5f7; padding: 15px 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;}
         .modal-body { padding: 20px; max-height: 500px; overflow-y: auto; }
@@ -65,11 +63,14 @@
         .inp-mini { width: 70px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; }
         .btn-primary { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;}
         
-        /* Lista de Colunas Editável */
+        .code-block { background: #172b4d; color: #a5adba; padding: 15px; border-radius: 6px; font-family: monospace; white-space: pre-wrap; margin-bottom: 10px; position: relative;}
+        .btn-copy { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8em; }
+        .btn-copy:hover { background: rgba(255,255,255,0.4); }
+
+        /* Lista de Colunas */
         .col-item { display: flex; align-items: center; gap: 8px; padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px; border: 1px solid #eee;}
         .col-inputs { flex-grow: 1; display: flex; gap: 5px; flex-direction: column; }
         .col-row { display: flex; gap: 5px; }
-        
         label { font-size: 0.9em; font-weight: bold; color: #444; }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -83,8 +84,12 @@
         <div style="display:flex; gap:10px; align-items:center;">
             <div id="statusMsg" class="status-badge"></div>
             
+            <button class="btn-bot" onclick="openIntegrator()">
+                <i class="fa-solid fa-robot"></i> Integração
+            </button>
+
             <button class="btn-add-new" onclick="openNewOrderModal()">
-                <i class="fa-solid fa-plus"></i> Novo Pedido
+                <i class="fa-solid fa-plus"></i> Novo
             </button>
             
             <button class="btn-config" onclick="openSettings()" title="Configurações"><i class="fa-solid fa-gear"></i></button>
@@ -93,10 +98,47 @@
 
     <div class="kanban-board" id="board"></div>
 
+    <dialog id="integratorModal">
+        <div class="modal-header">
+            <h3 style="margin:0">🤖 Gerador de Webhook</h3>
+            <button onclick="closeModal('integratorModal')" style="border:none; background:none; cursor:pointer;">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="margin-top:0; color:#666; font-size:0.9em;">Selecione para qual coluna você quer mover o cliente quando ele passar pelo fluxo do BotConversa:</p>
+            
+            <label>Mover para a Coluna:</label>
+            <select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select>
+            
+            <div style="background:#fff3cd; padding:10px; border-radius:4px; font-size:0.85em; color:#856404; margin-bottom:15px;">
+                💡 <b>Dica:</b> Copie os dados abaixo e cole no bloco "Integração" do BotConversa.
+            </div>
+
+            <label>1. URL (Método POST)</label>
+            <div class="code-block" id="codeUrl">
+                https://api.github.com/repos/thiagooler/CRM-NBV/dispatches
+                <button class="btn-copy" onclick="copyText('codeUrl')">Copiar</button>
+            </div>
+
+            <label>2. Headers (Cabeçalhos)</label>
+            <div class="code-block" id="codeHeaders">
+Authorization: token ghp_SEU_TOKEN_AQUI
+Accept: application/vnd.github.v3+json
+User-Agent: WarriorBot
+Content-Type: application/json
+                <button class="btn-copy" onclick="copyText('codeHeaders')">Copiar</button>
+            </div>
+
+            <label>3. Body (Corpo JSON)</label>
+            <div class="code-block" id="codeBody">
+                <button class="btn-copy" onclick="copyText('codeBody')">Copiar</button>
+            </div>
+        </div>
+    </dialog>
+
     <dialog id="settingsModal">
         <div class="modal-header">
             <h3 style="margin:0">Configurações</h3>
-            <button onclick="closeModal('settingsModal')" style="border:none; background:none; cursor:pointer; font-size:1.2em;">&times;</button>
+            <button onclick="closeModal('settingsModal')" style="border:none; background:none; cursor:pointer;">&times;</button>
         </div>
         
         <div style="padding:10px; display:flex; justify-content:space-between; border-bottom:1px solid #eee;">
@@ -125,41 +167,23 @@
     </dialog>
 
     <dialog id="newOrderModal">
-        <div class="modal-header">
-            <h3 style="margin:0">Novo Pedido Manual</h3>
-            <button onclick="closeModal('newOrderModal')" style="border:none; background:none; cursor:pointer;">&times;</button>
-        </div>
+        <div class="modal-header"><h3 style="margin:0">Novo Pedido Manual</h3><button onclick="closeModal('newOrderModal')" style="border:none; background:none; cursor:pointer;">&times;</button></div>
         <div class="modal-body">
-            <label>Nome do Cliente *</label>
-            <input type="text" id="manualName" class="inp-full" placeholder="Ex: João da Silva">
-            
-            <label>Produto / Serviço</label>
-            <input type="text" id="manualProduct" class="inp-full" placeholder="Ex: Ensaio Externo">
-            
-            <label>Prazo</label>
-            <input type="date" id="manualDate" class="inp-full">
-            
-            <button class="btn-primary" onclick="createManualOrder()">Criar Pedido</button>
+            <label>Nome do Cliente *</label><input type="text" id="manualName" class="inp-full">
+            <label>Produto</label><input type="text" id="manualProduct" class="inp-full">
+            <label>Prazo</label><input type="date" id="manualDate" class="inp-full">
+            <button class="btn-primary" onclick="createManualOrder()">Criar</button>
         </div>
     </dialog>
 
     <dialog id="editOrderModal">
-        <div class="modal-header">
-            <h3 style="margin:0">Editar Pedido</h3>
-            <button onclick="closeModal('editOrderModal')" style="border:none; background:none; cursor:pointer;">&times;</button>
-        </div>
+        <div class="modal-header"><h3 style="margin:0">Editar Pedido</h3><button onclick="closeModal('editOrderModal')" style="border:none; background:none; cursor:pointer;">&times;</button></div>
         <div class="modal-body">
             <input type="hidden" id="editOrderId">
-            <label>Nome do Cliente</label>
-            <input type="text" id="editClientName" class="inp-full">
-            
-            <label>Produto / Serviço</label>
-            <input type="text" id="editProduct" class="inp-full">
-            
-            <label>Prazo de Entrega</label>
-            <input type="date" id="editDueDate" class="inp-full">
-            
-            <button class="btn-primary" onclick="saveOrderEdits()">💾 Salvar Pedido</button>
+            <label>Nome</label><input type="text" id="editClientName" class="inp-full">
+            <label>Produto</label><input type="text" id="editProduct" class="inp-full">
+            <label>Prazo</label><input type="date" id="editDueDate" class="inp-full">
+            <button class="btn-primary" onclick="saveOrderEdits()">Salvar</button>
         </div>
     </dialog>
 
@@ -257,54 +281,61 @@
             return card;
         }
 
+        // --- INTEGRADOR BOTCONVERSA ---
+        function openIntegrator() {
+            const select = document.getElementById('integrationColSelect');
+            select.innerHTML = '';
+            Object.keys(columnsConfig).forEach(key => {
+                const opt = document.createElement('option');
+                opt.value = key;
+                opt.text = columnsConfig[key].title;
+                select.appendChild(opt);
+            });
+            updateIntegratorCode();
+            document.getElementById('integratorModal').showModal();
+        }
+
+        function updateIntegratorCode() {
+            const colId = document.getElementById('integrationColSelect').value;
+            const json = {
+                "event_type": "move_card_external",
+                "client_payload": {
+                    "chat_id": "{codigo-indicacao}",
+                    "status": colId
+                }
+            };
+            document.getElementById('codeBody').innerText = JSON.stringify(json, null, 2);
+        }
+
+        function copyText(elementId) {
+            const text = document.getElementById(elementId).innerText.replace('Copiar', '').trim();
+            navigator.clipboard.writeText(text).then(() => alert("Copiado!"));
+        }
+
+
         // --- CRIAR MANUALMENTE ---
         function openNewOrderModal() {
             document.getElementById('manualName').value = '';
             document.getElementById('manualProduct').value = '';
-            // Data de hoje como padrão
             document.getElementById('manualDate').valueAsDate = new Date();
             document.getElementById('newOrderModal').showModal();
         }
-
         async function createManualOrder() {
             const nome = document.getElementById('manualName').value;
             const produto = document.getElementById('manualProduct').value;
             const prazo = document.getElementById('manualDate').value;
-            
-            if(!nome) return alert("O nome do cliente é obrigatório!");
-
-            // Cria o objeto para enviar
-            const payload = {
-                nome: nome,
-                produto: produto || 'Pedido Manual',
-                prazo: prazo,
-                chat_id: '' // Pedido manual não tem chat_id do BotConversa
-            };
-
-            // Adiciona visualmente na hora (na primeira coluna)
+            if(!nome) return alert("Nome obrigatório!");
+            const payload = { nome, produto: produto || 'Pedido Manual', prazo, chat_id: '' };
             const firstCol = Object.keys(columnsConfig)[0];
-            const tempOrder = {
-                id: 'ped-' + Date.now(),
-                client: nome,
-                product: payload.produto,
-                dueDate: prazo,
-                status: firstCol
-            };
-            orders.push(tempOrder);
-            renderBoard();
-            closeModal('newOrderModal');
-
-            // Envia para o GitHub (usando a mesma lógica do Webhook)
-            showStatus('Criando...', '#36b37e');
-            await sendToGitHub('novo_pedido', payload);
-            showStatus('✅ Criado!', '#36b37e');
-            setTimeout(hideStatus, 2000);
+            orders.push({ id: 'ped-' + Date.now(), client: nome, product: payload.produto, dueDate: prazo, status: firstCol });
+            renderBoard(); closeModal('newOrderModal');
+            showStatus('Criando...', '#36b37e'); await sendToGitHub('novo_pedido', payload);
+            showStatus('✅ Criado!', '#36b37e'); setTimeout(hideStatus, 2000);
         }
 
         // --- EDIÇÃO ---
         function openEditOrder(id) {
-            const order = orders.find(o => o.id === id);
-            if(!order) return;
+            const order = orders.find(o => o.id === id); if(!order) return;
             document.getElementById('editOrderId').value = order.id;
             document.getElementById('editClientName').value = order.client;
             document.getElementById('editProduct').value = order.product;
@@ -317,23 +348,15 @@
             const product = document.getElementById('editProduct').value;
             const dueDate = document.getElementById('editDueDate').value;
             const idx = orders.findIndex(o => o.id === id);
-            if(idx > -1) {
-                orders[idx].client = client;
-                orders[idx].product = product;
-                orders[idx].dueDate = dueDate;
-                renderBoard();
-            }
-            closeModal('editOrderModal');
-            showStatus('Salvando...', '#ffab00');
+            if(idx > -1) { orders[idx].client=client; orders[idx].product=product; orders[idx].dueDate=dueDate; renderBoard(); }
+            closeModal('editOrderModal'); showStatus('Salvando...', '#ffab00');
             await sendToGitHub('update_order', { id, client, product, dueDate });
-            showStatus('✅ Editado!', '#36b37e');
-            setTimeout(hideStatus, 2000);
+            showStatus('✅ Editado!', '#36b37e'); setTimeout(hideStatus, 2000);
         }
 
         // --- CONFIG ---
         function openSettings() {
-            const list = document.getElementById('columnsList');
-            list.innerHTML = '';
+            const list = document.getElementById('columnsList'); list.innerHTML = '';
             Object.keys(columnsConfig).forEach(key => {
                 const col = columnsConfig[key];
                 list.innerHTML += `
@@ -342,40 +365,26 @@
                         <div class="col-inputs">
                             <input type="text" class="inp-full" style="margin:0; padding:5px;" value="${col.title}" onchange="updateColConfig('${key}', 'title', this.value)">
                             <div class="col-row">
-                                <input type="number" class="inp-mini" value="${col.days}" onchange="updateColConfig('${key}', 'days', this.value)" title="Dias de Prazo">
+                                <input type="number" class="inp-mini" value="${col.days}" onchange="updateColConfig('${key}', 'days', this.value)" title="Dias">
                                 <input type="color" style="height:30px;" value="${col.color}" onchange="updateColConfig('${key}', 'color', this.value)">
                             </div>
                         </div>
                         <button onclick="removeColumn('${key}')" style="color:red; border:none; background:none; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
+                    </div>`;
             });
             document.getElementById('settingsModal').showModal();
         }
-        function updateColConfig(key, field, value) {
-            if(field === 'days') value = parseInt(value);
-            columnsConfig[key][field] = value;
-        }
-        async function saveAllColumns() {
-            renderBoard(); showStatus('Salvando Colunas...', '#ffab00');
-            await sendToGitHub('save_columns', columnsConfig);
-            showStatus('✅ Config Salva!', '#36b37e'); setTimeout(hideStatus, 2000);
-        }
+        function updateColConfig(key, field, value) { if(field === 'days') value = parseInt(value); columnsConfig[key][field] = value; }
+        async function saveAllColumns() { renderBoard(); showStatus('Salvando...', '#ffab00'); await sendToGitHub('save_columns', columnsConfig); showStatus('✅ Config Salva!', '#36b37e'); setTimeout(hideStatus, 2000); }
         async function addColumn() {
             const title = document.getElementById('newColTitle').value;
             const color = document.getElementById('newColColor').value;
             const days = parseInt(document.getElementById('newColDays').value) || 0;
             if(!title) return alert("Digite um nome!");
             const id = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '_' + Math.floor(Math.random()*1000);
-            columnsConfig[id] = { title, color, days };
-            document.getElementById('newColTitle').value = '';
-            openSettings();
+            columnsConfig[id] = { title, color, days }; document.getElementById('newColTitle').value = ''; openSettings();
         }
-        async function removeColumn(key) {
-            if(!confirm("Remover esta coluna?")) return;
-            delete columnsConfig[key];
-            const row = document.getElementById('row-'+key); if(row) row.remove();
-        }
+        async function removeColumn(key) { if(!confirm("Remover?")) return; delete columnsConfig[key]; const row = document.getElementById('row-'+key); if(row) row.remove(); }
 
         // --- CORE ---
         function allowDrop(ev) { ev.preventDefault(); }
@@ -383,49 +392,24 @@
         async function drop(ev) {
             ev.preventDefault();
             const orderId = ev.dataTransfer.getData("text");
-            const column = ev.target.closest('.card-list');
-            if (!column) return;
+            const column = ev.target.closest('.card-list'); if (!column) return;
             const newStatus = column.id;
-            const idx = orders.findIndex(o => o.id === orderId);
-            if(idx === -1) return;
+            const idx = orders.findIndex(o => o.id === orderId); if(idx === -1) return;
             if (orders[idx].status !== newStatus) {
                 let newDate = null;
                 const days = columnsConfig[newStatus]?.days || 0;
-                if(days > 0) {
-                    const d = new Date(); d.setDate(d.getDate() + days);
-                    newDate = d.toISOString().split('T')[0];
-                    orders[idx].dueDate = newDate;
-                }
-                orders[idx].status = newStatus;
-                renderBoard();
+                if(days > 0) { const d = new Date(); d.setDate(d.getDate() + days); newDate = d.toISOString().split('T')[0]; orders[idx].dueDate = newDate; }
+                orders[idx].status = newStatus; renderBoard();
                 await sendToGitHub('update_status', { id: orderId, status: newStatus, newDate });
             }
         }
-        async function deleteOrder(id) {
-            if(confirm('Apagar pedido?')) {
-                orders = orders.filter(o => o.id !== id);
-                renderBoard();
-                await sendToGitHub('delete_order', { id });
-            }
-        }
+        async function deleteOrder(id) { if(confirm('Apagar?')) { orders = orders.filter(o => o.id !== id); renderBoard(); await sendToGitHub('delete_order', { id }); } }
         async function sendToGitHub(action, payload) {
-            const token = getToken();
-            if(!token) return alert("Token não encontrado!");
-            try {
-                await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ event_type: action, client_payload: payload })
-                });
-            } catch (e) { alert("Erro de conexão"); }
+            const token = getToken(); if(!token) return alert("Token não encontrado!");
+            try { await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, { method: 'POST', headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' }, body: JSON.stringify({ event_type: action, client_payload: payload }) }); } catch (e) { alert("Erro de conexão"); }
         }
 
-        function switchTab(id) {
-            document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            event.target.classList.add('active');
-        }
+        function switchTab(id) { document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active')); document.getElementById(id).classList.add('active'); event.target.classList.add('active'); }
         function closeModal(id) { document.getElementById(id).close(); }
         function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); }
         function showStatus(m,c) { const e=document.getElementById('statusMsg'); e.innerText=m; e.style.background=c; e.style.display='block'; }
