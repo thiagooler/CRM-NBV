@@ -109,6 +109,14 @@
       "product": "Manual",
       "dueDate": "2026-01-23",
       "status": "todo"
+    },
+    {
+      "id": "ped-1766575026019",
+      "client": "Amanda Batista dos Santos",
+      "chat_id": "486040647",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "review"
     }
   ]
 }
