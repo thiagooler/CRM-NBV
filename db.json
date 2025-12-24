@@ -482,6 +482,18 @@
       "waiting": true,
       "createdAt": 1766618319146,
       "history": []
+    },
+    {
+      "id": "ped-1766618441304",
+      "client": "Ana Rafaela",
+      "phone": "+554298033980",
+      "chat_id": "848254154",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766618441304,
+      "history": []
     }
   ]
 }
