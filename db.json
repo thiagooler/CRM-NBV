@@ -422,6 +422,18 @@
       "waiting": false,
       "createdAt": 1766615205975,
       "history": []
+    },
+    {
+      "id": "ped-1766615929015",
+      "client": "Mayara",
+      "phone": "+554298135422",
+      "chat_id": "844754093",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766615929015,
+      "history": []
     }
   ]
 }
