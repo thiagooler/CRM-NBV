@@ -296,7 +296,8 @@
       "chat_id": "818316888",
       "product": "Pedido via Bot",
       "dueDate": "2025-12-29",
-      "status": "review"
+      "status": "review",
+      "waiting": true
     },
     {
       "id": "ped-1766600582799",
