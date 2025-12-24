@@ -177,15 +177,6 @@
       "status": "review"
     },
     {
-      "id": "ped-1766590936459",
-      "client": "Idenilson",
-      "chat_id": "851388715",
-      "product": "Pedido via Bot",
-      "dueDate": "2025-12-27",
-      "status": "filadeatendimento_988",
-      "waiting": true
-    },
-    {
       "id": "ped-1766591881505",
       "client": "Daiene Melo",
       "chat_id": "787358780",
