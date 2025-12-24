@@ -1,4 +1,4 @@
-name: CRM Backend (Com Telefone)
+name: CRM Backend (Com Relatórios)
 
 on:
   workflow_dispatch:
@@ -67,15 +67,19 @@ jobs:
             }
             
             else if (action === 'novo_pedido') {
+                const now = Date.now();
                 const novo = {
-                  id: payload.id || ('ped-' + Date.now()),
+                  id: payload.id || ('ped-' + now),
                   client: payload.nome || 'Cliente',
-                  phone: payload.telefone || '', // SALVA O TELEFONE
+                  phone: payload.telefone || '',
                   chat_id: payload.chat_id || '',
                   product: payload.produto || 'Pedido',
                   dueDate: payload.prazo || '',
                   status: payload.status || 'todo',
-                  waiting: false 
+                  waiting: false,
+                  createdAt: now,     // DATA DE CRIAÇÃO
+                  finishedAt: null,   // DATA DE FIM
+                  history: []         // HISTÓRICO DE MOVIMENTOS
                 };
                 db.orders.push(novo);
             }
@@ -83,7 +87,23 @@ jobs:
             else if (action === 'update_status') {
                 const index = db.orders.findIndex(o => o.id === payload.id);
                 if (index > -1) {
-                  db.orders[index].status = payload.status;
+                  const oldStatus = db.orders[index].status;
+                  const newStatus = payload.status;
+                  
+                  // Registra no histórico
+                  if (!db.orders[index].history) db.orders[index].history = [];
+                  db.orders[index].history.push({
+                    from: oldStatus,
+                    to: newStatus,
+                    date: Date.now()
+                  });
+
+                  // Se for para finalizado, marca data fim
+                  if (newStatus === 'done') db.orders[index].finishedAt = Date.now();
+                  // Se saiu de finalizado (retorno), limpa data fim
+                  if (oldStatus === 'done' && newStatus !== 'done') db.orders[index].finishedAt = null;
+
+                  db.orders[index].status = newStatus;
                   if (payload.newDate) db.orders[index].dueDate = payload.newDate;
                 }
             }
@@ -92,7 +112,7 @@ jobs:
                 const index = db.orders.findIndex(o => o.id === payload.id);
                 if (index > -1) {
                     if (payload.client) db.orders[index].client = payload.client;
-                    if (payload.phone !== undefined) db.orders[index].phone = payload.phone; // ATUALIZA TELEFONE
+                    if (payload.phone !== undefined) db.orders[index].phone = payload.phone;
                     if (payload.product) db.orders[index].product = payload.product;
                     if (payload.dueDate) db.orders[index].dueDate = payload.dueDate;
                 }
@@ -118,21 +138,30 @@ jobs:
                     const d = new Date(); d.setDate(d.getDate() + colConfig.days);
                     newDate = d.toISOString().split('T')[0];
                  }
+                 
                  if (index > -1) {
+                    // Lógica de Histórico para Movimento Externo
+                    if (!db.orders[index].history) db.orders[index].history = [];
+                    db.orders[index].history.push({ from: db.orders[index].status, to: newStatus, date: Date.now() });
+                    
+                    if (newStatus === 'done') db.orders[index].finishedAt = Date.now();
+                    
                     db.orders[index].status = newStatus;
                     if (newDate) db.orders[index].dueDate = newDate;
-                    // Se vier telefone novo na atualização, salva
                     if (payload.telefone) db.orders[index].phone = payload.telefone;
                  } else {
+                    const now = Date.now();
                     const novo = {
-                      id: 'ped-' + Date.now(),
+                      id: 'ped-' + now,
                       client: payload.nome || 'Cliente Bot',
-                      phone: payload.telefone || '', // SALVA O TELEFONE
+                      phone: payload.telefone || '',
                       chat_id: payload.chat_id || '',
                       product: 'Pedido via Bot',
                       dueDate: newDate || '',
                       status: newStatus,
-                      waiting: false
+                      waiting: false,
+                      createdAt: now,
+                      history: []
                     };
                     db.orders.push(novo);
                  }
