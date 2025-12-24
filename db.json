@@ -147,6 +147,14 @@
       "product": "Manual",
       "dueDate": "2026-01-23",
       "status": "payment"
+    },
+    {
+      "id": "ped-1766583537428",
+      "client": "Lucimara",
+      "chat_id": "841878044",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "review"
     }
   ]
 }
