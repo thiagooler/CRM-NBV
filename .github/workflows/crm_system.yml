@@ -1,4 +1,4 @@
-name: CRM Backend (Semáforo)
+name: CRM Backend (Com Telefone)
 
 on:
   workflow_dispatch:
@@ -70,11 +70,12 @@ jobs:
                 const novo = {
                   id: payload.id || ('ped-' + Date.now()),
                   client: payload.nome || 'Cliente',
+                  phone: payload.telefone || '', // SALVA O TELEFONE
                   chat_id: payload.chat_id || '',
                   product: payload.produto || 'Pedido',
                   dueDate: payload.prazo || '',
                   status: payload.status || 'todo',
-                  waiting: false // Começa Verde
+                  waiting: false 
                 };
                 db.orders.push(novo);
             }
@@ -91,6 +92,7 @@ jobs:
                 const index = db.orders.findIndex(o => o.id === payload.id);
                 if (index > -1) {
                     if (payload.client) db.orders[index].client = payload.client;
+                    if (payload.phone !== undefined) db.orders[index].phone = payload.phone; // ATUALIZA TELEFONE
                     if (payload.product) db.orders[index].product = payload.product;
                     if (payload.dueDate) db.orders[index].dueDate = payload.dueDate;
                 }
@@ -100,14 +102,10 @@ jobs:
                 db.orders = db.orders.filter(o => o.id !== payload.id);
             }
             
-            // --- NOVO: TROCA A COR DA BOLINHA ---
             else if (action === 'toggle_waiting') {
-                // Procura pelo chat_id (vindo do Bot) ou ID interno
                 const index = db.orders.findIndex(o => o.chat_id === payload.chat_id || o.id === payload.id);
                 if (index > -1) {
-                    // true = amarelo, false = verde
                     db.orders[index].waiting = payload.waiting;
-                    console.log('Status de espera atualizado: ' + payload.waiting);
                 }
             }
             
@@ -123,10 +121,13 @@ jobs:
                  if (index > -1) {
                     db.orders[index].status = newStatus;
                     if (newDate) db.orders[index].dueDate = newDate;
+                    // Se vier telefone novo na atualização, salva
+                    if (payload.telefone) db.orders[index].phone = payload.telefone;
                  } else {
                     const novo = {
                       id: 'ped-' + Date.now(),
                       client: payload.nome || 'Cliente Bot',
+                      phone: payload.telefone || '', // SALVA O TELEFONE
                       chat_id: payload.chat_id || '',
                       product: 'Pedido via Bot',
                       dueDate: newDate || '',
