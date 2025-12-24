@@ -434,6 +434,18 @@
       "waiting": true,
       "createdAt": 1766615929015,
       "history": []
+    },
+    {
+      "id": "ped-1766616243165",
+      "client": "Elizete",
+      "phone": "+554298448122",
+      "chat_id": "793479815",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766616243165,
+      "history": []
     }
   ]
 }
