@@ -1,4 +1,4 @@
-name: CRM Backend (Anti-Fantasma)
+name: CRM Backend (Semáforo)
 
 on:
   workflow_dispatch:
@@ -59,8 +59,6 @@ jobs:
                 } catch (err) {}
             }
 
-            let notify = '';
-
             // --- ROTEADOR ---
 
             if (action === 'save_columns') {
@@ -69,14 +67,14 @@ jobs:
             }
             
             else if (action === 'novo_pedido') {
-                // CORREÇÃO: Aceita o status e ID enviados pelo Frontend
                 const novo = {
                   id: payload.id || ('ped-' + Date.now()),
                   client: payload.nome || 'Cliente',
                   chat_id: payload.chat_id || '',
                   product: payload.produto || 'Pedido',
                   dueDate: payload.prazo || '',
-                  status: payload.status || 'todo'
+                  status: payload.status || 'todo',
+                  waiting: false // Começa Verde
                 };
                 db.orders.push(novo);
             }
@@ -86,7 +84,6 @@ jobs:
                 if (index > -1) {
                   db.orders[index].status = payload.status;
                   if (payload.newDate) db.orders[index].dueDate = payload.newDate;
-                  notify = (db.orders[index].chat_id || '') + '|' + payload.status;
                 }
             }
 
@@ -101,6 +98,17 @@ jobs:
 
             else if (action === 'delete_order') {
                 db.orders = db.orders.filter(o => o.id !== payload.id);
+            }
+            
+            // --- NOVO: TROCA A COR DA BOLINHA ---
+            else if (action === 'toggle_waiting') {
+                // Procura pelo chat_id (vindo do Bot) ou ID interno
+                const index = db.orders.findIndex(o => o.chat_id === payload.chat_id || o.id === payload.id);
+                if (index > -1) {
+                    // true = amarelo, false = verde
+                    db.orders[index].waiting = payload.waiting;
+                    console.log('Status de espera atualizado: ' + payload.waiting);
+                }
             }
             
             else if (action === 'move_card_external') {
@@ -122,34 +130,16 @@ jobs:
                       chat_id: payload.chat_id || '',
                       product: 'Pedido via Bot',
                       dueDate: newDate || '',
-                      status: newStatus
+                      status: newStatus,
+                      waiting: false
                     };
                     db.orders.push(novo);
                  }
             }
 
             fs.writeFileSync('db.json', JSON.stringify(db, null, 2));
-            fs.writeFileSync('notify.txt', notify);
           "
 
           git add db.json
           git commit -m "CRM Action: ${{ github.event.action }}" || echo "Nada mudou"
           git push origin main || (git pull --rebase origin main && git push origin main)
-
-      - name: Notificar BotConversa
-        env:
-          API_KEY: ${{ secrets.BOTCONVERSA_KEY }}
-        run: |
-          if [ -f notify.txt ]; then
-            CONTENT=$(cat notify.txt)
-            if [ ! -z "$CONTENT" ]; then
-              CHAT_ID=$(echo "$CONTENT" | cut -d'|' -f1)
-              STATUS=$(echo "$CONTENT" | cut -d'|' -f2)
-              if [ ! -z "$CHAT_ID" ] && [ "$STATUS" == "doing" ]; then
-                 curl -s -X POST "https://backend.botconversa.com.br/api/v1/subscriber/$CHAT_ID/tags" \
-                 -H "api-key: $API_KEY" \
-                 -H "Content-Type: application/json" \
-                 -d '{"tag_id": "Status: Produção"}'
-              fi
-            fi
-          fi
