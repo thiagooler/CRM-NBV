@@ -171,6 +171,14 @@
       "product": "Pedido via Bot",
       "dueDate": "2025-12-29",
       "status": "review"
+    },
+    {
+      "id": "ped-1766586845289",
+      "client": "Jheniffer 🌻",
+      "chat_id": "841866083",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "review"
     }
   ]
 }
