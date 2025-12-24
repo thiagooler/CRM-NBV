@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CRM Warrior</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --bg: #f4f5f7; --card-bg: #fff; --text: #172b4d; }
@@ -17,71 +18,65 @@
         .sync-icon.success { color: #36b37e; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        .nav-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #dfe1e6; padding-bottom: 10px; margin-bottom: 20px; }
-        .view-tabs { display: flex; gap: 10px; }
-        .view-btn { border: none; background: none; font-size: 1.1rem; font-weight: bold; color: #6b778c; cursor: pointer; padding: 5px 15px; border-radius: 4px; transition: 0.2s; }
+        /* NAV */
+        .nav-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #dfe1e6; padding-bottom: 10px; margin-bottom: 20px; flex-wrap: wrap; gap:10px; }
+        .view-tabs { display: flex; gap: 10px; flex-wrap: wrap; }
+        .view-btn { border: none; background: none; font-size: 1rem; font-weight: bold; color: #6b778c; cursor: pointer; padding: 5px 15px; border-radius: 4px; transition: 0.2s; }
         .view-btn.active { color: #0052cc; background: #e3f2fd; }
+        .extra-btns { display: flex; gap: 10px; }
         .filter-btn { display:none; background: #fff; border: 1px solid #dfe1e6; padding: 5px 15px; border-radius: 4px; cursor: pointer; color: #555; font-weight: bold; }
         .filter-btn:hover { background: #eee; color: #0052cc; }
 
-        /* KANBAN */
-        #kanbanView { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; align-items: flex-start; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
-        .column { background: #ebecf0; border-radius: 10px; width: 320px; min-width: 320px; padding: 12px; display: flex; flex-direction: column; max-height: 85vh; border-top: 4px solid transparent; position: relative; }
-        .column-header { font-weight: 700; margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; color: #42526e; display: flex; justify-content: space-between; align-items: center;}
-        .col-menu-btn { cursor: pointer; padding: 5px; border-radius: 4px; } .col-menu-btn:hover { background: #dcdfe4; }
-        .col-options { display: none; position: absolute; top: 40px; right: 10px; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.2); border-radius: 6px; z-index: 100; width: 150px; overflow: hidden;}
-        .col-options div { padding: 10px; cursor: pointer; font-size: 0.9em; color: #333; } .col-options div:hover { background: #f4f5f7; color: #0052cc; } .col-options.active { display: block; }
-        .card-list { flex-grow: 1; overflow-y: auto; min-height: 100px; padding-bottom: 10px;}
-        .card { background: var(--card-bg); border-radius: 6px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: grab; position: relative; transition: transform 0.2s; border-left: 4px solid #ccc;}
-        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
-        .card-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; color: #172b4d; display: flex; align-items: center; }
-        .card-meta { font-size: 0.85em; color: #666; display: flex; align-items: center; gap: 6px; margin-top: 6px; }
-        .card-actions { margin-top: 12px; border-top: 1px solid #f4f5f7; padding-top: 8px; display: flex; justify-content: flex-end; gap: 8px;}
-
-        /* TIMELINE */
-        #timelineView { display: none; max-width: 1000px; margin: 0 auto; }
-        .timeline-item { background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid transparent; }
-        .tl-info { display: flex; flex-direction: column; gap: 5px; flex-grow: 1; }
-        .tl-client { font-weight: bold; font-size: 1.1rem; color: #172b4d; display: flex; align-items: center; }
-        .tl-product { color: #666; font-size: 0.9rem; }
-        .tl-meta { display: flex; gap: 15px; align-items: center; margin-top: 5px; }
-        .tl-date { font-weight: bold; font-size: 0.9rem; padding: 4px 8px; border-radius: 4px; background: #eee; }
-        .tl-actions { display: flex; gap: 10px; align-items: center; }
-        .status-select { padding: 8px; border-radius: 4px; border: 1px solid #dfe1e6; background: #f9f9f9; font-weight: bold; color: #444; max-width: 150px;}
+        /* VIEWS */
+        #kanbanView { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; align-items: flex-start; }
+        #timelineView, #reportsView { display: none; max-width: 1200px; margin: 0 auto; }
         
+        /* ESTILO DO RELATÓRIO */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .kpi-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center; }
+        .kpi-val { font-size: 2rem; font-weight: bold; color: #0052cc; }
+        .kpi-label { color: #666; font-size: 0.9em; text-transform: uppercase; }
+        
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .chart-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        .report-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .report-table th, .report-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        .report-table th { background: #ebecf0; color: #42526e; }
+
+        /* UTILS */
+        .column { background: #ebecf0; border-radius: 10px; width: 320px; min-width: 320px; padding: 12px; }
+        .column-header { font-weight: 700; margin-bottom: 15px; display: flex; justify-content: space-between; }
+        .card { background: var(--card-bg); border-radius: 6px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #ccc; cursor: grab; }
+        .card-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; }
+        .card-meta { font-size: 0.85em; color: #666; display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+        .timeline-item { background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; border-left: 5px solid transparent; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .status-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; border: 2px solid white; box-shadow: 0 0 3px rgba(0,0,0,0.2); }
         .dot-green { background: #36b37e; } .dot-yellow { background: #ffab00; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
-
-        /* HEADER TABLE STYLE */
-        .header-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .header-row { display: flex; align-items: center; justify-content: space-between; background: #172b4d; padding: 8px 12px; margin-bottom: 5px; border-radius: 4px; color: #a5adba; font-family: monospace; font-size: 0.9em; }
-        .header-key { font-weight: bold; color: #fff; width: 30%; }
-        .header-val { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 50%; color: #87ceeb; }
-        .header-copy { width: 20%; text-align: right; }
-        .copy-btn-sm { background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8em; }
-        .copy-btn-sm:hover { background: rgba(255,255,255,0.4); }
-
-        .btn-icon { background: #f4f5f7; border: none; cursor: pointer; color: #6b778c; border-radius: 4px; padding: 6px 10px; font-size: 0.8em; margin-left: 5px;}
-        .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; margin-left:5px;}
-        .btn-add-new { background: #36b37e; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
-        .btn-bot { background: #6554c0; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
-        .btn-wa { background: #dcf8c6; color: #075e54; }
-        .btn-wa:hover { background: #25d366; color: white; }
         
-        .col-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px; border: 1px solid #eee; transition: background 0.2s;}
-        .col-item.dragging { opacity: 0.5; background: #e3f2fd; border: 2px dashed #0052cc; }
-        .col-inputs { flex-grow: 1; display: flex; gap: 5px; flex-direction: column; }
-        .col-row { display: flex; gap: 5px; }
-        .drag-handle { cursor: grab; color: #999; font-size: 1.2em; padding: 5px; }
-        .drag-handle:active { cursor: grabbing; color: #0052cc; }
+        .btn-primary { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;}
+        .btn-csv { background: #36b37e; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+        .inp-full { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #dfe1e6; border-radius: 4px; box-sizing: border-box; }
         
-        .filter-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; }
-        .filter-item input[type="checkbox"] { width: 20px; height: 20px; }
-
-        @media (max-width: 768px) { body { padding: 10px; } .header-controls { width: 100%; justify-content: flex-end; } #kanbanView { gap: 10px; scroll-snap-type: x mandatory; padding-bottom: 20px; } .column { min-width: 85vw; width: 85vw; scroll-snap-align: center; } .timeline-item { flex-direction: column; align-items: flex-start; gap: 15px; } .tl-actions { width: 100%; justify-content: space-between; } .status-select { flex-grow: 1; } dialog { width: 95% !important; max-height: 90vh; margin: auto; } .btn-icon { padding: 10px; } }
+        /* RESTO DO CSS PADRÃO */
+        .btn-icon { background: #f4f5f7; border: none; cursor: pointer; color: #6b778c; border-radius: 4px; padding: 6px 10px; }
+        .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
+        .btn-add-new { background: #36b37e; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; gap: 8px; }
+        .btn-bot { background: #6554c0; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; gap: 8px; }
+        .btn-wa { background: #dcf8c6; color: #075e54; } .btn-wa:hover { background: #25d366; color: white; }
+        dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); padding: 0; width: 500px; font-family: inherit; } dialog::backdrop { background: rgba(0,0,0,0.6); }
+        .modal-header { background: #f4f5f7; padding: 15px 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;} .modal-body { padding: 20px; max-height: 500px; overflow-y: auto; }
         
-        dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); padding: 0; width: 500px; font-family: inherit; overflow: hidden;} dialog::backdrop { background: rgba(0,0,0,0.6); } .modal-header { background: #f4f5f7; padding: 15px 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;} .modal-body { padding: 20px; max-height: 500px; overflow-y: auto; } .tab-btn { background: none; border: none; padding: 10px; cursor: pointer; font-weight: bold; color: #666; border-bottom: 2px solid transparent; width: 48%;} .tab-btn.active { color: #0052cc; border-bottom-color: #0052cc; } .tab-content { display: none; } .tab-content.active { display: block; } .inp-full { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #dfe1e6; border-radius: 4px; box-sizing: border-box; } .inp-mini { width: 70px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; } .btn-primary { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;} .code-block { background: #172b4d; color: #a5adba; padding: 15px; border-radius: 6px; font-family: monospace; white-space: pre-wrap; margin-bottom: 10px; position: relative; word-break: break-all;} .btn-copy { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8em; } label { font-size: 0.9em; font-weight: bold; color: #444; } #statusMsg { background: #0052cc; color:white; padding:5px 10px; border-radius:4px; display:none; }
+        @media (max-width: 768px) { 
+            body { padding: 10px; } .header-controls { width: 100%; justify-content: flex-end; } 
+            #kanbanView { gap: 10px; scroll-snap-type: x mandatory; padding-bottom: 20px; } .column { min-width: 85vw; width: 85vw; scroll-snap-align: center; } 
+            .timeline-item { flex-direction: column; gap: 15px; } .charts-grid { grid-template-columns: 1fr; }
+            .col-options { right: 10px; }
+        }
+        .col-options { display: none; position: absolute; top: 40px; right: 10px; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.2); border-radius: 6px; z-index: 100; width: 150px; overflow: hidden;}
+        .col-options.active { display: block; } .col-options div { padding: 10px; cursor: pointer; } .col-options div:hover { background: #f4f5f7; color: #0052cc; }
+        #statusMsg { background: #0052cc; color:white; padding:5px 10px; border-radius:4px; display:none; }
     </style>
 </head>
 <body>
@@ -99,304 +94,205 @@
         <div class="view-tabs">
             <button class="view-btn active" onclick="switchView('kanban')" id="btn-kanban"><i class="fa-solid fa-columns"></i> Kanban</button>
             <button class="view-btn" onclick="switchView('timeline')" id="btn-timeline"><i class="fa-solid fa-hourglass-half"></i> Prazos</button>
+            <button class="view-btn" onclick="switchView('reports')" id="btn-reports"><i class="fa-solid fa-chart-line"></i> Relatórios</button>
         </div>
-        <button class="filter-btn" id="filterBtn" onclick="openFilterModal()"><i class="fa-solid fa-filter"></i> Filtrar Colunas</button>
+        <div class="extra-btns">
+            <button class="filter-btn" id="filterBtn" onclick="openFilterModal()"><i class="fa-solid fa-filter"></i> Filtrar</button>
+        </div>
     </div>
 
     <div id="kanbanView"></div>
     <div id="timelineView"></div>
-
-    <dialog id="integratorModal">
-        <div class="modal-header"><h3 style="margin:0">🤖 Webhook 2.0</h3><button onclick="closeModal('integratorModal')" style="border:none; background:none; cursor:pointer;">&times;</button></div>
-        <div class="modal-body">
-            <label style="color:#0052cc">Seu Token (GitHub):</label>
-            <input type="text" id="integrationToken" class="inp-full" placeholder="Cole ghp_..." oninput="updateIntegratorCode()">
-            <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-            
-            <label>Tipo de Ação:</label>
-            <select id="integrationActionType" class="inp-full" onchange="toggleIntegratorOptions()">
-                <option value="move">📁 Mover Card de Coluna</option>
-                <option value="color">🎨 Alterar Cor (Semáforo)</option>
-            </select>
-
-            <div id="opt-move">
-                <label>Mover para:</label><select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select>
-            </div>
-            
-            <div id="opt-color" style="display:none;">
-                <label>Definir Status:</label>
-                <select id="integrationColorSelect" class="inp-full" onchange="updateIntegratorCode()">
-                    <option value="true">🟡 Aguardando Cliente</option>
-                    <option value="false">🟢 Em Execução</option>
-                </select>
-            </div>
-
-            <h4 style="margin-bottom:5px; color:#333;">1. URL</h4>
-            <div class="header-row">
-                <span class="header-val" style="width:80%;" id="dispUrl">...</span>
-                <span class="header-copy"><button class="copy-btn-sm" onclick="copyText('dispUrl')">Copiar</button></span>
-            </div>
-
-            <h4 style="margin-bottom:5px; color:#333;">2. Headers</h4>
-            <div id="headersList"></div>
-
-            <h4 style="margin-bottom:5px; color:#333;">3. Body (JSON)</h4>
-            <div class="code-block" style="position:relative; font-size:0.85em;">
-                <pre id="jsonContent" style="margin:0; white-space:pre-wrap;">...</pre>
-                <button class="btn-copy" onclick="copyText('jsonContent')">Copiar</button>
-            </div>
-            
-            <div id="codeUrl" style="display:none;"></div>
-            <div id="codeBody" style="display:none;"></div>
-        </div>
-    </dialog>
-
-    <dialog id="filterModal">
-        <div class="modal-header"><h3 style="margin:0">👁️ Filtros</h3><button onclick="closeModal('filterModal')" style="border:none; background:none;">&times;</button></div>
-        <div class="modal-body">
-            <div id="filterList"></div>
-            <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
-            <div class="filter-item">
-                <input type="checkbox" id="chk-hideWaiting">
-                <span class="status-dot dot-yellow"></span>
-                <label for="chk-hideWaiting">Ocultar "Aguardando Resposta"</label>
-            </div>
-            <button class="btn-primary" onclick="applyFilters()">Aplicar</button>
-        </div>
-    </dialog>
-
-    <dialog id="settingsModal"><div class="modal-header"><h3 style="margin:0">Configurações</h3><button onclick="closeModal('settingsModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><div class="tab-content active"><div style="background:#e3f2fd;padding:10px;margin-bottom:10px;border-radius:4px;">✋ Arraste para organizar.</div><div id="columnsList"></div><button class="btn-primary" onclick="saveAllColumns()">💾 Salvar Ordem</button><h4 style="margin-top:20px;">Nova Coluna</h4><input id="newColTitle" class="inp-full" placeholder="Nome"><div style="display:flex;gap:10px;"><input type="color" id="newColColor" style="height:40px;width:50px;"><input type="number" id="newColDays" class="inp-full" placeholder="Dias"></div><button class="btn-primary" onclick="addColumn()">+ Adicionar</button></div></div></dialog>
     
-    <dialog id="newOrderModal">
-        <div class="modal-header"><h3 style="margin:0">Novo Pedido</h3><button onclick="closeModal('newOrderModal')" style="border:none; background:none;">&times;</button></div>
-        <div class="modal-body">
-            <label>Cliente *</label><input type="text" id="manualName" class="inp-full">
-            <label>Telefone</label><input type="text" id="manualPhone" class="inp-full" placeholder="5542999...">
-            <label>ID (Opcional)</label><input type="text" id="manualChatId" class="inp-full">
-            <label>Coluna Inicial</label><select id="manualColumn" class="inp-full" onchange="autoDateManual(this.value)"></select>
-            <label>Produto</label><input type="text" id="manualProduct" class="inp-full">
-            <label>Prazo</label><input type="date" id="manualDate" class="inp-full">
-            <button class="btn-primary" onclick="createManualOrder()">Criar</button>
+    <div id="reportsView">
+        <div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+            <button class="btn-csv" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Baixar CSV Completo</button>
         </div>
-    </dialog>
 
-    <dialog id="editOrderModal">
-        <div class="modal-header"><h3 style="margin:0">Editar</h3><button onclick="closeModal('editOrderModal')" style="border:none; background:none;">&times;</button></div>
-        <div class="modal-body">
-            <input type="hidden" id="editOrderId">
-            <label>Nome</label><input type="text" id="editClientName" class="inp-full">
-            <label>Telefone</label><input type="text" id="editPhone" class="inp-full">
-            <label>Produto</label><input type="text" id="editProduct" class="inp-full">
-            <label>Prazo</label><input type="date" id="editDueDate" class="inp-full">
-            <button class="btn-primary" onclick="saveOrderEdits()">Salvar</button>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-val" id="kpi-total">0</div>
+                <div class="kpi-label">Total de Pedidos</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-val" id="kpi-active" style="color:#ffab00">0</div>
+                <div class="kpi-label">Em Andamento</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-val" id="kpi-done" style="color:#36b37e">0</div>
+                <div class="kpi-label">Finalizados</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-val" id="kpi-avg">0d</div>
+                <div class="kpi-label">Duração Média</div>
+            </div>
         </div>
-    </dialog>
+
+        <div class="charts-grid">
+            <div class="chart-box">
+                <h4 style="margin-top:0">Pedidos por Status</h4>
+                <canvas id="chartStatus"></canvas>
+            </div>
+            <div class="chart-box">
+                <h4 style="margin-top:0">Top Clientes (Recorrência)</h4>
+                <div style="max-height:200px; overflow-y:auto;">
+                    <table class="report-table" id="tableClients">
+                        <thead><tr><th>Cliente</th><th>Qtd</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <dialog id="filterModal"><div class="modal-header"><h3 style="margin:0">👁️ Filtros</h3><button onclick="closeModal('filterModal')" style="border:none;background:none;">&times;</button></div><div class="modal-body"><div id="filterList"></div><hr><div style="padding:10px;"><input type="checkbox" id="chk-hideWaiting"><label for="chk-hideWaiting"> Ocultar "Aguardando"</label></div><button class="btn-primary" onclick="applyFilters()">Aplicar</button></div></dialog>
+    <dialog id="integratorModal"><div class="modal-header"><h3 style="margin:0">🤖 Integração</h3><button onclick="closeModal('integratorModal')" style="border:none;background:none;">&times;</button></div><div class="modal-body"><label>Token:</label><input id="integrationToken" class="inp-full" oninput="updateIntegratorCode()"><hr><label>Ação:</label><select id="integrationActionType" class="inp-full" onchange="toggleIntegratorOptions()"><option value="move">Mover Card</option><option value="color">Mudar Cor</option></select><div id="opt-move"><label>Para:</label><select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select></div><div id="opt-color" style="display:none;"><label>Status:</label><select id="integrationColorSelect" class="inp-full" onchange="updateIntegratorCode()"><option value="true">🟡 Aguardando</option><option value="false">🟢 Execução</option></select></div><h4 style="margin:5px 0">URL</h4><div class="code-block" id="dispUrl" style="font-size:0.8em;padding:10px;background:#eee;color:#333;margin-bottom:10px;">...</div><h4 style="margin:5px 0">Body</h4><textarea id="jsonContent" style="width:100%;height:150px;background:#172b4d;color:#ccc;border-radius:4px;"></textarea></div></dialog>
+    <dialog id="settingsModal"><div class="modal-header"><h3 style="margin:0">Config</h3><button onclick="closeModal('settingsModal')" style="border:none;background:none;">&times;</button></div><div class="modal-body"><div id="columnsList"></div><button class="btn-primary" onclick="saveAllColumns()">Salvar Ordem</button><h4 style="margin-top:20px">Nova Coluna</h4><input id="newColTitle" class="inp-full" placeholder="Nome"><div style="display:flex;gap:10px"><input type="color" id="newColColor" style="height:40px"><input type="number" id="newColDays" class="inp-full" placeholder="Dias"></div><button class="btn-primary" onclick="addColumn()">Adicionar</button></div></dialog>
+    <dialog id="newOrderModal"><div class="modal-header"><h3 style="margin:0">Novo</h3><button onclick="closeModal('newOrderModal')" style="border:none;background:none;">&times;</button></div><div class="modal-body"><label>Cliente*</label><input id="manualName" class="inp-full"><label>Tel</label><input id="manualPhone" class="inp-full"><label>ID</label><input id="manualChatId" class="inp-full"><label>Coluna</label><select id="manualColumn" class="inp-full" onchange="autoDateManual(this.value)"></select><label>Produto</label><input id="manualProduct" class="inp-full"><label>Prazo</label><input type="date" id="manualDate" class="inp-full"><button class="btn-primary" onclick="createManualOrder()">Criar</button></div></dialog>
+    <dialog id="editOrderModal"><div class="modal-header"><h3 style="margin:0">Editar</h3><button onclick="closeModal('editOrderModal')" style="border:none;background:none;">&times;</button></div><div class="modal-body"><input type="hidden" id="editOrderId"><label>Nome</label><input id="editClientName" class="inp-full"><label>Tel</label><input id="editPhone" class="inp-full"><label>Produto</label><input id="editProduct" class="inp-full"><label>Prazo</label><input type="date" id="editDueDate" class="inp-full"><button class="btn-primary" onclick="saveOrderEdits()">Salvar</button></div></dialog>
 
     <script>
         const REPO_OWNER = 'thiagooler'; const REPO_NAME = 'CRM-NBV';
         let columnsConfig = {'todo': { title: '📥 Novos', color: '#ff5630', days: 0 }, 'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 }, 'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }};
         let columnOrder = ['todo', 'doing', 'done'];
-        let orders = []; 
-        let currentView = 'kanban'; 
-        let visibleColumns = []; 
-        let hideWaiting = false;
-        let lastDataHash = ''; 
-        let dragSrcEl = null;
+        let orders = []; let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let dragSrcEl = null; let myChart = null;
 
-        // FUNÇÃO GLOBAL FIXADA
+        function getToken() { const p = new URLSearchParams(window.location.search); const t = p.get('token'); if(t) { localStorage.setItem('warrior_gh_token', t); return t; } return localStorage.getItem('warrior_gh_token'); }
+        async function init() { 
+            const t = getToken(); if(!t) alert("Configure seu Token!"); 
+            const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
+            const savedWait = localStorage.getItem('warrior_crm_hideWaiting'); if(savedWait) hideWaiting = JSON.parse(savedWait);
+            await loadData();
+            setInterval(() => loadData(true), 15000);
+        }
+
         function switchView(view) {
             currentView = view;
             document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-            const btn = document.getElementById('btn-'+view);
-            if(btn) btn.classList.add('active');
+            const btn = document.getElementById('btn-'+view); if(btn) btn.classList.add('active');
+            document.getElementById('kanbanView').style.display = view === 'kanban' ? 'flex' : 'none';
+            document.getElementById('timelineView').style.display = view === 'timeline' ? 'block' : 'none';
+            document.getElementById('reportsView').style.display = view === 'reports' ? 'block' : 'none';
+            const fBtn = document.getElementById('filterBtn'); if(fBtn) fBtn.style.display = view === 'timeline' ? 'block' : 'none';
             
-            const kanbanDiv = document.getElementById('kanbanView');
-            const timelineDiv = document.getElementById('timelineView');
-            const filterBtn = document.getElementById('filterBtn');
-
-            if(view === 'kanban') {
-                kanbanDiv.style.display = 'flex';
-                timelineDiv.style.display = 'none';
-                filterBtn.style.display = 'none'; 
-                renderBoard(); 
-            } else {
-                kanbanDiv.style.display = 'none';
-                timelineDiv.style.display = 'block';
-                filterBtn.style.display = 'block'; 
-                renderTimeline();
-            }
-        }
-
-        function getToken() { const p = new URLSearchParams(window.location.search); const t = p.get('token'); if(t) { localStorage.setItem('warrior_gh_token', t); return t; } return localStorage.getItem('warrior_gh_token'); }
-        
-        async function init() { 
-            const t = getToken(); 
-            const tkDisp = document.getElementById('tokenDisplay'); if(tkDisp) tkDisp.value = t ? t.substring(0,10) + '...' : 'Não configurado';
-            if(!t) alert("Configure seu Token!"); 
-            
-            const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
-            const savedWaiting = localStorage.getItem('warrior_crm_hideWaiting'); if(savedWaiting) hideWaiting = JSON.parse(savedWaiting);
-            
-            await loadData();
-            setInterval(() => loadData(true), 15000);
+            if(view === 'kanban') renderBoard();
+            else if(view === 'timeline') renderTimeline();
+            else if(view === 'reports') renderReports();
         }
 
         async function loadData(isAuto = false) { 
             const syncIcon = document.getElementById('syncIcon'); if(isAuto && syncIcon) syncIcon.classList.add('loading'); else showStatus('Carregando...', '#0052cc'); 
             try { 
-                const r = await fetch(`db.json?t=${new Date().getTime()}`); 
-                if(!r.ok) throw new Error("Erro DB"); 
-                const d = await r.json(); 
+                const r = await fetch(`db.json?t=${new Date().getTime()}`); if(!r.ok) throw new Error("Erro"); const d = await r.json(); 
                 if (Array.isArray(d)) orders = d; else { orders = d.orders||[]; if(d.columns) columnsConfig = d.columns; if(d.columnOrder) columnOrder = d.columnOrder; else columnOrder = Object.keys(columnsConfig); } 
-                
                 const pending = JSON.parse(localStorage.getItem('warrior_pending') || '[]');
                 const realPending = pending.filter(p => !orders.find(o => o.id === p.id));
                 localStorage.setItem('warrior_pending', JSON.stringify(realPending));
                 orders = [...orders, ...realPending];
-
                 const currentHash = JSON.stringify({o: orders, c: columnsConfig});
                 if (isAuto && currentHash === lastDataHash) { if(syncIcon) syncIcon.classList.remove('loading'); return; }
                 lastDataHash = currentHash;
-
                 if(visibleColumns.length === 0) visibleColumns = [...columnOrder];
-                
-                if(currentView === 'kanban') renderBoard(); else renderTimeline();
+                if(currentView === 'kanban') renderBoard(); else if(currentView === 'timeline') renderTimeline(); else renderReports();
                 if(isAuto) { if(syncIcon) { syncIcon.classList.remove('loading'); syncIcon.classList.add('success'); setTimeout(()=>syncIcon.classList.remove('success'),2000); } } else hideStatus();
             } catch (e) { if(!isAuto) hideStatus(); if(syncIcon) syncIcon.classList.remove('loading'); } 
         }
 
-        function renderBoard() {
-            const b = document.getElementById('kanbanView'); if(!b) return; b.innerHTML = ''; 
-            columnOrder.forEach(k => { 
-                const c = columnsConfig[k]; if(!c) return; 
-                const d = document.createElement('div'); d.className = 'column'; d.style.borderTopColor = c.color; 
-                d.innerHTML = `<div class="column-header" style="color:${c.color}"><span>${c.title} <span id="count-${k}" style="background:#fff;padding:2px 8px;border-radius:10px;font-size:0.8em;color:#333;">0</span></span><div style="position:relative"><i class="fa-solid fa-ellipsis-vertical col-menu-btn" onclick="toggleMenu('${k}')"></i><div id="menu-${k}" class="col-options"><div onclick="sortColumn('${k}','date')">📅 Prazo</div><div onclick="sortColumn('${k}','name')">🔤 Nome</div></div></div></div><div class="card-list" id="${k}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>`; b.appendChild(d); 
-                const l = d.querySelector('.card-list'); const o = orders.filter(ord => ord.status === k); 
-                const cEl = document.getElementById(`count-${k}`); if(cEl) cEl.innerText = o.length; 
-                o.forEach(or => l.appendChild(createCard(or, c.color))); 
+        // --- RELATÓRIOS E CSV ---
+        function renderReports() {
+            // 1. KPIs
+            document.getElementById('kpi-total').innerText = orders.length;
+            const doneCount = orders.filter(o => o.status === 'done').length;
+            document.getElementById('kpi-done').innerText = doneCount;
+            document.getElementById('kpi-active').innerText = orders.length - doneCount;
+            
+            // Duração Média (Baseado no histórico ou criação vs hoje)
+            let totalDur = 0; let counted = 0;
+            orders.forEach(o => {
+                if(o.status === 'done' && o.createdAt) {
+                    const end = o.finishedAt || Date.now(); // Se não tiver finishedAt, usa agora (improviso)
+                    totalDur += (end - o.createdAt);
+                    counted++;
+                } else if (o.id && o.id.startsWith('ped-') && o.status === 'done') {
+                    // Tenta pegar data do ID antigo
+                    const created = parseInt(o.id.split('-')[1]);
+                    if(!isNaN(created)) { totalDur += (Date.now() - created); counted++; }
+                }
             });
+            const avgDays = counted > 0 ? Math.ceil(totalDur / counted / (1000 * 60 * 60 * 24)) : 0;
+            document.getElementById('kpi-avg').innerText = avgDays + 'd';
+
+            // 2. Gráfico Status
+            const ctx = document.getElementById('chartStatus').getContext('2d');
+            const statusCounts = columnOrder.map(k => orders.filter(o => o.status === k).length);
+            const statusLabels = columnOrder.map(k => columnsConfig[k] ? columnsConfig[k].title : k);
+            const statusColors = columnOrder.map(k => columnsConfig[k] ? columnsConfig[k].color : '#ccc');
+
+            if(myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: statusLabels, datasets: [{ label: 'Pedidos', data: statusCounts, backgroundColor: statusColors }] },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+
+            // 3. Tabela Clientes
+            const clientCounts = {};
+            orders.forEach(o => { clientCounts[o.client] = (clientCounts[o.client] || 0) + 1; });
+            const sortedClients = Object.entries(clientCounts).sort((a,b) => b[1] - a[1]).slice(0, 10);
+            const tbody = document.querySelector('#tableClients tbody'); tbody.innerHTML = '';
+            sortedClients.forEach(([name, count]) => { tbody.innerHTML += `<tr><td>${name}</td><td><b>${count}</b></td></tr>`; });
         }
 
-        function renderTimeline() {
-            const c = document.getElementById('timelineView'); if(!c) return; c.innerHTML = ''; 
-            const s = [...orders].sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); 
-            s.forEach(o => { 
-                if (!visibleColumns.includes(o.status)) return;
-                if (hideWaiting && o.waiting) return;
-
-                const col = columnsConfig[o.status]||{color:'#ccc',title:'?'}; const dt = new Date(o.dueDate); const df = Math.ceil((dt - new Date()) / (86400000)); let cl = '#36b37e'; if (df < 0) cl = '#bf2600'; else if (df <= 2) cl = '#ffab00'; if (o.status === 'done') cl = '#42526e'; let opts = ''; columnOrder.forEach(k => { if(columnsConfig[k]) opts += `<option value="${k}" ${o.status === k ? 'selected' : ''}>${columnsConfig[k].title}</option>`; }); const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
-                
-                // Botão de Whats
-                const whatsBtn = o.phone ? `<button class="btn-icon btn-wa" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i></button>` : '';
-
-                c.innerHTML += `<div class="timeline-item" style="border-left-color:${col.color}"><div class="tl-info"><div class="tl-client"><span class="status-dot ${dotClass}"></span>${o.client}</div><div class="tl-product">${o.product}</div><div class="tl-meta"><span class="tl-date" style="color:${cl};border:1px solid ${cl}">${formatDate(o.dueDate)}</span><span style="font-size:0.8em;color:${col.color}"><i class="fa-solid fa-circle" style="font-size:0.6em"></i> ${col.title}</span></div></div><div class="tl-actions">${whatsBtn}<select class="status-select" onchange="changeStatus('${o.id}',this.value)">${opts}</select><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button></div></div>`; 
-            }); 
-        }
-
-        function createCard(o, c) { 
-            const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; 
-            const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
+        function exportCSV() {
+            let csv = "ID,Cliente,Telefone,Produto,Status,Data Prazo,Criado Em\n";
+            orders.forEach(o => {
+                const created = o.createdAt ? new Date(o.createdAt).toLocaleDateString() : (o.id.startsWith('ped-') ? new Date(parseInt(o.id.split('-')[1])).toLocaleDateString() : '-');
+                const statusName = columnsConfig[o.status] ? columnsConfig[o.status].title : o.status;
+                const line = `"${o.id}","${o.client}","${o.phone||''}","${o.product}","${statusName}","${o.dueDate}","${created}"`;
+                csv += line + "\n";
+            });
             
-            // Botão Whats
-            const whatsBtn = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i></button>` : '';
-
-            d.innerHTML = `<div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-actions">${whatsBtn}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "relatorio_crm.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
-        // --- MANIPULAÇÃO ---
-        function openIntegrator() { 
-            const t = localStorage.getItem('warrior_gh_token'); 
-            const tkInput = document.getElementById('integrationToken');
-            if(t && tkInput) tkInput.value = t; 
-            const s = document.getElementById('integrationColSelect'); 
-            if(s) { s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); }
-            toggleIntegratorOptions(); 
-            const m = document.getElementById('integratorModal'); if(m) m.showModal(); 
-        }
+        // --- RENDER BÁSICO ---
+        function renderBoard() { const b = document.getElementById('kanbanView'); if(!b) return; b.innerHTML = ''; columnOrder.forEach(k => { const c = columnsConfig[k]; if(!c) return; const d = document.createElement('div'); d.className = 'column'; d.style.borderTopColor = c.color; d.innerHTML = `<div class="column-header" style="color:${c.color}"><span>${c.title} <span id="count-${k}" style="background:#fff;padding:2px 8px;border-radius:10px;font-size:0.8em;color:#333;">0</span></span><div style="position:relative"><i class="fa-solid fa-ellipsis-vertical col-menu-btn" onclick="toggleMenu('${k}')"></i><div id="menu-${k}" class="col-options"><div onclick="sortColumn('${k}','date')">📅 Prazo</div><div onclick="sortColumn('${k}','name')">🔤 Nome</div></div></div></div><div class="card-list" id="${k}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>`; b.appendChild(d); const l = d.querySelector('.card-list'); const o = orders.filter(ord => ord.status === k); document.getElementById(`count-${k}`).innerText = o.length; o.forEach(or => l.appendChild(createCard(or, c.color))); }); }
+        function renderTimeline() { const c = document.getElementById('timelineView'); if(!c) return; c.innerHTML = ''; const s = [...orders].sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); s.forEach(o => { if (!visibleColumns.includes(o.status)) return; if(hideWaiting && o.waiting) return; const col = columnsConfig[o.status]||{color:'#ccc',title:'?'}; const dt = new Date(o.dueDate); const df = Math.ceil((dt - new Date()) / (86400000)); let cl = '#36b37e'; if (df < 0) cl = '#bf2600'; else if (df <= 2) cl = '#ffab00'; if (o.status === 'done') cl = '#42526e'; let opts = ''; columnOrder.forEach(k => { if(columnsConfig[k]) opts += `<option value="${k}" ${o.status === k ? 'selected' : ''}>${columnsConfig[k].title}</option>`; }); const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; const wa = o.phone ? `<button class="btn-icon btn-wa" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i></button>` : ''; c.innerHTML += `<div class="timeline-item" style="border-left-color:${col.color}"><div class="tl-info"><div class="tl-client"><span class="status-dot ${dotClass}"></span>${o.client}</div><div class="tl-product">${o.product}</div><div class="tl-meta"><span class="tl-date" style="color:${cl};border:1px solid ${cl}">${formatDate(o.dueDate)}</span><span style="font-size:0.8em;color:${col.color}"><i class="fa-solid fa-circle" style="font-size:0.6em"></i> ${col.title}</span></div></div><div class="tl-actions">${wa}<select class="status-select" onchange="changeStatus('${o.id}',this.value)">${opts}</select><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button></div></div>`; }); }
+        function createCard(o, c) { const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; const wa = o.phone ? `<button class="btn-icon btn-wa" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i></button>` : ''; d.innerHTML = `<div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-actions">${wa}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; }
 
-        function toggleIntegratorOptions() {
-            const typeEl = document.getElementById('integrationActionType'); const type = typeEl ? typeEl.value : 'move';
-            const divMove = document.getElementById('opt-move'); const divColor = document.getElementById('opt-color');
-            if(divMove) divMove.style.display = type === 'move' ? 'block' : 'none';
-            if(divColor) divColor.style.display = type === 'color' ? 'block' : 'none';
-            updateIntegratorCode();
-        }
-
-        function updateIntegratorCode() {
-            const tkEl = document.getElementById('integrationToken'); const token = tkEl ? tkEl.value.trim() : '';
-            if(token) localStorage.setItem('warrior_gh_token', token); 
-            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`;
-            const dispUrl = document.getElementById('dispUrl'); if(dispUrl) dispUrl.innerText = url;
-            const codeUrl = document.getElementById('codeUrl'); if(codeUrl) codeUrl.innerText = url;
-
-            const headers = [{ k: 'Authorization', v: `token ${token || 'ghp_SEU_TOKEN'}` }, { k: 'Accept', v: 'application/vnd.github.v3+json' }, { k: 'Content-Type', v: 'application/json' }, { k: 'User-Agent', v: 'WarriorBot' }];
-            const list = document.getElementById('headersList');
-            if(list) { list.innerHTML = ''; headers.forEach(h => { const safeKey = h.k.replace(/-/g,''); list.innerHTML += `<div class="header-row"><span class="header-key">${h.k}</span><span class="header-val" id="val-${safeKey}">${h.v}</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('val-${safeKey}')">Copiar</button></span></div>`; }); }
-
-            const typeEl = document.getElementById('integrationActionType'); const type = typeEl ? typeEl.value : 'move';
-            let json = {};
-            if (type === 'move') {
-                const colEl = document.getElementById('integrationColSelect'); const col = colEl ? colEl.value : '';
-                json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "telefone": "{telefone}", "status": col, "nome": "{nome-completo}" } };
-            } else {
-                const colSel = document.getElementById('integrationColorSelect'); const isWaiting = colSel ? (colSel.value === 'true') : false;
-                json = { "event_type": "crm_event", "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } };
-            }
-            const cb = document.getElementById('jsonContent'); if(cb) cb.innerText = JSON.stringify(json, null, 2);
-            const hiddenBody = document.getElementById('codeBody'); if(hiddenBody) hiddenBody.innerText = JSON.stringify(json, null, 2);
-        }
-
-        // --- FILTROS ---
-        function openFilterModal() { 
-            const l = document.getElementById('filterList'); l.innerHTML = ''; 
-            columnOrder.forEach(k => { 
-                if(columnsConfig[k]) l.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${k}" value="${k}" ${visibleColumns.includes(k)?'checked':''}><div style="width:15px;height:15px;background:${columnsConfig[k].color};border-radius:50%;"></div><label for="chk-${k}">${columnsConfig[k].title}</label></div>`; 
-            }); 
-            const waitChk = document.getElementById('chk-hideWaiting');
-            if(waitChk) waitChk.checked = hideWaiting;
-            document.getElementById('filterModal').showModal(); 
-        }
-
-        function applyFilters() { 
-            visibleColumns = []; 
-            document.querySelectorAll('#filterList input[type="checkbox"]').forEach(c => { if(c.checked) visibleColumns.push(c.value); }); 
-            localStorage.setItem('warrior_crm_filters', JSON.stringify(visibleColumns)); 
-            
-            const waitChk = document.getElementById('chk-hideWaiting');
-            if(waitChk) {
-                hideWaiting = waitChk.checked;
-                localStorage.setItem('warrior_crm_hideWaiting', JSON.stringify(hideWaiting));
-            }
-
-            closeModal('filterModal'); 
-            renderTimeline(); 
-        }
-
+        // --- CORE ---
+        function openIntegrator() { const t = localStorage.getItem('warrior_gh_token'); if(t) document.getElementById('integrationToken').value = t; const s = document.getElementById('integrationColSelect'); if(s){ s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); } toggleIntegratorOptions(); document.getElementById('integratorModal').showModal(); }
+        function toggleIntegratorOptions() { const type = document.getElementById('integrationActionType').value; document.getElementById('opt-move').style.display = type === 'move' ? 'block' : 'none'; document.getElementById('opt-color').style.display = type === 'color' ? 'block' : 'none'; updateIntegratorCode(); }
+        function updateIntegratorCode() { const t = document.getElementById('integrationToken').value.trim(); if(t) localStorage.setItem('warrior_gh_token', t); const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`; document.getElementById('dispUrl').innerText = url; const type = document.getElementById('integrationActionType').value; let json = {}; if (type === 'move') { const col = document.getElementById('integrationColSelect').value; json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}" } }; } else { const isWaiting = document.getElementById('integrationColorSelect').value === 'true'; json = { "event_type": "crm_event", "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; } document.getElementById('jsonContent').value = JSON.stringify(json, null, 2); }
         async function sendToGitHub(realAction, payload) { const t = getToken(); if(!t) { alert("Token?"); return; } const body = { event_type: "crm_event", client_payload: { real_action: realAction, ...payload } }; try { const r = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, { method: 'POST', headers: { 'Authorization': `token ${t}`, 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) }); if(!r.ok) throw new Error(r.status); } catch(e) { alert("Erro Envio: "+e.message); throw e; } }
-        function copyText(id) { const el = document.getElementById(id); if(el) navigator.clipboard.writeText(el.innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); } 
-        function copyLink(id) { navigator.clipboard.writeText(window.location.href.replace('index.html','').split('?')[0] + 'rastreio/?id='+id); alert("Link Rastreio Copiado!"); }
-        function closeModal(id) { document.getElementById(id).close(); } 
-        function showStatus(m,c) { const e=document.getElementById('statusMsg'); if(e) { e.innerText=m; e.style.background=c; e.style.display='block'; } } 
-        function hideStatus() { const e=document.getElementById('statusMsg'); if(e) e.style.display='none'; } 
-        function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; } 
-        function sortColumn(k, t) { let c = orders.filter(o => o.status === k); let o = orders.filter(o => o.status !== k); if (t === 'date') c.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); else c.sort((a,b) => a.client.localeCompare(b.client)); orders = [...o, ...c]; renderBoard(); } 
-        function allowDrop(ev) { ev.preventDefault(); } function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); } 
-        function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
-        function switchTab(id) { document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active')); document.getElementById(id).classList.add('active'); event.target.classList.add('active'); }
-        function openNewOrderModal() { document.getElementById('manualName').value=''; document.getElementById('manualPhone').value=''; document.getElementById('manualChatId').value=''; document.getElementById('manualProduct').value=''; document.getElementById('manualDate').valueAsDate=new Date(); const s = document.getElementById('manualColumn'); s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); document.getElementById('newOrderModal').showModal(); }
+        function openFilterModal() { const l = document.getElementById('filterList'); l.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) l.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${k}" value="${k}" ${visibleColumns.includes(k)?'checked':''}><div style="width:15px;height:15px;background:${columnsConfig[k].color};border-radius:50%;"></div><label for="chk-${k}">${columnsConfig[k].title}</label></div>`; }); document.getElementById('chk-hideWaiting').checked = hideWaiting; document.getElementById('filterModal').showModal(); }
+        function applyFilters() { visibleColumns = []; document.querySelectorAll('#filterList input[type="checkbox"]').forEach(c => { if(c.checked) visibleColumns.push(c.value); }); localStorage.setItem('warrior_crm_filters', JSON.stringify(visibleColumns)); hideWaiting = document.getElementById('chk-hideWaiting').checked; localStorage.setItem('warrior_crm_hideWaiting', JSON.stringify(hideWaiting)); closeModal('filterModal'); if(currentView==='timeline') renderTimeline(); }
+        function openNewOrderModal() { document.getElementById('manualName').value=''; document.getElementById('manualChatId').value=''; document.getElementById('manualProduct').value=''; document.getElementById('manualPhone').value=''; document.getElementById('manualDate').valueAsDate=new Date(); const s = document.getElementById('manualColumn'); s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); document.getElementById('newOrderModal').showModal(); }
         function autoDateManual(s) { const d = columnsConfig[s]?.days || 0; if(d>0) { const dt = new Date(); dt.setDate(dt.getDate()+d); document.getElementById('manualDate').valueAsDate = dt; } }
-        async function createManualOrder() { const n = document.getElementById('manualName').value; if(!n) return alert("Nome!"); const pay = { id: 'ped-' + Date.now(), nome: n, telefone: document.getElementById('manualPhone').value, chat_id: document.getElementById('manualChatId').value, produto: document.getElementById('manualProduct').value || 'Manual', prazo: document.getElementById('manualDate').value, status: document.getElementById('manualColumn').value, waiting: false }; const newOrder = { id: pay.id, client: pay.nome, phone: pay.telefone, chat_id: pay.chat_id, product: pay.produto, dueDate: pay.prazo, status: pay.status, waiting: false }; orders.push(newOrder); const pending = JSON.parse(localStorage.getItem('warrior_pending') || '[]'); pending.push(newOrder); localStorage.setItem('warrior_pending', JSON.stringify(pending)); closeModal('newOrderModal'); if(currentView==='kanban') renderBoard(); else renderTimeline(); showStatus('Enviando...', '#36b37e'); try { await sendToGitHub('novo_pedido', pay); showStatus('✅ Enviado!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro Envio!', '#bf2600'); } }
-        function openEditOrder(id) { const o = orders.find(ord => ord.id === id); if(!o) return; document.getElementById('editOrderId').value = o.id; document.getElementById('editClientName').value = o.client; document.getElementById('editPhone').value = o.phone || ''; document.getElementById('editProduct').value = o.product; document.getElementById('editDueDate').value = o.dueDate; document.getElementById('editOrderModal').showModal(); }
-        async function saveOrderEdits() { const id = document.getElementById('editOrderId').value; const c = document.getElementById('editClientName').value; const ph = document.getElementById('editPhone').value; const p = document.getElementById('editProduct').value; const d = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=c; orders[idx].phone=ph; orders[idx].product=p; orders[idx].dueDate=d; if(currentView==='kanban') renderBoard(); else renderTimeline(); } closeModal('editOrderModal'); try { await sendToGitHub('update_order', { id, client: c, phone: ph, product: p, dueDate: d }); } catch(e) {} }
-        async function changeStatus(id, st) { const i = orders.findIndex(o => o.id === id); if(i === -1) return; const days = columnsConfig[st]?.days || 0; let nd = null; if(days>0) { const d = new Date(); d.setDate(d.getDate()+days); nd = d.toISOString().split('T')[0]; orders[i].dueDate = nd; } orders[i].status = st; if(currentView==='kanban') renderBoard(); else renderTimeline(); try { await sendToGitHub('update_status', { id, status: st, newDate: nd }); } catch(e) {} }
+        async function createManualOrder() { const n = document.getElementById('manualName').value; if(!n) return alert("Nome!"); const pay = { id: 'ped-'+Date.now(), nome: n, telefone: document.getElementById('manualPhone').value, chat_id: document.getElementById('manualChatId').value, produto: document.getElementById('manualProduct').value || 'Manual', prazo: document.getElementById('manualDate').value, status: document.getElementById('manualColumn').value, waiting: false }; const newOrder = { id: pay.id, client: pay.nome, phone: pay.telefone, chat_id: pay.chat_id, product: pay.produto, dueDate: pay.prazo, status: pay.status, waiting: false, createdAt: Date.now() }; orders.push(newOrder); const pending = JSON.parse(localStorage.getItem('warrior_pending') || '[]'); pending.push(newOrder); localStorage.setItem('warrior_pending', JSON.stringify(pending)); closeModal('newOrderModal'); if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); showStatus('Enviando...', '#36b37e'); try { await sendToGitHub('novo_pedido', pay); showStatus('✅ Enviado!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); } }
+        function openEditOrder(id) { const o = orders.find(ord => ord.id === id); if(!o) return; document.getElementById('editOrderId').value = o.id; document.getElementById('editClientName').value = o.client; document.getElementById('editPhone').value = o.phone||''; document.getElementById('editProduct').value = o.product; document.getElementById('editDueDate').value = o.dueDate; document.getElementById('editOrderModal').showModal(); }
+        async function saveOrderEdits() { const id = document.getElementById('editOrderId').value; const c = document.getElementById('editClientName').value; const ph = document.getElementById('editPhone').value; const p = document.getElementById('editProduct').value; const d = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=c; orders[idx].phone=ph; orders[idx].product=p; orders[idx].dueDate=d; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); } closeModal('editOrderModal'); try { await sendToGitHub('update_order', { id, client: c, phone: ph, product: p, dueDate: d }); } catch(e) {} }
+        async function changeStatus(id, st) { const i = orders.findIndex(o => o.id === id); if(i === -1) return; const days = columnsConfig[st]?.days || 0; let nd = null; if(days>0) { const d = new Date(); d.setDate(d.getDate()+days); nd = d.toISOString().split('T')[0]; orders[i].dueDate = nd; } orders[i].status = st; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToGitHub('update_status', { id, status: st, newDate: nd }); } catch(e) {} }
         async function drop(ev) { ev.preventDefault(); const id = ev.dataTransfer.getData("text"); const col = ev.target.closest('.card-list'); if (!col) return; const ns = col.id; if(orders.find(o=>o.id===id).status !== ns) changeStatus(id, ns); }
         async function saveAllColumns() { if(currentView === 'kanban') renderBoard(); showStatus('Salvando...', '#ffab00'); try { await sendToGitHub('save_columns', { columns: columnsConfig, order: columnOrder }); showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); } }
         async function addColumn() { const t = document.getElementById('newColTitle').value; if(!t) return; const id = t.toLowerCase().replace(/[^a-z0-9]/g, '')+'_'+Math.floor(Math.random()*1000); columnsConfig[id] = { title: t, color: document.getElementById('newColColor').value, days: parseInt(document.getElementById('newColDays').value)||0 }; columnOrder.push(id); document.getElementById('newColTitle').value = ''; openSettings(); }
         async function removeColumn(k) { if(!confirm("Remover?")) return; delete columnsConfig[k]; columnOrder = columnOrder.filter(id => id !== k); openSettings(); }
-        async function deleteOrder(id) { if(confirm('Apagar?')) { orders = orders.filter(o => o.id !== id); if(currentView==='kanban') renderBoard(); else renderTimeline(); try { await sendToGitHub('delete_order', { id }); } catch(e) {} } }
+        async function deleteOrder(id) { if(confirm('Apagar?')) { orders = orders.filter(o => o.id !== id); if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToGitHub('delete_order', { id }); } catch(e) {} } }
         function openSettings() { const l = document.getElementById('columnsList'); l.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) { const c = columnsConfig[k]; const d = document.createElement('div'); d.className='col-item'; d.draggable=true; d.dataset.key=k; d.innerHTML = `<div class="drag-handle"><i class="fa-solid fa-grip-lines"></i></div><div class="color-dot" style="background:${c.color}"></div><div class="col-inputs"><input class="inp-full" style="margin:0;padding:5px;" value="${c.title}" onchange="columnsConfig['${k}'].title=this.value"><div class="col-row"><input type="number" class="inp-mini" value="${c.days}" onchange="columnsConfig['${k}'].days=parseInt(this.value)"><input type="color" style="height:30px;" value="${c.color}" onchange="columnsConfig['${k}'].color=this.value"></div></div><button onclick="removeColumn('${k}')" style="color:red;border:none;background:none;"><i class="fa-solid fa-trash"></i></button>`; d.addEventListener('dragstart', handleDragStart); d.addEventListener('dragover', handleDragOver); d.addEventListener('drop', handleDrop); l.appendChild(d); } }); document.getElementById('settingsModal').showModal(); }
         function handleDragStart(e) { dragSrcEl = this; e.dataTransfer.effectAllowed = 'move'; } function handleDragOver(e) { e.preventDefault(); return false; } function handleDrop(e) { e.stopPropagation(); if (dragSrcEl !== this) { const s = dragSrcEl.dataset.key; const t = this.dataset.key; const si = columnOrder.indexOf(s); const ti = columnOrder.indexOf(t); if(si>-1 && ti>-1) { columnOrder.splice(si, 1); columnOrder.splice(ti, 0, s); openSettings(); } } return false; }
-
+        
+        // Utils
+        function copyText(id) { const el = document.getElementById(id); if(el) navigator.clipboard.writeText(el.tagName==='TEXTAREA'?el.value:el.innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); } 
+        function copyLink(id) { navigator.clipboard.writeText(window.location.href.replace('index.html','').split('?')[0] + 'rastreio/?id='+id); alert("Link Rastreio Copiado!"); }
+        function closeModal(id) { document.getElementById(id).close(); } function showStatus(m,c) { const e=document.getElementById('statusMsg'); if(e) { e.innerText=m; e.style.background=c; e.style.display='block'; } } function hideStatus() { const e=document.getElementById('statusMsg'); if(e) e.style.display='none'; } function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; } function sortColumn(k, t) { let c = orders.filter(o => o.status === k); let o = orders.filter(o => o.status !== k); if (t === 'date') c.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); else c.sort((a,b) => a.client.localeCompare(b.client)); orders = [...o, ...c]; renderBoard(); } function allowDrop(ev) { ev.preventDefault(); } function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); } function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
         document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
         document.addEventListener('DOMContentLoaded', init);
     </script>
