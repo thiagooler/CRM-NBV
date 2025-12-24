@@ -1,5 +1,10 @@
 {
   "columns": {
+    "aberto_798": {
+      "color": "#989a04",
+      "days": 0,
+      "title": "Aberto"
+    },
     "approval": {
       "color": "#6554c0",
       "days": 30,
@@ -67,7 +72,8 @@
     "emproduo_216",
     "prontoparaentrega_2",
     "disponivelpararetirada_769",
-    "psvenda_619"
+    "psvenda_619",
+    "aberto_798"
   ],
   "orders": [
     {
