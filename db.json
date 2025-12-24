@@ -205,6 +205,14 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-03",
       "status": "done"
+    },
+    {
+      "id": "ped-1766593630976",
+      "client": "Luciele",
+      "chat_id": "768782196",
+      "product": "Manual",
+      "dueDate": "2026-09-20",
+      "status": "payment"
     }
   ]
 }
