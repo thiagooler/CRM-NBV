@@ -245,6 +245,14 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-23",
       "status": "payment"
+    },
+    {
+      "id": "ped-1766596149927",
+      "client": "Cristiane  Miranda",
+      "chat_id": "785789753",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "filadeproduo_612"
     }
   ]
 }
