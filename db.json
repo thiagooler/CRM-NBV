@@ -1,10 +1,5 @@
 {
   "columns": {
-    "approval": {
-      "color": "#6554c0",
-      "days": 30,
-      "title": "Aguardando resposta"
-    },
     "disponivelpararetirada_769": {
       "color": "#1e9816",
       "days": 30,
@@ -60,7 +55,6 @@
     "filadeatendimento_988",
     "doing",
     "review",
-    "approval",
     "done",
     "payment",
     "filadeproduo_612",
