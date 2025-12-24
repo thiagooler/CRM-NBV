@@ -175,6 +175,7 @@
         <div class="modal-header"><h3 style="margin:0">Novo Pedido</h3><button onclick="closeModal('newOrderModal')" style="border:none; background:none; cursor:pointer;">&times;</button></div>
         <div class="modal-body">
             <label>Cliente *</label><input type="text" id="manualName" class="inp-full">
+            <label>ID do Cliente (Opcional)</label><input type="text" id="manualChatId" class="inp-full" placeholder="Ex: ID do BotConversa">
             <label>Produto</label><input type="text" id="manualProduct" class="inp-full">
             <label>Prazo</label><input type="date" id="manualDate" class="inp-full">
             <button class="btn-primary" onclick="createManualOrder()">Criar</button>
@@ -201,16 +202,12 @@
         let dragSrcEl = null; 
         let lastDataHash = '';
         let currentView = 'kanban';
-        let visibleColumns = []; // FILTRO DE COLUNAS
+        let visibleColumns = [];
 
         function getToken() { const p = new URLSearchParams(window.location.search); const t = p.get('token'); if (t) { localStorage.setItem('warrior_gh_token', t); return t; } return localStorage.getItem('warrior_gh_token'); }
         async function init() { 
             const t = getToken(); document.getElementById('tokenDisplay').value = t ? t.substring(0,10) + '...' : 'Não configurado'; if(!t) alert("Configure seu Token!"); 
-            
-            // CARREGA FILTROS DO PC
-            const savedFilters = localStorage.getItem('warrior_crm_filters');
-            if(savedFilters) visibleColumns = JSON.parse(savedFilters);
-
+            const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
             await loadData();
             setInterval(() => loadData(true), 15000);
         }
@@ -223,12 +220,12 @@
             if(view === 'kanban') {
                 document.getElementById('kanbanView').style.display = 'flex';
                 document.getElementById('timelineView').style.display = 'none';
-                document.getElementById('filterBtn').style.display = 'none'; // Esconde filtro no Kanban
+                document.getElementById('filterBtn').style.display = 'none'; 
                 renderBoard(); 
             } else {
                 document.getElementById('kanbanView').style.display = 'none';
                 document.getElementById('timelineView').style.display = 'block';
-                document.getElementById('filterBtn').style.display = 'block'; // Mostra filtro no Prazos
+                document.getElementById('filterBtn').style.display = 'block'; 
                 renderTimeline();
             }
         }
@@ -241,10 +238,7 @@
                 if (isAuto && currentHash === lastDataHash) { syncIcon.classList.remove('loading'); return; }
                 lastDataHash = currentHash;
                 if (Array.isArray(d)) orders = d; else { orders = d.orders||[]; if(d.columns) columnsConfig = d.columns; if(d.columnOrder && Array.isArray(d.columnOrder)) columnOrder = d.columnOrder; else columnOrder = Object.keys(columnsConfig); } 
-                
-                // Se for a primeira vez, mostra todas as colunas
                 if(visibleColumns.length === 0) visibleColumns = [...columnOrder];
-
                 if(currentView === 'kanban') renderBoard(); else renderTimeline();
                 if(isAuto) { syncIcon.classList.remove('loading'); syncIcon.classList.add('success'); setTimeout(() => syncIcon.classList.remove('success'), 2000); } else { hideStatus(); }
             } catch (e) { if(!isAuto) hideStatus(); syncIcon.classList.remove('loading'); } 
@@ -252,42 +246,22 @@
         
         // --- FILTROS ---
         function openFilterModal() {
-            const list = document.getElementById('filterList');
-            list.innerHTML = '';
-            
+            const list = document.getElementById('filterList'); list.innerHTML = '';
             columnOrder.forEach(key => {
-                const col = columnsConfig[key];
-                if(!col) return;
-                
+                const col = columnsConfig[key]; if(!col) return;
                 const isChecked = visibleColumns.includes(key) ? 'checked' : '';
-                
-                const div = document.createElement('div');
-                div.className = 'filter-item';
-                div.innerHTML = `
-                    <input type="checkbox" id="chk-${key}" value="${key}" ${isChecked}>
-                    <div style="width:15px; height:15px; background:${col.color}; border-radius:50%;"></div>
-                    <label for="chk-${key}">${col.title}</label>
-                `;
-                list.appendChild(div);
+                list.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${key}" value="${key}" ${isChecked}><div style="width:15px; height:15px; background:${col.color}; border-radius:50%;"></div><label for="chk-${key}">${col.title}</label></div>`;
             });
             document.getElementById('filterModal').showModal();
         }
-
         function applyFilters() {
             visibleColumns = [];
-            const checkboxes = document.querySelectorAll('#filterList input[type="checkbox"]');
-            checkboxes.forEach(chk => {
-                if(chk.checked) visibleColumns.push(chk.value);
-            });
-            
-            // SALVA NO PC DO USUÁRIO
+            document.querySelectorAll('#filterList input[type="checkbox"]').forEach(chk => { if(chk.checked) visibleColumns.push(chk.value); });
             localStorage.setItem('warrior_crm_filters', JSON.stringify(visibleColumns));
-            
-            closeModal('filterModal');
-            renderTimeline(); // Atualiza a lista
+            closeModal('filterModal'); renderTimeline();
         }
 
-        // --- RENDERIZADORES ---
+        // --- RENDER ---
         function renderBoard() {
             const b = document.getElementById('kanbanView'); b.innerHTML = ''; 
             columnOrder.forEach(k => { 
@@ -295,31 +269,23 @@
                 const d = document.createElement('div'); d.className = 'column'; d.style.borderTopColor = c.color; d.innerHTML = `<div class="column-header" style="color:${c.color}"><span>${c.title} <span id="count-${k}" style="background:#fff; padding:2px 8px; border-radius:10px; font-size:0.8em; color:#333;">0</span></span><div style="position:relative"><i class="fa-solid fa-ellipsis-vertical col-menu-btn" onclick="toggleMenu('${k}')"></i><div id="menu-${k}" class="col-options"><div onclick="sortColumn('${k}', 'date')">📅 Prazo</div><div onclick="sortColumn('${k}', 'name')">🔤 Nome</div></div></div></div><div class="card-list" id="${k}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>`; b.appendChild(d); const l = d.querySelector('.card-list'); const o = orders.filter(o => o.status === k); document.getElementById(`count-${k}`).innerText = o.length; o.forEach(or => l.appendChild(createCard(or, c.color))); 
             });
         }
-
         function renderTimeline() {
             const container = document.getElementById('timelineView'); container.innerHTML = '';
             const sortedOrders = [...orders].sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate));
             let visibleCount = 0;
-
             sortedOrders.forEach(o => {
-                // AQUI A MÁGICA DO FILTRO
                 if (!visibleColumns.includes(o.status)) return;
                 visibleCount++;
-
                 const col = columnsConfig[o.status] || { color: '#ccc', title: '?' };
                 const dt = new Date(o.dueDate); const today = new Date(); const diffTime = dt - today; const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
                 let dateColor = '#36b37e'; if (diffDays < 0) dateColor = '#bf2600'; else if (diffDays <= 2) dateColor = '#ffab00'; if (o.status === 'done') dateColor = '#42526e'; 
-
                 let optionsHtml = ''; columnOrder.forEach(k => { const c = columnsConfig[k]; if(c) optionsHtml += `<option value="${k}" ${o.status === k ? 'selected' : ''}>${c.title}</option>`; });
-
                 const item = document.createElement('div'); item.className = 'timeline-item'; item.style.borderLeftColor = col.color;
                 item.innerHTML = `<div class="tl-info"><div class="tl-client">${o.client}</div><div class="tl-product">${o.product}</div><div class="tl-meta"><span class="tl-date" style="color:${dateColor}; border:1px solid ${dateColor}">${formatDate(o.dueDate)}</span><span style="font-size:0.8em; color:${col.color}"><i class="fa-solid fa-circle" style="font-size:0.6em"></i> ${col.title}</span></div></div><div class="tl-actions"><select class="status-select" onchange="changeStatusFromTimeline('${o.id}', this.value)">${optionsHtml}</select><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button></div>`;
                 container.appendChild(item);
             });
-            
             if(visibleCount === 0) container.innerHTML = '<p style="text-align:center; color:#666; padding:20px;">Nenhum pedido visível (Verifique os filtros).</p>';
         }
-
         function createCard(o, c) { const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; const dt = new Date(o.dueDate); const late = dt < new Date() && o.status !== 'done'; d.innerHTML = `<div class="card-title">${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-actions"><button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; }
 
         async function changeStatusFromTimeline(id, newStatus) {
@@ -367,8 +333,8 @@
         function openIntegrator() { const t = localStorage.getItem('warrior_gh_token'); if(t) document.getElementById('integrationToken').value = t; const s = document.getElementById('integrationColSelect'); s.innerHTML = ''; columnOrder.forEach(k => { const o = document.createElement('option'); o.value = k; o.text = columnsConfig[k].title; s.appendChild(o); }); updateIntegratorCode(); document.getElementById('integratorModal').showModal(); }
         function updateIntegratorCode() { const t = document.getElementById('integrationToken').value.trim(); if(t) localStorage.setItem('warrior_gh_token', t); document.getElementById('codeHeaders').innerText = `Authorization: token ${t || 'ghp_SEU_TOKEN'}\nAccept: application/vnd.github.v3+json\nUser-Agent: WarriorBot\nContent-Type: application/json`; const col = document.getElementById('integrationColSelect').value; const json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}" } }; document.getElementById('codeBody').innerText = JSON.stringify(json, null, 2); }
         function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); }
-        function openNewOrderModal() { document.getElementById('manualName').value = ''; document.getElementById('manualProduct').value = ''; document.getElementById('manualDate').valueAsDate = new Date(); document.getElementById('newOrderModal').showModal(); }
-        async function createManualOrder() { const n = document.getElementById('manualName').value; const p = document.getElementById('manualProduct').value; const pr = document.getElementById('manualDate').value; if(!n) return alert("Nome obrigatório!"); const pay = { nome: n, produto: p || 'Manual', prazo: pr, chat_id: '' }; const c = columnOrder[0]; orders.push({ id: 'ped-'+Date.now(), client: n, product: pay.produto, dueDate: pr, status: c }); if(currentView==='kanban') renderBoard(); else renderTimeline(); closeModal('newOrderModal'); showStatus('Criando...', '#36b37e'); try { await sendToGitHub('novo_pedido', pay); showStatus('✅ Criado!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); } }
+        function openNewOrderModal() { document.getElementById('manualName').value = ''; document.getElementById('manualChatId').value = ''; document.getElementById('manualProduct').value = ''; document.getElementById('manualDate').valueAsDate = new Date(); document.getElementById('newOrderModal').showModal(); }
+        async function createManualOrder() { const n = document.getElementById('manualName').value; const cid = document.getElementById('manualChatId').value; const p = document.getElementById('manualProduct').value; const pr = document.getElementById('manualDate').value; if(!n) return alert("Nome obrigatório!"); const pay = { nome: n, chat_id: cid, produto: p || 'Manual', prazo: pr }; const c = columnOrder[0]; orders.push({ id: 'ped-'+Date.now(), client: n, chat_id: cid, product: pay.produto, dueDate: pr, status: c }); if(currentView==='kanban') renderBoard(); else renderTimeline(); closeModal('newOrderModal'); showStatus('Criando...', '#36b37e'); try { await sendToGitHub('novo_pedido', pay); showStatus('✅ Criado!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); } }
         function openEditOrder(id) { const o = orders.find(ord => ord.id === id); if(!o) return; document.getElementById('editOrderId').value = o.id; document.getElementById('editClientName').value = o.client; document.getElementById('editProduct').value = o.product; document.getElementById('editDueDate').value = o.dueDate; document.getElementById('editOrderModal').showModal(); }
         async function saveOrderEdits() { const id = document.getElementById('editOrderId').value; const c = document.getElementById('editClientName').value; const p = document.getElementById('editProduct').value; const d = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=c; orders[idx].product=p; orders[idx].dueDate=d; if(currentView==='kanban') renderBoard(); else renderTimeline(); } closeModal('editOrderModal'); showStatus('Salvando...', '#ffab00'); try { await sendToGitHub('update_order', { id, client: c, product: p, dueDate: d }); showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); } }
         function allowDrop(ev) { ev.preventDefault(); } function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); } 
