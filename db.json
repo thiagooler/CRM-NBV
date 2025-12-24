@@ -85,6 +85,14 @@
       "product": "Pedido via Bot",
       "dueDate": "2025-12-31",
       "status": "prontoparaentrega_2"
+    },
+    {
+      "id": "ped-1766536646102",
+      "client": "Taiz Grando",
+      "chat_id": "503653240",
+      "product": "Manual",
+      "dueDate": "2026-01-23",
+      "status": "todo"
     }
   ]
 }
