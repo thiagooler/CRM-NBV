@@ -312,6 +312,18 @@
       "dueDate": "2025-12-29",
       "status": "review",
       "waiting": false
+    },
+    {
+      "id": "ped-1766609256890",
+      "client": "Leocádia",
+      "phone": "+554299892523",
+      "chat_id": "841862909",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "filadeproduo_612",
+      "waiting": false,
+      "createdAt": 1766609256890,
+      "history": []
     }
   ]
 }
