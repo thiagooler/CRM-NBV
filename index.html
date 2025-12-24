@@ -12,8 +12,6 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
         .header h1 { margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; color: #0052cc; }
         .header-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        
-        .status-badge { padding: 8px 16px; border-radius: 4px; font-weight: bold; font-size: 0.9em; display: none; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
         .sync-icon { color: #aaa; font-size: 1.2rem; transition: color 0.3s; margin-right: 10px; }
         .sync-icon.loading { animation: spin 1s linear infinite; color: #0052cc; }
         .sync-icon.success { color: #36b37e; }
@@ -68,6 +66,8 @@
         .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; margin-left:5px;}
         .btn-add-new { background: #36b37e; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
         .btn-bot { background: #6554c0; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
+        .btn-wa { background: #dcf8c6; color: #075e54; }
+        .btn-wa:hover { background: #25d366; color: white; }
         
         .col-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px; border: 1px solid #eee; transition: background 0.2s;}
         .col-item.dragging { opacity: 0.5; background: #e3f2fd; border: 2px dashed #0052cc; }
@@ -127,7 +127,7 @@
                 <label>Definir Status:</label>
                 <select id="integrationColorSelect" class="inp-full" onchange="updateIntegratorCode()">
                     <option value="true">🟡 Aguardando Cliente</option>
-                    <option value="false">🟢 Em Execução (Respondido)</option>
+                    <option value="false">🟢 Em Execução</option>
                 </select>
             </div>
 
@@ -155,22 +155,42 @@
         <div class="modal-header"><h3 style="margin:0">👁️ Filtros</h3><button onclick="closeModal('filterModal')" style="border:none; background:none;">&times;</button></div>
         <div class="modal-body">
             <div id="filterList"></div>
-            
             <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
-            
             <div class="filter-item">
                 <input type="checkbox" id="chk-hideWaiting">
                 <span class="status-dot dot-yellow"></span>
                 <label for="chk-hideWaiting">Ocultar "Aguardando Resposta"</label>
             </div>
-            
             <button class="btn-primary" onclick="applyFilters()">Aplicar</button>
         </div>
     </dialog>
 
     <dialog id="settingsModal"><div class="modal-header"><h3 style="margin:0">Configurações</h3><button onclick="closeModal('settingsModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><div class="tab-content active"><div style="background:#e3f2fd;padding:10px;margin-bottom:10px;border-radius:4px;">✋ Arraste para organizar.</div><div id="columnsList"></div><button class="btn-primary" onclick="saveAllColumns()">💾 Salvar Ordem</button><h4 style="margin-top:20px;">Nova Coluna</h4><input id="newColTitle" class="inp-full" placeholder="Nome"><div style="display:flex;gap:10px;"><input type="color" id="newColColor" style="height:40px;width:50px;"><input type="number" id="newColDays" class="inp-full" placeholder="Dias"></div><button class="btn-primary" onclick="addColumn()">+ Adicionar</button></div></div></dialog>
-    <dialog id="newOrderModal"><div class="modal-header"><h3 style="margin:0">Novo Pedido</h3><button onclick="closeModal('newOrderModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><label>Cliente *</label><input type="text" id="manualName" class="inp-full"><label>ID (Opcional)</label><input type="text" id="manualChatId" class="inp-full"><label>Coluna Inicial</label><select id="manualColumn" class="inp-full" onchange="autoDateManual(this.value)"></select><label>Produto</label><input type="text" id="manualProduct" class="inp-full"><label>Prazo</label><input type="date" id="manualDate" class="inp-full"><button class="btn-primary" onclick="createManualOrder()">Criar</button></div></dialog>
-    <dialog id="editOrderModal"><div class="modal-header"><h3 style="margin:0">Editar</h3><button onclick="closeModal('editOrderModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><input type="hidden" id="editOrderId"><label>Nome</label><input type="text" id="editClientName" class="inp-full"><label>Produto</label><input type="text" id="editProduct" class="inp-full"><label>Prazo</label><input type="date" id="editDueDate" class="inp-full"><button class="btn-primary" onclick="saveOrderEdits()">Salvar</button></div></dialog>
+    
+    <dialog id="newOrderModal">
+        <div class="modal-header"><h3 style="margin:0">Novo Pedido</h3><button onclick="closeModal('newOrderModal')" style="border:none; background:none;">&times;</button></div>
+        <div class="modal-body">
+            <label>Cliente *</label><input type="text" id="manualName" class="inp-full">
+            <label>Telefone</label><input type="text" id="manualPhone" class="inp-full" placeholder="5542999...">
+            <label>ID (Opcional)</label><input type="text" id="manualChatId" class="inp-full">
+            <label>Coluna Inicial</label><select id="manualColumn" class="inp-full" onchange="autoDateManual(this.value)"></select>
+            <label>Produto</label><input type="text" id="manualProduct" class="inp-full">
+            <label>Prazo</label><input type="date" id="manualDate" class="inp-full">
+            <button class="btn-primary" onclick="createManualOrder()">Criar</button>
+        </div>
+    </dialog>
+
+    <dialog id="editOrderModal">
+        <div class="modal-header"><h3 style="margin:0">Editar</h3><button onclick="closeModal('editOrderModal')" style="border:none; background:none;">&times;</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="editOrderId">
+            <label>Nome</label><input type="text" id="editClientName" class="inp-full">
+            <label>Telefone</label><input type="text" id="editPhone" class="inp-full">
+            <label>Produto</label><input type="text" id="editProduct" class="inp-full">
+            <label>Prazo</label><input type="date" id="editDueDate" class="inp-full">
+            <button class="btn-primary" onclick="saveOrderEdits()">Salvar</button>
+        </div>
+    </dialog>
 
     <script>
         const REPO_OWNER = 'thiagooler'; const REPO_NAME = 'CRM-NBV';
@@ -179,7 +199,7 @@
         let orders = []; 
         let currentView = 'kanban'; 
         let visibleColumns = []; 
-        let hideWaiting = false; // VARIAVEL NOVA
+        let hideWaiting = false;
         let lastDataHash = ''; 
         let dragSrcEl = null;
 
@@ -245,7 +265,6 @@
             } catch (e) { if(!isAuto) hideStatus(); if(syncIcon) syncIcon.classList.remove('loading'); } 
         }
 
-        // --- RENDER ---
         function renderBoard() {
             const b = document.getElementById('kanbanView'); if(!b) return; b.innerHTML = ''; 
             columnOrder.forEach(k => { 
@@ -262,20 +281,26 @@
             const c = document.getElementById('timelineView'); if(!c) return; c.innerHTML = ''; 
             const s = [...orders].sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); 
             s.forEach(o => { 
-                // FILTRO DE COLUNA
                 if (!visibleColumns.includes(o.status)) return;
-                // FILTRO DE AGUARDANDO (NOVO)
                 if (hideWaiting && o.waiting) return;
 
                 const col = columnsConfig[o.status]||{color:'#ccc',title:'?'}; const dt = new Date(o.dueDate); const df = Math.ceil((dt - new Date()) / (86400000)); let cl = '#36b37e'; if (df < 0) cl = '#bf2600'; else if (df <= 2) cl = '#ffab00'; if (o.status === 'done') cl = '#42526e'; let opts = ''; columnOrder.forEach(k => { if(columnsConfig[k]) opts += `<option value="${k}" ${o.status === k ? 'selected' : ''}>${columnsConfig[k].title}</option>`; }); const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
-                c.innerHTML += `<div class="timeline-item" style="border-left-color:${col.color}"><div class="tl-info"><div class="tl-client"><span class="status-dot ${dotClass}"></span>${o.client}</div><div class="tl-product">${o.product}</div><div class="tl-meta"><span class="tl-date" style="color:${cl};border:1px solid ${cl}">${formatDate(o.dueDate)}</span><span style="font-size:0.8em;color:${col.color}"><i class="fa-solid fa-circle" style="font-size:0.6em"></i> ${col.title}</span></div></div><div class="tl-actions"><select class="status-select" onchange="changeStatus('${o.id}',this.value)">${opts}</select><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button></div></div>`; 
+                
+                // Botão de Whats
+                const whatsBtn = o.phone ? `<button class="btn-icon btn-wa" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i></button>` : '';
+
+                c.innerHTML += `<div class="timeline-item" style="border-left-color:${col.color}"><div class="tl-info"><div class="tl-client"><span class="status-dot ${dotClass}"></span>${o.client}</div><div class="tl-product">${o.product}</div><div class="tl-meta"><span class="tl-date" style="color:${cl};border:1px solid ${cl}">${formatDate(o.dueDate)}</span><span style="font-size:0.8em;color:${col.color}"><i class="fa-solid fa-circle" style="font-size:0.6em"></i> ${col.title}</span></div></div><div class="tl-actions">${whatsBtn}<select class="status-select" onchange="changeStatus('${o.id}',this.value)">${opts}</select><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button></div></div>`; 
             }); 
         }
 
         function createCard(o, c) { 
             const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; 
             const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
-            d.innerHTML = `<div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-actions"><button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
+            
+            // Botão Whats
+            const whatsBtn = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i></button>` : '';
+
+            d.innerHTML = `<div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-actions">${whatsBtn}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
         }
 
         // --- MANIPULAÇÃO ---
@@ -283,7 +308,6 @@
             const t = localStorage.getItem('warrior_gh_token'); 
             const tkInput = document.getElementById('integrationToken');
             if(t && tkInput) tkInput.value = t; 
-            
             const s = document.getElementById('integrationColSelect'); 
             if(s) { s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); }
             toggleIntegratorOptions(); 
@@ -313,7 +337,7 @@
             let json = {};
             if (type === 'move') {
                 const colEl = document.getElementById('integrationColSelect'); const col = colEl ? colEl.value : '';
-                json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}" } };
+                json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "telefone": "{telefone}", "status": col, "nome": "{nome-completo}" } };
             } else {
                 const colSel = document.getElementById('integrationColorSelect'); const isWaiting = colSel ? (colSel.value === 'true') : false;
                 json = { "event_type": "crm_event", "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } };
@@ -328,10 +352,8 @@
             columnOrder.forEach(k => { 
                 if(columnsConfig[k]) l.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${k}" value="${k}" ${visibleColumns.includes(k)?'checked':''}><div style="width:15px;height:15px;background:${columnsConfig[k].color};border-radius:50%;"></div><label for="chk-${k}">${columnsConfig[k].title}</label></div>`; 
             }); 
-            // Checkbox do Waiting
             const waitChk = document.getElementById('chk-hideWaiting');
             if(waitChk) waitChk.checked = hideWaiting;
-            
             document.getElementById('filterModal').showModal(); 
         }
 
@@ -361,11 +383,11 @@
         function allowDrop(ev) { ev.preventDefault(); } function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); } 
         function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
         function switchTab(id) { document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active')); document.getElementById(id).classList.add('active'); event.target.classList.add('active'); }
-        function openNewOrderModal() { document.getElementById('manualName').value=''; document.getElementById('manualChatId').value=''; document.getElementById('manualProduct').value=''; document.getElementById('manualDate').valueAsDate=new Date(); const s = document.getElementById('manualColumn'); s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); document.getElementById('newOrderModal').showModal(); }
+        function openNewOrderModal() { document.getElementById('manualName').value=''; document.getElementById('manualPhone').value=''; document.getElementById('manualChatId').value=''; document.getElementById('manualProduct').value=''; document.getElementById('manualDate').valueAsDate=new Date(); const s = document.getElementById('manualColumn'); s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); document.getElementById('newOrderModal').showModal(); }
         function autoDateManual(s) { const d = columnsConfig[s]?.days || 0; if(d>0) { const dt = new Date(); dt.setDate(dt.getDate()+d); document.getElementById('manualDate').valueAsDate = dt; } }
-        async function createManualOrder() { const n = document.getElementById('manualName').value; if(!n) return alert("Nome!"); const pay = { id: 'ped-' + Date.now(), nome: n, chat_id: document.getElementById('manualChatId').value, produto: document.getElementById('manualProduct').value || 'Manual', prazo: document.getElementById('manualDate').value, status: document.getElementById('manualColumn').value, waiting: false }; const newOrder = { id: pay.id, client: pay.nome, chat_id: pay.chat_id, product: pay.produto, dueDate: pay.prazo, status: pay.status, waiting: false }; orders.push(newOrder); const pending = JSON.parse(localStorage.getItem('warrior_pending') || '[]'); pending.push(newOrder); localStorage.setItem('warrior_pending', JSON.stringify(pending)); closeModal('newOrderModal'); if(currentView==='kanban') renderBoard(); else renderTimeline(); showStatus('Enviando...', '#36b37e'); try { await sendToGitHub('novo_pedido', pay); showStatus('✅ Enviado!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro Envio!', '#bf2600'); } }
-        function openEditOrder(id) { const o = orders.find(ord => ord.id === id); if(!o) return; document.getElementById('editOrderId').value = o.id; document.getElementById('editClientName').value = o.client; document.getElementById('editProduct').value = o.product; document.getElementById('editDueDate').value = o.dueDate; document.getElementById('editOrderModal').showModal(); }
-        async function saveOrderEdits() { const id = document.getElementById('editOrderId').value; const c = document.getElementById('editClientName').value; const p = document.getElementById('editProduct').value; const d = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=c; orders[idx].product=p; orders[idx].dueDate=d; if(currentView==='kanban') renderBoard(); else renderTimeline(); } closeModal('editOrderModal'); try { await sendToGitHub('update_order', { id, client: c, product: p, dueDate: d }); } catch(e) {} }
+        async function createManualOrder() { const n = document.getElementById('manualName').value; if(!n) return alert("Nome!"); const pay = { id: 'ped-' + Date.now(), nome: n, telefone: document.getElementById('manualPhone').value, chat_id: document.getElementById('manualChatId').value, produto: document.getElementById('manualProduct').value || 'Manual', prazo: document.getElementById('manualDate').value, status: document.getElementById('manualColumn').value, waiting: false }; const newOrder = { id: pay.id, client: pay.nome, phone: pay.telefone, chat_id: pay.chat_id, product: pay.produto, dueDate: pay.prazo, status: pay.status, waiting: false }; orders.push(newOrder); const pending = JSON.parse(localStorage.getItem('warrior_pending') || '[]'); pending.push(newOrder); localStorage.setItem('warrior_pending', JSON.stringify(pending)); closeModal('newOrderModal'); if(currentView==='kanban') renderBoard(); else renderTimeline(); showStatus('Enviando...', '#36b37e'); try { await sendToGitHub('novo_pedido', pay); showStatus('✅ Enviado!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro Envio!', '#bf2600'); } }
+        function openEditOrder(id) { const o = orders.find(ord => ord.id === id); if(!o) return; document.getElementById('editOrderId').value = o.id; document.getElementById('editClientName').value = o.client; document.getElementById('editPhone').value = o.phone || ''; document.getElementById('editProduct').value = o.product; document.getElementById('editDueDate').value = o.dueDate; document.getElementById('editOrderModal').showModal(); }
+        async function saveOrderEdits() { const id = document.getElementById('editOrderId').value; const c = document.getElementById('editClientName').value; const ph = document.getElementById('editPhone').value; const p = document.getElementById('editProduct').value; const d = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=c; orders[idx].phone=ph; orders[idx].product=p; orders[idx].dueDate=d; if(currentView==='kanban') renderBoard(); else renderTimeline(); } closeModal('editOrderModal'); try { await sendToGitHub('update_order', { id, client: c, phone: ph, product: p, dueDate: d }); } catch(e) {} }
         async function changeStatus(id, st) { const i = orders.findIndex(o => o.id === id); if(i === -1) return; const days = columnsConfig[st]?.days || 0; let nd = null; if(days>0) { const d = new Date(); d.setDate(d.getDate()+days); nd = d.toISOString().split('T')[0]; orders[i].dueDate = nd; } orders[i].status = st; if(currentView==='kanban') renderBoard(); else renderTimeline(); try { await sendToGitHub('update_status', { id, status: st, newDate: nd }); } catch(e) {} }
         async function drop(ev) { ev.preventDefault(); const id = ev.dataTransfer.getData("text"); const col = ev.target.closest('.card-list'); if (!col) return; const ns = col.id; if(orders.find(o=>o.id===id).status !== ns) changeStatus(id, ns); }
         async function saveAllColumns() { if(currentView === 'kanban') renderBoard(); showStatus('Salvando...', '#ffab00'); try { await sendToGitHub('save_columns', { columns: columnsConfig, order: columnOrder }); showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); } }
