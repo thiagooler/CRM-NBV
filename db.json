@@ -77,6 +77,14 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-22",
       "status": "doing"
+    },
+    {
+      "id": "ped-1766534840673",
+      "client": "Lucineia Almeida",
+      "chat_id": "477667884",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "prontoparaentrega_2"
     }
   ]
 }
