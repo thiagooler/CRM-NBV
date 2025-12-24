@@ -362,6 +362,18 @@
       "waiting": true,
       "createdAt": 1766614350445,
       "history": []
+    },
+    {
+      "id": "ped-1766614563576",
+      "client": "Adão e Rosilda",
+      "phone": "+554284077857",
+      "chat_id": "824792096",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766614563576,
+      "history": []
     }
   ]
 }
