@@ -324,6 +324,18 @@
       "waiting": false,
       "createdAt": 1766609256890,
       "history": []
+    },
+    {
+      "id": "ped-1766609749096",
+      "client": "Emerson",
+      "phone": "+554284052400",
+      "chat_id": "843964164",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766609749096,
+      "history": []
     }
   ]
 }
