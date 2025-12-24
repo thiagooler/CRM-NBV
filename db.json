@@ -269,6 +269,14 @@
       "product": "Pedido via Bot",
       "dueDate": "2025-12-29",
       "status": "review"
+    },
+    {
+      "id": "ped-1766598040826",
+      "client": "Luana dos Reis Piovesan",
+      "chat_id": "477637426",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "review"
     }
   ]
 }
