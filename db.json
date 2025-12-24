@@ -139,6 +139,14 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-13",
       "status": "emproduo_216"
+    },
+    {
+      "id": "ped-1766583146797",
+      "client": "Rosana",
+      "chat_id": "554299520233",
+      "product": "Manual",
+      "dueDate": "2026-01-23",
+      "status": "payment"
     }
   ]
 }
