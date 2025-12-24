@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acompanhe seu Pedido</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #0052cc; --bg: #f4f5f7; --text: #172b4d; --success: #36b37e; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        .container { background: white; width: 100%; max-width: 450px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; padding: 25px; text-align: center; }
+        
+        h1 { margin: 0 0 10px 0; color: var(--primary); font-size: 1.5rem; }
+        p { color: #666; margin: 5px 0; font-size: 0.95rem; }
+        
+        /* CAIXA DE STATUS */
+        .status-box { background: #ebecf0; padding: 15px; border-radius: 8px; margin: 25px 0; border-left: 5px solid #ccc; text-align: left; transition: all 0.3s; }
+        .status-label { font-size: 0.8rem; text-transform: uppercase; font-weight: bold; color: #555; }
+        .status-current { font-size: 1.2rem; font-weight: bold; color: #333; margin-top: 5px; }
+        
+        /* TIMELINE DE PROGRESSO */
+        .timeline { display: flex; justify-content: space-between; margin-top: 30px; position: relative; }
+        .timeline::before { content: ''; position: absolute; top: 15px; left: 0; right: 0; height: 3px; background: #dfe1e6; z-index: 0; }
+        
+        .step { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .step-dot { width: 30px; height: 30px; background: #dfe1e6; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.8rem; color: #fff; font-weight: bold; transition: 0.3s; border: 3px solid #fff; }
+        
+        .step.active .step-dot { background: var(--primary); box-shadow: 0 0 0 3px rgba(0,82,204,0.2); }
+        .step.completed .step-dot { background: var(--success); }
+        .step-title { font-size: 0.7rem; color: #999; margin-top: 8px; font-weight: bold; text-align: center; max-width: 60px; line-height: 1.2; }
+        .step.active .step-title { color: var(--primary); }
+        .step.completed .step-title { color: var(--success); }
+
+        /* INFO PEDIDO */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px; }
+        .info-item label { display: block; font-size: 0.75rem; color: #888; font-weight: bold; text-transform: uppercase; }
+        .info-item div { font-weight: bold; color: #333; margin-top: 3px; }
+
+        .loading { color: #888; font-style: italic; }
+        .error { color: #bf2600; background: #ffebe6; padding: 10px; border-radius: 4px; display: none; }
+        
+        .btn-whatsapp { display: block; width: 100%; background: #25D366; color: white; text-decoration: none; padding: 12px; border-radius: 6px; font-weight: bold; margin-top: 25px; }
+        .btn-whatsapp:hover { background: #1ebc57; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1><i class="fa-solid fa-box-open"></i> Status do Pedido</h1>
+        
+        <div id="loading" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Buscando seu pedido...</div>
+        <div id="error" class="error">Pedido não encontrado. Verifique o link.</div>
+
+        <div id="content" style="display:none;">
+            <p>Olá, <b id="clientName">...</b></p>
+            
+            <div class="status-box" id="statusBox">
+                <div class="status-label">Situação Atual</div>
+                <div class="status-current" id="currentStatus">...</div>
+            </div>
+
+            <div class="timeline" id="progressBar"></div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Produto</label>
+                    <div id="productName">...</div>
+                </div>
+                <div class="info-item">
+                    <label>Previsão</label>
+                    <div id="dueDate">...</div>
+                </div>
+            </div>
+
+            <a href="https://wa.me/5500000000000" class="btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Falar com Suporte</a>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO: Coloque seu número de whats aqui se quiser
+        const WHATSAPP_NUM = "5542999999999"; 
+
+        async function loadOrder() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchId = urlParams.get('id'); // Pega o ID da URL
+
+            if (!searchId) {
+                showError("Link inválido (sem ID).");
+                return;
+            }
+
+            try {
+                // Sobe um nível (../) para pegar o db.json na raiz
+                const response = await fetch('../db.json?t=' + new Date().getTime());
+                if (!response.ok) throw new Error("Erro de conexão");
+                const data = await response.json();
+
+                let orders = [];
+                let columns = {};
+                let orderList = [];
+
+                // Lida com a estrutura do JSON (Antigo ou Novo)
+                if (Array.isArray(data)) {
+                    orders = data;
+                    // Se for antigo, cria colunas padrão
+                    columns = {'todo':{title:'Novos', color:'#ff5630'}, 'doing':{title:'Produção', color:'#ffab00'}, 'done':{title:'Finalizado', color:'#36b37e'}};
+                    orderList = ['todo', 'doing', 'done'];
+                } else {
+                    orders = data.orders || [];
+                    columns = data.columns || {};
+                    orderList = data.columnOrder || Object.keys(columns);
+                }
+
+                // PROCURA O CLIENTE (Pelo ID Interno OU Pelo ID do BotConversa)
+                const order = orders.find(o => o.id === searchId || o.chat_id === searchId);
+
+                if (!order) {
+                    showError("Pedido não localizado.");
+                    return;
+                }
+
+                renderOrder(order, columns, orderList);
+
+            } catch (e) {
+                console.error(e);
+                showError("Erro ao buscar dados.");
+            }
+        }
+
+        function renderOrder(order, columns, orderList) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+
+            // Preenche Textos
+            document.getElementById('clientName').innerText = order.client;
+            document.getElementById('productName').innerText = order.product;
+            
+            // Formata Data
+            if (order.dueDate) {
+                const dateParts = order.dueDate.split('-');
+                document.getElementById('dueDate').innerText = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+            } else {
+                document.getElementById('dueDate').innerText = "A definir";
+            }
+
+            // Status Atual
+            const currentStatusKey = order.status;
+            const currentConfig = columns[currentStatusKey] || { title: 'Desconhecido', color: '#ccc' };
+            
+            const statusBox = document.getElementById('statusBox');
+            statusBox.style.borderLeftColor = currentConfig.color;
+            document.getElementById('currentStatus').innerText = currentConfig.title;
+            document.getElementById('currentStatus').style.color = currentConfig.color;
+
+            // Renderiza a Barra de Progresso (Timeline)
+            const timeline = document.getElementById('progressBar');
+            timeline.innerHTML = '';
+
+            let foundCurrent = false;
+            
+            // Só mostra as primeiras 4 ou 5 etapas pra não quebrar no celular se tiver muitas
+            const displayList = orderList.length > 5 ? orderList.slice(0, 5) : orderList;
+
+            displayList.forEach((key, index) => {
+                const col = columns[key];
+                if(!col) return;
+
+                const step = document.createElement('div');
+                step.className = 'step';
+                
+                // Lógica de Ativo/Completado
+                if (key === currentStatusKey) {
+                    step.classList.add('active');
+                    foundCurrent = true;
+                } else if (!foundCurrent) {
+                    step.classList.add('completed');
+                }
+
+                step.innerHTML = `
+                    <div class="step-dot">
+                        ${!foundCurrent && key !== currentStatusKey ? '<i class="fa-solid fa-check"></i>' : (index + 1)}
+                    </div>
+                    <div class="step-title">${col.title}</div>
+                `;
+                timeline.appendChild(step);
+            });
+        }
+
+        function showError(msg) {
+            document.getElementById('loading').style.display = 'none';
+            const err = document.getElementById('error');
+            err.innerText = msg;
+            err.style.display = 'block';
+        }
+
+        loadOrder();
+    </script>
+</body>
+</html>
