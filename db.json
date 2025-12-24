@@ -398,6 +398,18 @@
       "waiting": true,
       "createdAt": 1766614848678,
       "history": []
+    },
+    {
+      "id": "ped-1766614947424",
+      "client": "Maria Nepchy da Silva",
+      "phone": "+554299913752",
+      "chat_id": "849663779",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766614947424,
+      "history": []
     }
   ]
 }
