@@ -253,6 +253,14 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-03",
       "status": "filadeproduo_612"
+    },
+    {
+      "id": "ped-1766596931491",
+      "client": "Carina Ferreira Kloster",
+      "chat_id": "495750734",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-13",
+      "status": "emproduo_216"
     }
   ]
 }
