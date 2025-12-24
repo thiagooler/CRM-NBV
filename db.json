@@ -86,7 +86,8 @@
       "chat_id": "503653240",
       "product": "Manual",
       "dueDate": "2026-01-23",
-      "status": "todo"
+      "status": "todo",
+      "waiting": false
     },
     {
       "id": "ped-1766536799923",
