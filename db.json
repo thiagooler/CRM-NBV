@@ -460,18 +460,6 @@
       "history": []
     },
     {
-      "id": "ped-1766617590697",
-      "client": "Valentina",
-      "phone": "+554298109539",
-      "chat_id": "847224307",
-      "product": "Pedido via Bot",
-      "dueDate": "2025-12-29",
-      "status": "review",
-      "waiting": false,
-      "createdAt": 1766617590697,
-      "history": []
-    },
-    {
       "id": "ped-1766618319146",
       "client": "Marieli",
       "phone": "+554284045659",
