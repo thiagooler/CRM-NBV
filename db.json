@@ -350,6 +350,18 @@
       "waiting": true,
       "createdAt": 1766609749096,
       "history": []
+    },
+    {
+      "id": "ped-1766614350445",
+      "client": "Daniel KOSAK",
+      "phone": "+554298557613",
+      "chat_id": "849496733",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766614350445,
+      "history": []
     }
   ]
 }
