@@ -237,6 +237,14 @@
       "product": "Manual",
       "dueDate": "2025-12-29",
       "status": "review"
+    },
+    {
+      "id": "ped-1766595478812",
+      "client": "FRAN F. BECKMANN",
+      "chat_id": "679309150",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-23",
+      "status": "payment"
     }
   ]
 }
