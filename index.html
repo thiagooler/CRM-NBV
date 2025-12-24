@@ -176,8 +176,13 @@
         <div class="modal-body">
             <label>Cliente *</label><input type="text" id="manualName" class="inp-full">
             <label>ID do Cliente (Opcional)</label><input type="text" id="manualChatId" class="inp-full" placeholder="Ex: ID do BotConversa">
-            <label>Produto</label><input type="text" id="manualProduct" class="inp-full">
+            
+            <label>Entrar em qual Coluna?</label>
+            <select id="manualColumn" class="inp-full" onchange="autoDateManual(this.value)"></select>
+            
+            <label>Descrição do Produto</label><input type="text" id="manualProduct" class="inp-full" placeholder="Ex: Álbum 20x30">
             <label>Prazo</label><input type="date" id="manualDate" class="inp-full">
+            
             <button class="btn-primary" onclick="createManualOrder()">Criar</button>
         </div>
     </dialog>
@@ -333,8 +338,51 @@
         function openIntegrator() { const t = localStorage.getItem('warrior_gh_token'); if(t) document.getElementById('integrationToken').value = t; const s = document.getElementById('integrationColSelect'); s.innerHTML = ''; columnOrder.forEach(k => { const o = document.createElement('option'); o.value = k; o.text = columnsConfig[k].title; s.appendChild(o); }); updateIntegratorCode(); document.getElementById('integratorModal').showModal(); }
         function updateIntegratorCode() { const t = document.getElementById('integrationToken').value.trim(); if(t) localStorage.setItem('warrior_gh_token', t); document.getElementById('codeHeaders').innerText = `Authorization: token ${t || 'ghp_SEU_TOKEN'}\nAccept: application/vnd.github.v3+json\nUser-Agent: WarriorBot\nContent-Type: application/json`; const col = document.getElementById('integrationColSelect').value; const json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}" } }; document.getElementById('codeBody').innerText = JSON.stringify(json, null, 2); }
         function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); }
-        function openNewOrderModal() { document.getElementById('manualName').value = ''; document.getElementById('manualChatId').value = ''; document.getElementById('manualProduct').value = ''; document.getElementById('manualDate').valueAsDate = new Date(); document.getElementById('newOrderModal').showModal(); }
-        async function createManualOrder() { const n = document.getElementById('manualName').value; const cid = document.getElementById('manualChatId').value; const p = document.getElementById('manualProduct').value; const pr = document.getElementById('manualDate').value; if(!n) return alert("Nome obrigatório!"); const pay = { nome: n, chat_id: cid, produto: p || 'Manual', prazo: pr }; const c = columnOrder[0]; orders.push({ id: 'ped-'+Date.now(), client: n, chat_id: cid, product: pay.produto, dueDate: pr, status: c }); if(currentView==='kanban') renderBoard(); else renderTimeline(); closeModal('newOrderModal'); showStatus('Criando...', '#36b37e'); try { await sendToGitHub('novo_pedido', pay); showStatus('✅ Criado!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); } }
+        
+        // --- NOVO PEDIDO MANUAL COM STATUS ---
+        function openNewOrderModal() { 
+            document.getElementById('manualName').value = ''; 
+            document.getElementById('manualChatId').value = ''; 
+            document.getElementById('manualProduct').value = ''; 
+            document.getElementById('manualDate').valueAsDate = new Date(); 
+            
+            // Popula o seletor de colunas
+            const sel = document.getElementById('manualColumn');
+            sel.innerHTML = '';
+            columnOrder.forEach(k => {
+                if(columnsConfig[k]) sel.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`;
+            });
+            
+            document.getElementById('newOrderModal').showModal(); 
+        }
+        
+        function autoDateManual(status) {
+            const days = columnsConfig[status]?.days || 0;
+            if(days > 0) {
+                const d = new Date(); d.setDate(d.getDate() + days);
+                document.getElementById('manualDate').valueAsDate = d;
+            }
+        }
+
+        async function createManualOrder() { 
+            const n = document.getElementById('manualName').value; 
+            const cid = document.getElementById('manualChatId').value; 
+            const p = document.getElementById('manualProduct').value; 
+            const pr = document.getElementById('manualDate').value; 
+            const st = document.getElementById('manualColumn').value; // PEGA A COLUNA ESCOLHIDA
+            
+            if(!n) return alert("Nome obrigatório!"); 
+            const pay = { nome: n, chat_id: cid, produto: p || 'Manual', prazo: pr, status: st }; 
+            
+            // Cria na coluna certa
+            orders.push({ id: 'ped-'+Date.now(), client: n, chat_id: cid, product: pay.produto, dueDate: pr, status: st }); 
+            
+            if(currentView==='kanban') renderBoard(); else renderTimeline(); 
+            closeModal('newOrderModal'); 
+            showStatus('Criando...', '#36b37e'); 
+            try { await sendToGitHub('novo_pedido', pay); showStatus('✅ Criado!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); } 
+        }
+
         function openEditOrder(id) { const o = orders.find(ord => ord.id === id); if(!o) return; document.getElementById('editOrderId').value = o.id; document.getElementById('editClientName').value = o.client; document.getElementById('editProduct').value = o.product; document.getElementById('editDueDate').value = o.dueDate; document.getElementById('editOrderModal').showModal(); }
         async function saveOrderEdits() { const id = document.getElementById('editOrderId').value; const c = document.getElementById('editClientName').value; const p = document.getElementById('editProduct').value; const d = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=c; orders[idx].product=p; orders[idx].dueDate=d; if(currentView==='kanban') renderBoard(); else renderTimeline(); } closeModal('editOrderModal'); showStatus('Salvando...', '#ffab00'); try { await sendToGitHub('update_order', { id, client: c, product: p, dueDate: d }); showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); } }
         function allowDrop(ev) { ev.preventDefault(); } function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); } 
