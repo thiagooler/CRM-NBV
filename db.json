@@ -470,6 +470,18 @@
       "waiting": true,
       "createdAt": 1766617590697,
       "history": []
+    },
+    {
+      "id": "ped-1766618319146",
+      "client": "Marieli",
+      "phone": "+554284045659",
+      "chat_id": "487870532",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766618319146,
+      "history": []
     }
   ]
 }
