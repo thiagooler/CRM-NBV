@@ -518,6 +518,18 @@
       "waiting": false,
       "createdAt": 1766644922210,
       "history": []
+    },
+    {
+      "id": "ped-1766685802702",
+      "client": "ricklineia",
+      "phone": "+554298281792",
+      "chat_id": "845069566",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-24",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766685802702,
+      "history": []
     }
   ]
 }
