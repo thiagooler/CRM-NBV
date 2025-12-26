@@ -992,6 +992,18 @@
       "waiting": true,
       "createdAt": 1766784105345,
       "history": []
+    },
+    {
+      "id": "ped-1766784251171",
+      "client": "Leticia Matiazzo 🌹",
+      "phone": "+554299952077",
+      "chat_id": "722947291",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766784251171,
+      "history": []
     }
   ]
 }
