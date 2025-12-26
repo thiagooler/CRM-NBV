@@ -764,6 +764,18 @@
       "waiting": false,
       "createdAt": 1766772046467,
       "history": []
+    },
+    {
+      "id": "ped-1766779954067",
+      "client": "Danieli Forekevicz Fogaça",
+      "phone": "+554298638737",
+      "chat_id": "847685278",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-02",
+      "status": "prontoparaentrega_2",
+      "waiting": false,
+      "createdAt": 1766779954067,
+      "history": []
     }
   ]
 }
