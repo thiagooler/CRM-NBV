@@ -932,6 +932,18 @@
       "waiting": false,
       "createdAt": 1766783181518,
       "history": []
+    },
+    {
+      "id": "ped-1766783241925",
+      "client": "FranRigon.🦋",
+      "phone": "+554284355128",
+      "chat_id": "673538270",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766783241925,
+      "history": []
     }
   ]
 }
