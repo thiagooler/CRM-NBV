@@ -608,6 +608,18 @@
       "waiting": true,
       "createdAt": 1766722655951,
       "history": []
+    },
+    {
+      "id": "ped-1766722728563",
+      "client": "~Keithy 🤍",
+      "phone": "+554288480377",
+      "chat_id": "849469349",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766722728563,
+      "history": []
     }
   ]
 }
