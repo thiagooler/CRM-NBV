@@ -245,8 +245,16 @@
       "client": "Cristiane  Miranda",
       "chat_id": "785789753",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "filadeproduo_612"
+      "dueDate": "2026-01-15",
+      "status": "emproduo_216",
+      "history": [
+        {
+          "from": "filadeproduo_612",
+          "to": "emproduo_216",
+          "date": 1766788494892
+        }
+      ],
+      "phone": "+554284112049"
     },
     {
       "id": "ped-1766596931491",
