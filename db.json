@@ -704,6 +704,18 @@
       "waiting": true,
       "createdAt": 1766723584137,
       "history": []
+    },
+    {
+      "id": "ped-1766723906175",
+      "client": "Gevanildo",
+      "phone": "+554299065865",
+      "chat_id": "822397935",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766723906175,
+      "history": []
     }
   ]
 }
