@@ -752,6 +752,18 @@
       "waiting": false,
       "createdAt": 1766770546191,
       "history": []
+    },
+    {
+      "id": "ped-1766772046467",
+      "client": "Joao Marcos Rodrigues",
+      "phone": "+554299934161",
+      "chat_id": "510322824",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-29",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "createdAt": 1766772046467,
+      "history": []
     }
   ]
 }
