@@ -836,6 +836,18 @@
       "waiting": true,
       "createdAt": 1766782004024,
       "history": []
+    },
+    {
+      "id": "ped-1766782132445",
+      "client": "Dani🌻",
+      "phone": "+554284286659",
+      "chat_id": "607355056",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766782132445,
+      "history": []
     }
   ]
 }
