@@ -872,6 +872,18 @@
       "waiting": false,
       "createdAt": 1766782620871,
       "history": []
+    },
+    {
+      "id": "ped-1766782693491",
+      "client": "Ar uniformes",
+      "phone": "+554284013431",
+      "chat_id": "847423773",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766782693491,
+      "history": []
     }
   ]
 }
