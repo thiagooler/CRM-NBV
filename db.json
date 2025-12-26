@@ -1052,6 +1052,18 @@
       "waiting": true,
       "createdAt": 1766784984289,
       "history": []
+    },
+    {
+      "id": "ped-1766785237386",
+      "client": "Miguel",
+      "phone": "+554195354891",
+      "chat_id": "844533526",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766785237386,
+      "history": []
     }
   ]
 }
