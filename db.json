@@ -908,6 +908,18 @@
       "waiting": true,
       "createdAt": 1766782878231,
       "history": []
+    },
+    {
+      "id": "ped-1766783071751",
+      "client": "Renata Santos",
+      "phone": "+554299934367",
+      "chat_id": "849585455",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766783071751,
+      "history": []
     }
   ]
 }
