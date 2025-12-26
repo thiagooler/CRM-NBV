@@ -848,6 +848,18 @@
       "waiting": true,
       "createdAt": 1766782132445,
       "history": []
+    },
+    {
+      "id": "ped-1766782560660",
+      "client": "Cleicieli rodrigues dos santos",
+      "phone": "+554299713263",
+      "chat_id": "523185636",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766782560660,
+      "history": []
     }
   ]
 }
