@@ -860,6 +860,18 @@
       "waiting": true,
       "createdAt": 1766782560660,
       "history": []
+    },
+    {
+      "id": "ped-1766782620871",
+      "client": "Solange",
+      "phone": "+554299870843",
+      "chat_id": "848097510",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-25",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766782620871,
+      "history": []
     }
   ]
 }
