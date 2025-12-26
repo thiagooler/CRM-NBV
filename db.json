@@ -195,8 +195,17 @@
       "client": "Daiene Melo",
       "chat_id": "787358780",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "done"
+      "dueDate": "2026-01-05",
+      "status": "done",
+      "history": [
+        {
+          "from": "done",
+          "to": "done",
+          "date": 1766792313867
+        }
+      ],
+      "finishedAt": 1766792313867,
+      "phone": "+554298215788"
     },
     {
       "id": "ped-1766593494254",
