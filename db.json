@@ -920,6 +920,18 @@
       "waiting": true,
       "createdAt": 1766783071751,
       "history": []
+    },
+    {
+      "id": "ped-1766783181518",
+      "client": "Fran",
+      "phone": "+554299143209",
+      "chat_id": "491575401",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766783181518,
+      "history": []
     }
   ]
 }
