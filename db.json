@@ -800,6 +800,18 @@
       "waiting": true,
       "createdAt": 1766781634346,
       "history": []
+    },
+    {
+      "id": "ped-1766781790740",
+      "client": "Soraia Cristina Nunes de jesus",
+      "phone": "+554299716057",
+      "chat_id": "458068841",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766781790740,
+      "history": []
     }
   ]
 }
