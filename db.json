@@ -680,6 +680,18 @@
       "waiting": true,
       "createdAt": 1766723363290,
       "history": []
+    },
+    {
+      "id": "ped-1766723411266",
+      "client": "Leni",
+      "phone": "+554298060820",
+      "chat_id": "847842397",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766723411266,
+      "history": []
     }
   ]
 }
