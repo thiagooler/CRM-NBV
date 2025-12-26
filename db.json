@@ -1028,6 +1028,18 @@
       "waiting": true,
       "createdAt": 1766784642492,
       "history": []
+    },
+    {
+      "id": "ped-1766784792205",
+      "client": "Flávia",
+      "phone": "+554284231450",
+      "chat_id": "609217465",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766784792205,
+      "history": []
     }
   ]
 }
