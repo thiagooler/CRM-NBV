@@ -980,6 +980,18 @@
       "waiting": true,
       "createdAt": 1766783759699,
       "history": []
+    },
+    {
+      "id": "ped-1766784105345",
+      "client": "Valdete de souza",
+      "phone": "+554284044146",
+      "chat_id": "483019051",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766784105345,
+      "history": []
     }
   ]
 }
