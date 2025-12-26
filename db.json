@@ -692,6 +692,18 @@
       "waiting": true,
       "createdAt": 1766723411266,
       "history": []
+    },
+    {
+      "id": "ped-1766723584137",
+      "client": "marcosateixeira1200",
+      "phone": "+554299826867",
+      "chat_id": "849155266",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766723584137,
+      "history": []
     }
   ]
 }
