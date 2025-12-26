@@ -596,6 +596,18 @@
       "waiting": true,
       "createdAt": 1766722387545,
       "history": []
+    },
+    {
+      "id": "ped-1766722655951",
+      "client": "ciprianodossantosrozeclei",
+      "phone": "+554298277202",
+      "chat_id": "849502229",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766722655951,
+      "history": []
     }
   ]
 }
