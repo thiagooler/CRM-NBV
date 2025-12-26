@@ -776,6 +776,18 @@
       "waiting": false,
       "createdAt": 1766779954067,
       "history": []
+    },
+    {
+      "id": "ped-1766780754773",
+      "client": "Thais Lenkiw🥰",
+      "phone": "+554284084187",
+      "chat_id": "468824808",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766780754773,
+      "history": []
     }
   ]
 }
