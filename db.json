@@ -119,8 +119,16 @@
       "client": "Leandrinho ❤️",
       "chat_id": "844633018",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "filadeproduo_612"
+      "dueDate": "2026-01-15",
+      "status": "emproduo_216",
+      "history": [
+        {
+          "from": "filadeproduo_612",
+          "to": "emproduo_216",
+          "date": 1766788669968
+        }
+      ],
+      "phone": "+554299283086"
     },
     {
       "id": "ped-1766581691126",
