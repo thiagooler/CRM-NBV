@@ -956,6 +956,18 @@
       "waiting": true,
       "createdAt": 1766783417862,
       "history": []
+    },
+    {
+      "id": "ped-1766783494833",
+      "client": "Emily Wiedermann",
+      "phone": "+554299656791",
+      "chat_id": "849493584",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766783494833,
+      "history": []
     }
   ]
 }
