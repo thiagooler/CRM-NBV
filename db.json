@@ -884,6 +884,18 @@
       "waiting": true,
       "createdAt": 1766782693491,
       "history": []
+    },
+    {
+      "id": "ped-1766782826512",
+      "client": "Sil",
+      "phone": "+554299409873",
+      "chat_id": "573020122",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-25",
+      "status": "payment",
+      "waiting": false,
+      "createdAt": 1766782826512,
+      "history": []
     }
   ]
 }
