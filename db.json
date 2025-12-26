@@ -334,11 +334,17 @@
       "phone": "+554299892523",
       "chat_id": "841862909",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "filadeproduo_612",
+      "dueDate": "2026-01-15",
+      "status": "emproduo_216",
       "waiting": false,
       "createdAt": 1766609256890,
-      "history": []
+      "history": [
+        {
+          "from": "filadeproduo_612",
+          "to": "emproduo_216",
+          "date": 1766787623778
+        }
+      ]
     },
     {
       "id": "ped-1766609749096",
