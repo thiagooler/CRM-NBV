@@ -896,6 +896,18 @@
       "waiting": true,
       "createdAt": 1766782826512,
       "history": []
+    },
+    {
+      "id": "ped-1766782878231",
+      "client": "Alisson Mateus",
+      "phone": "+554797219087",
+      "chat_id": "848040211",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766782878231,
+      "history": []
     }
   ]
 }
