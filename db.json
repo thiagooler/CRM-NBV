@@ -518,6 +518,18 @@
       "waiting": false,
       "createdAt": 1766685802702,
       "history": []
+    },
+    {
+      "id": "ped-1766719545890",
+      "client": "Antônio Carlos Pacheco",
+      "phone": "+554284037158",
+      "chat_id": "847749295",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766719545890,
+      "history": []
     }
   ]
 }
