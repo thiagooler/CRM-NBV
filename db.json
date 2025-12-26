@@ -530,6 +530,18 @@
       "waiting": true,
       "createdAt": 1766719545890,
       "history": []
+    },
+    {
+      "id": "ped-1766719586141",
+      "client": "DEBORɅ GɅSPɅR",
+      "phone": "+554484477970",
+      "chat_id": "848551284",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766719586141,
+      "history": []
     }
   ]
 }
