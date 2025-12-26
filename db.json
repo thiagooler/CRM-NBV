@@ -632,6 +632,18 @@
       "waiting": true,
       "createdAt": 1766722783145,
       "history": []
+    },
+    {
+      "id": "ped-1766722855223",
+      "client": "Vujanski",
+      "phone": "+554299664859",
+      "chat_id": "849495346",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766722855223,
+      "history": []
     }
   ]
 }
