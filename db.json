@@ -587,11 +587,17 @@
       "phone": "+554299783258",
       "chat_id": "762236340",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-31",
-      "status": "review",
+      "dueDate": "2026-01-25",
+      "status": "payment",
       "waiting": true,
       "createdAt": 1766721717857,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1766788496215
+        }
+      ]
     },
     {
       "id": "ped-1766721884409",
