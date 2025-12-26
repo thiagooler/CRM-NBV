@@ -975,11 +975,17 @@
       "phone": "+554299589696",
       "chat_id": "838204401",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-31",
-      "status": "review",
+      "dueDate": "2026-01-25",
+      "status": "payment",
       "waiting": false,
       "createdAt": 1766783759699,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1766786403798
+        }
+      ]
     },
     {
       "id": "ped-1766784105345",
