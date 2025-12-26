@@ -668,6 +668,18 @@
       "waiting": true,
       "createdAt": 1766723316257,
       "history": []
+    },
+    {
+      "id": "ped-1766723363290",
+      "client": "Tafa🍏",
+      "phone": "+554298463619",
+      "chat_id": "847834897",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766723363290,
+      "history": []
     }
   ]
 }
