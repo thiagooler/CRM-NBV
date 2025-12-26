@@ -1141,7 +1141,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2025-12-29",
       "status": "filadeatendimento_988",
-      "waiting": false,
+      "waiting": true,
       "createdAt": 1766791227444,
       "history": []
     }
