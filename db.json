@@ -978,11 +978,17 @@
       "phone": "+554299143209",
       "chat_id": "491575401",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-31",
-      "status": "review",
+      "dueDate": "2026-01-05",
+      "status": "filadeproduo_612",
       "waiting": false,
       "createdAt": 1766783181518,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "filadeproduo_612",
+          "date": 1766790738084
+        }
+      ]
     },
     {
       "id": "ped-1766783241925",
