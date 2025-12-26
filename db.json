@@ -656,6 +656,18 @@
       "waiting": true,
       "createdAt": 1766723130250,
       "history": []
+    },
+    {
+      "id": "ped-1766723316257",
+      "client": "Maria Lúcia",
+      "phone": "+554399239262",
+      "chat_id": "849494532",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766723316257,
+      "history": []
     }
   ]
 }
