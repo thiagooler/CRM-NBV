@@ -740,6 +740,18 @@
       "waiting": false,
       "createdAt": 1766766507851,
       "history": []
+    },
+    {
+      "id": "ped-1766770546191",
+      "client": "Sandi❤️🏕️🙏🏻",
+      "phone": "+554298528836",
+      "chat_id": "848250413",
+      "product": "Pedido via Bot",
+      "dueDate": "",
+      "status": "approval",
+      "waiting": false,
+      "createdAt": 1766770546191,
+      "history": []
     }
   ]
 }
