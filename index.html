@@ -33,7 +33,7 @@
         .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
         .card-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; color: #172b4d; display: flex; align-items: center; }
         .card-meta { font-size: 0.85em; color: #666; display: flex; align-items: center; gap: 6px; margin-top: 6px; }
-        .card-actions { margin-top: 12px; border-top: 1px solid #f4f5f7; padding-top: 8px; display: flex; justify-content: flex-end; gap: 8px;}
+        .card-actions { margin-top: 12px; border-top: 1px solid #f4f5f7; padding-top: 8px; display: flex; justify-content: flex-end; gap: 8px; align-items: center; flex-wrap: wrap;}
         #timelineView, #reportsView { display: none; max-width: 1200px; margin: 0 auto; }
         .timeline-item { background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid transparent; }
         .tl-info { display: flex; flex-direction: column; gap: 5px; flex-grow: 1; }
@@ -46,14 +46,13 @@
         .status-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; border: 2px solid white; box-shadow: 0 0 3px rgba(0,0,0,0.2); }
         .dot-green { background: #36b37e; } .dot-yellow { background: #ffab00; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
-        /* TABLE STYLES */
         .header-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .header-row { display: flex; align-items: center; justify-content: space-between; background: #172b4d; padding: 8px 12px; margin-bottom: 5px; border-radius: 4px; color: #a5adba; font-family: monospace; font-size: 0.9em; }
         .header-key { font-weight: bold; color: #fff; width: 30%; }
         .header-val { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 50%; color: #87ceeb; }
         .header-copy { width: 20%; text-align: right; }
         .copy-btn-sm { background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8em; }
-        /* REPORTS */
+        .copy-btn-sm:hover { background: rgba(255,255,255,0.4); }
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .kpi-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center; }
         .kpi-val { font-size: 2rem; font-weight: bold; color: #0052cc; }
@@ -63,12 +62,11 @@
         .report-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .report-table th, .report-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
         .report-table th { background: #ebecf0; color: #42526e; }
-        /* GENERAL */
         .btn-icon { background: #f4f5f7; border: none; cursor: pointer; color: #6b778c; border-radius: 4px; padding: 6px 10px; font-size: 0.8em; margin-left: 5px;}
         .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; margin-left:5px;}
         .btn-add-new { background: #36b37e; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
         .btn-bot { background: #6554c0; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
-        .btn-wa { background: #dcf8c6; color: #075e54; } .btn-wa:hover { background: #25d366; color: white; }
+        .btn-wa { background: #dcf8c6; color: #075e54; display: flex; align-items: center; gap: 5px; padding: 6px 12px; } .btn-wa:hover { background: #25d366; color: white; }
         .btn-csv { background: #36b37e; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .col-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px; border: 1px solid #eee; transition: background 0.2s;}
         .col-item.dragging { opacity: 0.5; background: #e3f2fd; border: 2px dashed #0052cc; }
@@ -126,34 +124,20 @@
     <dialog id="integratorModal">
         <div class="modal-header"><h3 style="margin:0">🤖 Webhook 2.0</h3><button onclick="closeModal('integratorModal')" style="border:none; background:none; cursor:pointer;">&times;</button></div>
         <div class="modal-body">
-            <label style="color:#0052cc">Seu Token:</label>
+            <label style="color:#0052cc">Seu Token (GitHub):</label>
             <input type="text" id="integrationToken" class="inp-full" placeholder="Cole ghp_..." oninput="updateIntegratorCode()">
             <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-            
             <label>Tipo de Ação:</label>
             <select id="integrationActionType" class="inp-full" onchange="toggleIntegratorOptions()">
                 <option value="move">📁 Mover Card de Coluna</option>
                 <option value="color">🎨 Alterar Cor (Semáforo)</option>
                 <option value="delete">❌ Deletar Pedido</option>
             </select>
-
-            <div id="opt-move">
-                <label>Mover para:</label><select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select>
-            </div>
-            
-            <div id="opt-color" style="display:none;">
-                <label>Definir Status:</label>
-                <select id="integrationColorSelect" class="inp-full" onchange="updateIntegratorCode()">
-                    <option value="true">🟡 Aguardando Cliente</option>
-                    <option value="false">🟢 Em Execução</option>
-                </select>
-            </div>
-
-            <h4 style="margin-bottom:5px; color:#333;">1. URL</h4>
-            <div class="header-row"><span class="header-val" id="dispUrl" style="width:80%">...</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('dispUrl')">Copiar</button></span></div>
+            <div id="opt-move"><label>Mover para:</label><select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select></div>
+            <div id="opt-color" style="display:none;"><label>Definir Status:</label><select id="integrationColorSelect" class="inp-full" onchange="updateIntegratorCode()"><option value="true">🟡 Aguardando Cliente</option><option value="false">🟢 Em Execução</option></select></div>
+            <h4 style="margin-bottom:5px; color:#333;">1. URL</h4><div class="header-row"><span class="header-val" id="dispUrl" style="width:80%">...</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('dispUrl')">Copiar</button></span></div>
             <h4 style="margin-bottom:5px; color:#333;">2. Headers</h4><div id="headersList"></div>
-            <h4 style="margin-bottom:5px; color:#333;">3. Body (JSON)</h4>
-            <div class="code-block" style="position:relative; font-size:0.85em;"><pre id="jsonContent" style="margin:0; white-space:pre-wrap;">...</pre><button class="btn-copy" onclick="copyText('jsonContent')">Copiar</button></div>
+            <h4 style="margin-bottom:5px; color:#333;">3. Body (JSON)</h4><div class="code-block" style="position:relative; font-size:0.85em;"><pre id="jsonContent" style="margin:0; white-space:pre-wrap;">...</pre><button class="btn-copy" onclick="copyText('jsonContent')">Copiar</button></div>
             <div id="codeUrl" style="display:none;"></div><div id="codeBody" style="display:none;"></div>
         </div>
     </dialog>
@@ -176,6 +160,15 @@
             if(!t) alert("Configure seu Token!"); 
             const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
             const savedWait = localStorage.getItem('warrior_crm_hideWaiting'); if(savedWait) hideWaiting = JSON.parse(savedWait);
+            
+            // MAGIC SCROLL NO KANBAN
+            const slider = document.getElementById('kanbanView');
+            if (slider) {
+                slider.addEventListener('wheel', (e) => {
+                    if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; }
+                });
+            }
+
             await loadData();
             setInterval(() => loadData(true), 15000);
         }
@@ -213,7 +206,6 @@
             } catch (e) { if(!isAuto) hideStatus(); if(syncIcon) syncIcon.classList.remove('loading'); } 
         }
 
-        // --- RENDER ---
         function renderBoard() {
             const b = document.getElementById('kanbanView'); if(!b) return; b.innerHTML = ''; 
             columnOrder.forEach(k => { 
@@ -233,7 +225,7 @@
                 if (!visibleColumns.includes(o.status)) return;
                 if (hideWaiting && o.waiting) return;
                 const col = columnsConfig[o.status]||{color:'#ccc',title:'?'}; const dt = new Date(o.dueDate); const df = Math.ceil((dt - new Date()) / (86400000)); let cl = '#36b37e'; if (df < 0) cl = '#bf2600'; else if (df <= 2) cl = '#ffab00'; if (o.status === 'done') cl = '#42526e'; let opts = ''; columnOrder.forEach(k => { if(columnsConfig[k]) opts += `<option value="${k}" ${o.status === k ? 'selected' : ''}>${columnsConfig[k].title}</option>`; }); const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
-                const wa = o.phone ? `<button class="btn-icon btn-wa" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i></button>` : '';
+                const wa = o.phone ? `<button class="btn-icon btn-wa" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
                 c.innerHTML += `<div class="timeline-item" style="border-left-color:${col.color}"><div class="tl-info"><div class="tl-client"><span class="status-dot ${dotClass}"></span>${o.client}</div><div class="tl-product">${o.product}</div><div class="tl-meta"><span class="tl-date" style="color:${cl};border:1px solid ${cl}">${formatDate(o.dueDate)}</span><span style="font-size:0.8em;color:${col.color}"><i class="fa-solid fa-circle" style="font-size:0.6em"></i> ${col.title}</span></div></div><div class="tl-actions">${wa}<select class="status-select" onchange="changeStatus('${o.id}',this.value)">${opts}</select><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button></div></div>`; 
             }); 
         }
@@ -241,11 +233,10 @@
         function createCard(o, c) { 
             const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; 
             const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
-            const wa = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i></button>` : '';
+            const wa = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
             d.innerHTML = `<div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-actions">${wa}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
         }
 
-        // --- RELATÓRIOS ---
         function renderReports() {
             document.getElementById('kpi-total').innerText = orders.length;
             const doneCount = orders.filter(o => o.status === 'done').length;
@@ -341,10 +332,9 @@
         function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
         function openFilterModal() { const l = document.getElementById('filterList'); l.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) l.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${k}" value="${k}" ${visibleColumns.includes(k)?'checked':''}><div style="width:15px;height:15px;background:${columnsConfig[k].color};border-radius:50%;"></div><label for="chk-${k}">${columnsConfig[k].title}</label></div>`; }); document.getElementById('chk-hideWaiting').checked = hideWaiting; document.getElementById('filterModal').showModal(); }
         function applyFilters() { visibleColumns = []; document.querySelectorAll('#filterList input[type="checkbox"]').forEach(c => { if(c.checked) visibleColumns.push(c.value); }); localStorage.setItem('warrior_crm_filters', JSON.stringify(visibleColumns)); hideWaiting = document.getElementById('chk-hideWaiting').checked; localStorage.setItem('warrior_crm_hideWaiting', JSON.stringify(hideWaiting)); closeModal('filterModal'); if(currentView==='timeline') renderTimeline(); }
-        
         function openNewOrderModal() { document.getElementById('manualName').value=''; document.getElementById('manualChatId').value=''; document.getElementById('manualProduct').value=''; document.getElementById('manualPhone').value=''; document.getElementById('manualDate').valueAsDate=new Date(); const s = document.getElementById('manualColumn'); s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); document.getElementById('newOrderModal').showModal(); }
         function autoDateManual(s) { const d = columnsConfig[s]?.days || 0; if(d>0) { const dt = new Date(); dt.setDate(dt.getDate()+d); document.getElementById('manualDate').valueAsDate = dt; } }
-        async function createManualOrder() { const n = document.getElementById('manualName').value; if(!n) return alert("Nome!"); const pay = { id: 'ped-'+Date.now(), nome: n, telefone: document.getElementById('manualPhone').value, chat_id: document.getElementById('manualChatId').value, produto: document.getElementById('manualProduct').value || 'Manual', prazo: document.getElementById('manualDate').value, status: document.getElementById('manualColumn').value, waiting: false }; const newOrder = { id: pay.id, client: pay.nome, phone: pay.telefone, chat_id: pay.chat_id, product: pay.produto, dueDate: pay.prazo, status: pay.status, waiting: false, createdAt: Date.now() }; orders.push(newOrder); const pending = JSON.parse(localStorage.getItem('warrior_pending') || '[]'); pending.push(newOrder); localStorage.setItem('warrior_pending', JSON.stringify(pending)); closeModal('newOrderModal'); if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); showStatus('Enviando...', '#36b37e'); try { await sendToGitHub('novo_pedido', pay); showStatus('✅ Enviado!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); } }
+        async function createManualOrder() { const n = document.getElementById('manualName').value; if(!n) return alert("Nome!"); const pay = { id: 'ped-'+Date.now(), nome: n, telefone: document.getElementById('manualPhone').value, chat_id: document.getElementById('manualChatId').value, produto: document.getElementById('manualProduct').value || 'Manual', prazo: document.getElementById('manualDate').value, status: document.getElementById('manualColumn').value, waiting: false }; const newOrder = { id: pay.id, client: pay.nome, phone: pay.telefone, chat_id: pay.chat_id, product: pay.produto, dueDate: pay.prazo, status: pay.status, waiting: false, createdAt: Date.now() }; orders.push(newOrder); const pending = JSON.parse(localStorage.getItem('warrior_pending') || '[]'); pending.push(newOrder); localStorage.setItem('warrior_pending', JSON.stringify(pending)); closeModal('newOrderModal'); if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); showStatus('Enviando...', '#36b37e'); try { await sendToGitHub('novo_pedido', pay); showStatus('✅ Enviado!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro Envio!', '#bf2600'); } }
         function openEditOrder(id) { const o = orders.find(ord => ord.id === id); if(!o) return; document.getElementById('editOrderId').value = o.id; document.getElementById('editClientName').value = o.client; document.getElementById('editPhone').value = o.phone||''; document.getElementById('editProduct').value = o.product; document.getElementById('editDueDate').value = o.dueDate; document.getElementById('editOrderModal').showModal(); }
         async function saveOrderEdits() { const id = document.getElementById('editOrderId').value; const c = document.getElementById('editClientName').value; const ph = document.getElementById('editPhone').value; const p = document.getElementById('editProduct').value; const d = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=c; orders[idx].phone=ph; orders[idx].product=p; orders[idx].dueDate=d; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); } closeModal('editOrderModal'); try { await sendToGitHub('update_order', { id, client: c, phone: ph, product: p, dueDate: d }); } catch(e) {} }
         async function changeStatus(id, st) { const i = orders.findIndex(o => o.id === id); if(i === -1) return; const days = columnsConfig[st]?.days || 0; let nd = null; if(days>0) { const d = new Date(); d.setDate(d.getDate()+days); nd = d.toISOString().split('T')[0]; orders[i].dueDate = nd; } orders[i].status = st; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToGitHub('update_status', { id, status: st, newDate: nd }); } catch(e) {} }
