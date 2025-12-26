@@ -560,6 +560,18 @@
       "waiting": true,
       "createdAt": 1766721365866,
       "history": []
+    },
+    {
+      "id": "ped-1766721717857",
+      "client": "Ingrid Thais",
+      "phone": "+554299783258",
+      "chat_id": "762236340",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766721717857,
+      "history": []
     }
   ]
 }
