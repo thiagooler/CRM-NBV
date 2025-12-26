@@ -716,6 +716,18 @@
       "waiting": true,
       "createdAt": 1766723906175,
       "history": []
+    },
+    {
+      "id": "ped-1766724203992",
+      "client": "Rafael Pedroso",
+      "phone": "+554298622912",
+      "chat_id": "849133385",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766724203992,
+      "history": []
     }
   ]
 }
