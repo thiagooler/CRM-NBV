@@ -9,20 +9,70 @@
     <style>
         :root { --bg: #f4f5f7; --card-bg: #fff; --text: #172b4d; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }
+        
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
         .header h1 { margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; color: #0052cc; }
         .header-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        
         .sync-icon { color: #aaa; font-size: 1.2rem; transition: color 0.3s; margin-right: 10px; }
         .sync-icon.loading { animation: spin 1s linear infinite; color: #0052cc; }
         .sync-icon.success { color: #36b37e; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* NAV */
         .nav-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #dfe1e6; padding-bottom: 10px; margin-bottom: 20px; }
         .view-tabs { display: flex; gap: 10px; }
         .view-btn { border: none; background: none; font-size: 1.1rem; font-weight: bold; color: #6b778c; cursor: pointer; padding: 5px 15px; border-radius: 4px; transition: 0.2s; }
         .view-btn.active { color: #0052cc; background: #e3f2fd; }
         .filter-btn { display:none; background: #fff; border: 1px solid #dfe1e6; padding: 5px 15px; border-radius: 4px; cursor: pointer; color: #555; font-weight: bold; }
         .filter-btn:hover { background: #eee; color: #0052cc; }
-        #kanbanView { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 50px; min-height: 80vh; align-items: flex-start; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+
+        /* KANBAN CONTAINER COM SETAS */
+        .kanban-wrapper { position: relative; width: 100%; }
+        
+        #kanbanView { 
+            display: flex; 
+            gap: 15px; 
+            overflow-x: auto; 
+            padding-bottom: 50px; 
+            min-height: 80vh; 
+            align-items: flex-start; 
+            scroll-behavior: smooth; /* Rolagem suave */
+            -webkit-overflow-scrolling: touch; 
+        }
+
+        /* SETAS DE NAVEGAÇÃO */
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            background: rgba(0, 82, 204, 0.9);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 60px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            opacity: 0; /* Invisível por padrão */
+            pointer-events: none;
+        }
+        .kanban-wrapper:hover .scroll-btn { opacity: 1; pointer-events: all; } /* Aparece ao passar o mouse */
+        
+        .scroll-btn.left { left: 0; border-radius: 0 50px 50px 0; }
+        .scroll-btn.right { right: 0; border-radius: 50px 0 0 50px; }
+        .scroll-btn:hover { background: #0052cc; width: 50px; }
+
+        /* MOBILE: Esconde as setas (usa touch) */
+        @media (max-width: 768px) {
+            .scroll-btn { display: none !important; }
+        }
+
+        /* RESTO DO CSS (Mantido) */
         .column { background: #ebecf0; border-radius: 10px; width: 320px; min-width: 320px; padding: 12px; display: flex; flex-direction: column; max-height: 85vh; border-top: 4px solid transparent; position: relative; }
         .column-header { font-weight: 700; margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; color: #42526e; display: flex; justify-content: space-between; align-items: center;}
         .col-menu-btn { cursor: pointer; padding: 5px; border-radius: 4px; } .col-menu-btn:hover { background: #dcdfe4; }
@@ -34,6 +84,7 @@
         .card-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; color: #172b4d; display: flex; align-items: center; }
         .card-meta { font-size: 0.85em; color: #666; display: flex; align-items: center; gap: 6px; margin-top: 6px; }
         .card-actions { margin-top: 12px; border-top: 1px solid #f4f5f7; padding-top: 8px; display: flex; justify-content: flex-end; gap: 8px; align-items: center; flex-wrap: wrap;}
+        
         #timelineView, #reportsView { display: none; max-width: 1200px; margin: 0 auto; }
         .timeline-item { background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid transparent; }
         .tl-info { display: flex; flex-direction: column; gap: 5px; flex-grow: 1; }
@@ -76,7 +127,14 @@
         .drag-handle:active { cursor: grabbing; color: #0052cc; }
         .filter-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; }
         .filter-item input[type="checkbox"] { width: 20px; height: 20px; }
-        @media (max-width: 768px) { body { padding: 10px; } .header-controls { width: 100%; justify-content: flex-end; } #kanbanView { gap: 10px; scroll-snap-type: x mandatory; padding-bottom: 20px; } .column { min-width: 85vw; width: 85vw; scroll-snap-align: center; } .timeline-item { flex-direction: column; align-items: flex-start; gap: 15px; } .tl-actions { width: 100%; justify-content: space-between; } .status-select { flex-grow: 1; } dialog { width: 95% !important; max-height: 90vh; margin: auto; } .btn-icon { padding: 10px; } .charts-grid { grid-template-columns: 1fr; } }
+        
+        @media (max-width: 768px) { 
+            body { padding: 10px; } .header-controls { width: 100%; justify-content: flex-end; } 
+            #kanbanView { gap: 10px; scroll-snap-type: x mandatory; padding-bottom: 20px; } .column { min-width: 85vw; width: 85vw; scroll-snap-align: center; } 
+            .timeline-item { flex-direction: column; align-items: flex-start; gap: 15px; } .tl-actions { width: 100%; justify-content: space-between; } .status-select { flex-grow: 1; } 
+            dialog { width: 95% !important; max-height: 90vh; margin: auto; } .btn-icon { padding: 10px; } .charts-grid { grid-template-columns: 1fr; } 
+        }
+        
         dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); padding: 0; width: 500px; font-family: inherit; overflow: hidden;} dialog::backdrop { background: rgba(0,0,0,0.6); } .modal-header { background: #f4f5f7; padding: 15px 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;} .modal-body { padding: 20px; max-height: 500px; overflow-y: auto; } .tab-btn { background: none; border: none; padding: 10px; cursor: pointer; font-weight: bold; color: #666; border-bottom: 2px solid transparent; width: 48%;} .tab-btn.active { color: #0052cc; border-bottom-color: #0052cc; } .tab-content { display: none; } .tab-content.active { display: block; } .inp-full { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #dfe1e6; border-radius: 4px; box-sizing: border-box; } .inp-mini { width: 70px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; } .btn-primary { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;} .code-block { background: #172b4d; color: #a5adba; padding: 15px; border-radius: 6px; font-family: monospace; white-space: pre-wrap; margin-bottom: 10px; position: relative; word-break: break-all;} .btn-copy { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8em; } label { font-size: 0.9em; font-weight: bold; color: #444; } #statusMsg { background: #0052cc; color:white; padding:5px 10px; border-radius:4px; display:none; }
     </style>
 </head>
@@ -102,7 +160,12 @@
         </div>
     </div>
 
-    <div id="kanbanView"></div>
+    <div class="kanban-wrapper" id="kanbanWrapper">
+        <button class="scroll-btn left" onclick="scrollBoard(-1)">❮</button>
+        <div id="kanbanView"></div>
+        <button class="scroll-btn right" onclick="scrollBoard(1)">❯</button>
+    </div>
+
     <div id="timelineView"></div>
     
     <div id="reportsView">
@@ -161,7 +224,7 @@
             const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
             const savedWait = localStorage.getItem('warrior_crm_hideWaiting'); if(savedWait) hideWaiting = JSON.parse(savedWait);
             
-            // MAGIC SCROLL NO KANBAN
+            // MAGIC SCROLL (Comentado para usar setas, ou manter ambos)
             const slider = document.getElementById('kanbanView');
             if (slider) {
                 slider.addEventListener('wheel', (e) => {
@@ -173,19 +236,42 @@
             setInterval(() => loadData(true), 15000);
         }
 
+        // --- NAVEGAÇÃO LATERAL (SETAS) ---
+        function scrollBoard(direction) {
+            const slider = document.getElementById('kanbanView');
+            const scrollAmount = 320; // Tamanho de uma coluna
+            slider.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+        }
+
         function switchView(view) {
             currentView = view;
             document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
             const btn = document.getElementById('btn-'+view); if(btn) btn.classList.add('active');
             
-            document.getElementById('kanbanView').style.display = view === 'kanban' ? 'flex' : 'none';
-            document.getElementById('timelineView').style.display = view === 'timeline' ? 'block' : 'none';
-            document.getElementById('reportsView').style.display = view === 'reports' ? 'block' : 'none';
-            const fBtn = document.getElementById('filterBtn'); if(fBtn) fBtn.style.display = view === 'timeline' ? 'block' : 'none';
-            
-            if(view === 'kanban') renderBoard();
-            else if(view === 'timeline') renderTimeline();
-            else if(view === 'reports') renderReports();
+            const kanbanWrapper = document.getElementById('kanbanWrapper');
+            const timelineDiv = document.getElementById('timelineView');
+            const reportsDiv = document.getElementById('reportsView');
+            const filterBtn = document.getElementById('filterBtn');
+
+            if(view === 'kanban') {
+                kanbanWrapper.style.display = 'block';
+                timelineDiv.style.display = 'none';
+                reportsDiv.style.display = 'none';
+                filterBtn.style.display = 'none'; 
+                renderBoard(); 
+            } else if (view === 'timeline') {
+                kanbanWrapper.style.display = 'none';
+                timelineDiv.style.display = 'block';
+                reportsDiv.style.display = 'none';
+                filterBtn.style.display = 'block'; 
+                renderTimeline();
+            } else {
+                kanbanWrapper.style.display = 'none';
+                timelineDiv.style.display = 'none';
+                reportsDiv.style.display = 'block';
+                filterBtn.style.display = 'none'; 
+                renderReports();
+            }
         }
 
         async function loadData(isAuto = false) { 
