@@ -584,6 +584,18 @@
       "waiting": true,
       "createdAt": 1766721884409,
       "history": []
+    },
+    {
+      "id": "ped-1766722387545",
+      "client": "Luana Fajardo Pedroso",
+      "phone": "+554299593436",
+      "chat_id": "849530825",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "review",
+      "waiting": false,
+      "createdAt": 1766722387545,
+      "history": []
     }
   ]
 }
