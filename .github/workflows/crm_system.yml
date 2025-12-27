@@ -1,4 +1,4 @@
-name: CRM Backend (Smart Flow Protection)
+name: CRM Backend (Snooze Feature)
 
 on:
   workflow_dispatch:
@@ -21,7 +21,6 @@ jobs:
         env:
           MY_TOKEN: ${{ secrets.GH_PAT }} 
           PAYLOAD_JSON: ${{ toJson(github.event.client_payload) }}
-          API_KEY: ${{ secrets.BOTCONVERSA_KEY }}
         run: |
           git config --global user.name 'CRM Robot'
           git config --global user.email 'bot@warrior.com'
@@ -72,9 +71,7 @@ jobs:
             }
             
             else if (action === 'novo_pedido') {
-                // REGRA 1: SE JÁ EXISTE, NÃO CRIA DUPLICADO NA FILA
                 const exists = db.orders.find(o => o.chat_id === payload.chat_id);
-                
                 if (!exists) {
                     const now = Date.now();
                     const novo = {
@@ -84,22 +81,17 @@ jobs:
                       chat_id: payload.chat_id || '',
                       product: payload.produto || 'Pedido',
                       dueDate: payload.prazo || '',
-                      status: payload.status || db.columnOrder[0], // Usa a primeira coluna se não definida
+                      status: payload.status || db.columnOrder[0],
                       waiting: payload.waiting !== undefined ? payload.waiting : false,
+                      hiddenUntil: null, // NOVO CAMPO
                       createdAt: now,
-                      finishedAt: null,
                       history: []
                     };
                     db.orders.push(novo);
-                    console.log('Novo pedido criado.');
-                } else {
-                    console.log('Cliente já existe. Ignorando criação duplicada.');
-                    // Opcional: Se quiser apenas atualizar o telefone/nome do existente, faria aqui.
                 }
             }
 
             else if (action === 'update_status') {
-                // Movimento MANUAL (pelo site) - Sempre permitido
                 const index = db.orders.findIndex(o => o.id === payload.id);
                 if (index > -1) {
                   const oldStatus = db.orders[index].status;
@@ -107,9 +99,17 @@ jobs:
                   if (!db.orders[index].history) db.orders[index].history = [];
                   db.orders[index].history.push({ from: oldStatus, to: newStatus, date: Date.now() });
                   if (newStatus === 'done') db.orders[index].finishedAt = Date.now();
-                  if (oldStatus === 'done' && newStatus !== 'done') db.orders[index].finishedAt = null;
                   db.orders[index].status = newStatus;
+                  db.orders[index].hiddenUntil = null; // SE MEXEU, REAPARECE
                   if (payload.newDate) db.orders[index].dueDate = payload.newDate;
+                }
+            }
+
+            else if (action === 'hide_order') {
+                // NOVA AÇÃO: OCULTAR
+                const index = db.orders.findIndex(o => o.id === payload.id);
+                if (index > -1) {
+                    db.orders[index].hiddenUntil = payload.hiddenUntil;
                 }
             }
 
@@ -135,54 +135,43 @@ jobs:
             
             else if (action === 'toggle_waiting') {
                 const index = db.orders.findIndex(o => o.chat_id === payload.chat_id || o.id === payload.id);
-                if (index > -1) {
-                    db.orders[index].waiting = payload.waiting;
-                }
+                if (index > -1) db.orders[index].waiting = payload.waiting;
             }
             
             else if (action === 'move_card_external') {
                  const newStatus = payload.status;
                  const index = db.orders.findIndex(o => o.chat_id === payload.chat_id);
-                 
-                 // REGRA 2: PROTEÇÃO CONTRA RETROCESSO PARA A FILA INICIAL
                  const firstColumn = db.columnOrder[0];
                  
                  if (index > -1) {
                     const currentStatus = db.orders[index].status;
-                    
-                    // Se o bot tenta jogar pra primeira coluna, mas o card NÃO está nela...
                     if (newStatus === firstColumn && currentStatus !== firstColumn) {
-                        console.log('BLOQUEIO: Tentativa de mover card avançado de volta para o início.');
-                        // Apenas atualiza o semáforo se solicitado, mas NÃO move a coluna
                         if (payload.waiting !== undefined) db.orders[index].waiting = payload.waiting;
                     } else {
-                        // Movimento permitido (Normal ou Avanço)
                         let newDate = '';
                         const colConfig = (db.columns && db.columns[newStatus]) ? db.columns[newStatus] : { days: 0 };
                         if (colConfig.days > 0) {
                             const d = new Date(); d.setDate(d.getDate() + colConfig.days);
                             newDate = d.toISOString().split('T')[0];
                         }
-
                         if (!db.orders[index].history) db.orders[index].history = [];
                         db.orders[index].history.push({ from: db.orders[index].status, to: newStatus, date: Date.now() });
-                        
                         if (newStatus === 'done') db.orders[index].finishedAt = Date.now();
                         
                         db.orders[index].status = newStatus;
+                        db.orders[index].hiddenUntil = null; // SE O BOT MEXEU, REAPARECE
+                        
                         if (newDate) db.orders[index].dueDate = newDate;
                         if (payload.telefone) db.orders[index].phone = payload.telefone;
                         if (payload.waiting !== undefined) db.orders[index].waiting = payload.waiting;
                     }
                  } else {
-                    // Se não existe, cria novo (mesmo que seja na primeira coluna, pois é novo)
                     let newDate = '';
                     const colConfig = (db.columns && db.columns[newStatus]) ? db.columns[newStatus] : { days: 0 };
                     if (colConfig.days > 0) {
                         const d = new Date(); d.setDate(d.getDate() + colConfig.days);
                         newDate = d.toISOString().split('T')[0];
                     }
-
                     const now = Date.now();
                     const novo = {
                       id: 'ped-' + now,
@@ -193,6 +182,7 @@ jobs:
                       dueDate: newDate || '',
                       status: newStatus,
                       waiting: payload.waiting !== undefined ? payload.waiting : false,
+                      hiddenUntil: null,
                       createdAt: now,
                       history: []
                     };
