@@ -2226,6 +2226,18 @@
       "waiting": true,
       "createdAt": 1766860727942,
       "history": []
+    },
+    {
+      "id": "ped-1766860734284",
+      "client": "Eliane Kloster",
+      "phone": "+554398240857",
+      "chat_id": "457576759",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766860734284,
+      "history": []
     }
   ]
 }
