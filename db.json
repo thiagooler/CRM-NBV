@@ -1984,6 +1984,18 @@
       "waiting": false,
       "createdAt": 1766859714644,
       "history": []
+    },
+    {
+      "id": "ped-1766859724855",
+      "client": "Eliane APARECIDA PEDROZO",
+      "phone": "+554298165368",
+      "chat_id": "463970793",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-06",
+      "status": "filadeproduo_612",
+      "waiting": false,
+      "createdAt": 1766859724855,
+      "history": []
     }
   ]
 }
