@@ -3060,6 +3060,18 @@
       "waiting": true,
       "createdAt": 1766861345914,
       "history": []
+    },
+    {
+      "id": "ped-1766861351551",
+      "client": "Ângelo",
+      "phone": "+554299064261",
+      "chat_id": "510130818",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861351551,
+      "history": []
     }
   ]
 }
