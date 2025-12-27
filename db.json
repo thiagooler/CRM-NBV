@@ -3938,6 +3938,18 @@
       "waiting": false,
       "createdAt": 1766862914902,
       "history": []
+    },
+    {
+      "id": "ped-1766862926113",
+      "client": "grazielykoleska",
+      "phone": "+554284277227",
+      "chat_id": "633360949",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862926113,
+      "history": []
     }
   ]
 }
