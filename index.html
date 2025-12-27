@@ -97,8 +97,8 @@
         .col-inputs { flex-grow: 1; display: flex; gap: 5px; flex-direction: column; }
         .col-row { display: flex; gap: 5px; }
         
-        /* INPUT DE ORDEM */
-        .order-input { width: 40px; text-align: center; font-weight: bold; border: 1px solid #0052cc; color: #0052cc; border-radius: 4px; padding: 5px; }
+        /* INPUT DE ORDEM MANUAL */
+        .order-input { width: 45px; text-align: center; font-weight: bold; border: 2px solid #0052cc; color: #0052cc; border-radius: 6px; padding: 8px; font-size: 1rem; }
 
         .filter-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; }
         .filter-item input[type="checkbox"] { width: 20px; height: 20px; }
@@ -181,7 +181,7 @@
     </dialog>
 
     <dialog id="filterModal"><div class="modal-header"><h3 style="margin:0">👁️ Filtros</h3><button onclick="closeModal('filterModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><div id="filterList"></div><hr style="margin:15px 0; border:0; border-top:1px solid #eee;"><div class="filter-item"><input type="checkbox" id="chk-hideWaiting"><span class="status-dot dot-yellow"></span><label for="chk-hideWaiting"> Ocultar "Aguardando"</label></div><button class="btn-primary" onclick="applyFilters()">Aplicar</button></div></dialog>
-    <dialog id="settingsModal"><div class="modal-header"><h3 style="margin:0">Configurações</h3><button onclick="closeModal('settingsModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><div class="tab-content active"><div style="background:#e3f2fd;padding:10px;margin-bottom:10px;border-radius:4px;">✋ Digite a posição para mover.</div><div id="columnsList"></div><button class="btn-primary" onclick="saveAllColumns()">💾 Salvar Ordem</button><h4 style="margin-top:20px;">Nova Coluna</h4><input id="newColTitle" class="inp-full" placeholder="Nome"><div style="display:flex;gap:10px;"><input type="color" id="newColColor" style="height:40px;width:50px;"><input type="number" id="newColDays" class="inp-full" placeholder="Dias"></div><button class="btn-primary" onclick="addColumn()">+ Adicionar</button></div></div></dialog>
+    <dialog id="settingsModal"><div class="modal-header"><h3 style="margin:0">Configurações</h3><button onclick="closeModal('settingsModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><div class="tab-content active"><div style="background:#e3f2fd;padding:10px;margin-bottom:10px;border-radius:4px;">✋ Digite a posição (1, 2, 3...) e Salve.</div><div id="columnsList"></div><button class="btn-primary" onclick="saveAllColumns()">💾 Salvar Ordem</button><h4 style="margin-top:20px;">Nova Coluna</h4><input id="newColTitle" class="inp-full" placeholder="Nome"><div style="display:flex;gap:10px;"><input type="color" id="newColColor" style="height:40px;width:50px;"><input type="number" id="newColDays" class="inp-full" placeholder="Dias"></div><button class="btn-primary" onclick="addColumn()">+ Adicionar</button></div></div></dialog>
     <dialog id="newOrderModal"><div class="modal-header"><h3 style="margin:0">Novo Pedido</h3><button onclick="closeModal('newOrderModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><label>Cliente *</label><input type="text" id="manualName" class="inp-full"><label>Telefone</label><input type="text" id="manualPhone" class="inp-full"><label>ID (Opcional)</label><input type="text" id="manualChatId" class="inp-full"><label>Coluna Inicial</label><select id="manualColumn" class="inp-full" onchange="autoDateManual(this.value)"></select><label>Produto</label><input type="text" id="manualProduct" class="inp-full"><label>Prazo</label><input type="date" id="manualDate" class="inp-full"><button class="btn-primary" onclick="createManualOrder()">Criar</button></div></dialog>
     <dialog id="editOrderModal"><div class="modal-header"><h3 style="margin:0">Editar</h3><button onclick="closeModal('editOrderModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><input type="hidden" id="editOrderId"><label>Nome</label><input type="text" id="editClientName" class="inp-full"><label>Telefone</label><input type="text" id="editPhone" class="inp-full"><label>Produto</label><input type="text" id="editProduct" class="inp-full"><label>Prazo</label><input type="date" id="editDueDate" class="inp-full"><button class="btn-primary" onclick="saveOrderEdits()">Salvar</button></div></dialog>
 
@@ -189,7 +189,7 @@
         const REPO_OWNER = 'thiagooler'; const REPO_NAME = 'CRM-NBV';
         let columnsConfig = {'todo': { title: '📥 Novos', color: '#ff5630', days: 0 }, 'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 }, 'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }};
         let columnOrder = ['todo', 'doing', 'done'];
-        let orders = []; let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let dragSrcEl = null; let myChart = null;
+        let orders = []; let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let myChart = null;
         let searchTerm = ''; 
 
         function getToken() { const p = new URLSearchParams(window.location.search); const t = p.get('token'); if(t) { localStorage.setItem('warrior_gh_token', t); return t; } return localStorage.getItem('warrior_gh_token'); }
@@ -197,78 +197,25 @@
             const t = getToken(); const tkDisp = document.getElementById('tokenDisplay'); if(tkDisp) tkDisp.value = t ? t.substring(0,10) + '...' : 'Não configurado'; if(!t) alert("Configure seu Token!"); 
             const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
             const savedWait = localStorage.getItem('warrior_crm_hideWaiting'); if(savedWait) hideWaiting = JSON.parse(savedWait);
-            
-            // MAGIC SCROLL NO KANBAN
             const slider = document.getElementById('kanbanView');
-            if (slider) {
-                slider.addEventListener('wheel', (e) => {
-                    if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; }
-                });
-            }
-
+            if (slider) { slider.addEventListener('wheel', (e) => { if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; } }); }
             await loadData();
             setInterval(() => loadData(true), 15000);
         }
 
-        // --- BUSCA AVANÇADA ---
-        function handleSearch(val) {
-            searchTerm = val.toLowerCase();
-            if(currentView === 'kanban') renderBoard();
-            else if(currentView === 'timeline') renderTimeline();
-        }
-
-        function matchesSearch(order) {
-            if(!searchTerm) return true;
-            const term = searchTerm;
-            const name = (order.client || '').toLowerCase();
-            const id = (order.id || '').toLowerCase();
-            const prod = (order.product || '').toLowerCase();
-            const rawPhone = (order.phone || '').toLowerCase();
-            const cleanPhone = rawPhone.replace(/\D/g, ''); 
-            
-            return name.includes(term) || id.includes(term) || prod.includes(term) || rawPhone.includes(term) || cleanPhone.includes(term);
-        }
-
-        // --- NAVEGAÇÃO LATERAL (SETAS) ---
-        function scrollBoard(direction) {
-            const slider = document.getElementById('kanbanView');
-            const scrollAmount = 320; 
-            slider.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
-        }
-
+        // --- BUSCA ---
+        function handleSearch(val) { searchTerm = val.toLowerCase(); if(currentView === 'kanban') renderBoard(); else if(currentView === 'timeline') renderTimeline(); }
+        function matchesSearch(order) { if(!searchTerm) return true; const term = searchTerm; const name = (order.client || '').toLowerCase(); const id = (order.id || '').toLowerCase(); const prod = (order.product || '').toLowerCase(); const rawPhone = (order.phone || '').toLowerCase(); const cleanPhone = rawPhone.replace(/\D/g, ''); return name.includes(term) || id.includes(term) || prod.includes(term) || rawPhone.includes(term) || cleanPhone.includes(term); }
+        function scrollBoard(direction) { const slider = document.getElementById('kanbanView'); slider.scrollBy({ left: direction * 320, behavior: 'smooth' }); }
+        
         function switchView(view) {
             currentView = view;
             document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
             const btn = document.getElementById('btn-'+view); if(btn) btn.classList.add('active');
-            
-            const kanbanWrapper = document.getElementById('kanbanWrapper');
-            const timelineDiv = document.getElementById('timelineView');
-            const reportsDiv = document.getElementById('reportsView');
-            const filterBtn = document.getElementById('filterBtn');
-            const searchBox = document.querySelector('.search-box');
-
-            if(view === 'kanban') {
-                kanbanWrapper.style.display = 'block';
-                timelineDiv.style.display = 'none';
-                reportsDiv.style.display = 'none';
-                filterBtn.style.display = 'none'; 
-                if(searchBox) searchBox.style.display = 'block';
-                renderBoard(); 
-            } else if (view === 'timeline') {
-                kanbanWrapper.style.display = 'none';
-                timelineDiv.style.display = 'block';
-                reportsDiv.style.display = 'none';
-                filterBtn.style.display = 'block'; 
-                if(searchBox) searchBox.style.display = 'block';
-                renderTimeline();
-            } else {
-                kanbanWrapper.style.display = 'none';
-                timelineDiv.style.display = 'none';
-                reportsDiv.style.display = 'block';
-                filterBtn.style.display = 'none'; 
-                if(searchBox) searchBox.style.display = 'none'; // Esconde busca no relatório
-                renderReports();
-            }
+            const kw = document.getElementById('kanbanWrapper'); const td = document.getElementById('timelineView'); const rd = document.getElementById('reportsView'); const fb = document.getElementById('filterBtn'); const sb = document.querySelector('.search-box');
+            if(view === 'kanban') { kw.style.display='block'; td.style.display='none'; rd.style.display='none'; fb.style.display='none'; if(sb) sb.style.display='block'; renderBoard(); } 
+            else if (view === 'timeline') { kw.style.display='none'; td.style.display='block'; rd.style.display='none'; fb.style.display='block'; if(sb) sb.style.display='block'; renderTimeline(); } 
+            else { kw.style.display='none'; td.style.display='none'; rd.style.display='block'; fb.style.display='none'; if(sb) sb.style.display='none'; renderReports(); }
         }
 
         async function loadData(isAuto = false) { 
@@ -276,32 +223,20 @@
             try { 
                 const r = await fetch(`db.json?t=${new Date().getTime()}`); if(!r.ok) throw new Error("Erro DB"); const d = await r.json(); 
                 if (Array.isArray(d)) orders = d; else { orders = d.orders||[]; if(d.columns) columnsConfig = d.columns; if(d.columnOrder) columnOrder = d.columnOrder; else columnOrder = Object.keys(columnsConfig); } 
-                const pending = JSON.parse(localStorage.getItem('warrior_pending') || '[]');
-                const realPending = pending.filter(p => !orders.find(o => o.id === p.id));
-                localStorage.setItem('warrior_pending', JSON.stringify(realPending));
-                orders = [...orders, ...realPending];
-                const currentHash = JSON.stringify({o: orders, c: columnsConfig});
-                if (isAuto && currentHash === lastDataHash) { if(syncIcon) syncIcon.classList.remove('loading'); return; }
-                lastDataHash = currentHash;
+                const pending = JSON.parse(localStorage.getItem('warrior_pending') || '[]'); const realPending = pending.filter(p => !orders.find(o => o.id === p.id)); localStorage.setItem('warrior_pending', JSON.stringify(realPending)); orders = [...orders, ...realPending];
+                const currentHash = JSON.stringify({o: orders, c: columnsConfig}); if (isAuto && currentHash === lastDataHash) { if(syncIcon) syncIcon.classList.remove('loading'); return; } lastDataHash = currentHash;
                 if(visibleColumns.length === 0) visibleColumns = [...columnOrder];
                 if(currentView === 'kanban') renderBoard(); else if(currentView === 'timeline') renderTimeline(); else renderReports();
                 if(isAuto) { if(syncIcon) { syncIcon.classList.remove('loading'); syncIcon.classList.add('success'); setTimeout(()=>syncIcon.classList.remove('success'),2000); } } else hideStatus();
             } catch (e) { if(!isAuto) hideStatus(); if(syncIcon) syncIcon.classList.remove('loading'); } 
         }
 
-        // --- CÁLCULO DE TEMPO ---
         function calculateTime(order) {
-            const now = new Date();
-            const created = new Date(order.createdAt || Date.now());
-            const totalMs = now - created;
-            const totalDays = Math.floor(totalMs / (1000 * 60 * 60 * 24));
+            const now = new Date(); const created = new Date(order.createdAt || Date.now());
+            const totalMs = now - created; const totalDays = Math.floor(totalMs / (1000 * 60 * 60 * 24));
             let lastMove = created;
-            if (order.history && order.history.length > 0) {
-               const lastEntry = order.history[order.history.length - 1];
-               if(lastEntry && lastEntry.date) lastMove = new Date(lastEntry.date);
-            }
-            const stageMs = now - lastMove;
-            const stageDays = Math.floor(stageMs / (1000 * 60 * 60 * 24));
+            if (order.history && order.history.length > 0) { const lastEntry = order.history[order.history.length - 1]; if(lastEntry && lastEntry.date) lastMove = new Date(lastEntry.date); }
+            const stageMs = now - lastMove; const stageDays = Math.floor(stageMs / (1000 * 60 * 60 * 24));
             return { total: totalDays, stage: stageDays };
         }
 
@@ -311,11 +246,7 @@
                 const c = columnsConfig[k]; if(!c) return; 
                 const d = document.createElement('div'); d.className = 'column'; d.style.borderTopColor = c.color; 
                 d.innerHTML = `<div class="column-header" style="color:${c.color}"><span>${c.title} <span id="count-${k}" style="background:#fff;padding:2px 8px;border-radius:10px;font-size:0.8em;color:#333;">0</span></span><div style="position:relative"><i class="fa-solid fa-ellipsis-vertical col-menu-btn" onclick="toggleMenu('${k}')"></i><div id="menu-${k}" class="col-options"><div onclick="sortColumn('${k}','date')">📅 Prazo</div><div onclick="sortColumn('${k}','name')">🔤 Nome</div></div></div></div><div class="card-list" id="${k}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>`; b.appendChild(d); 
-                const l = d.querySelector('.card-list'); 
-                
-                // FILTRO DE BUSCA NO KANBAN
-                const o = orders.filter(ord => ord.status === k && matchesSearch(ord)); 
-                
+                const l = d.querySelector('.card-list'); const o = orders.filter(ord => ord.status === k && matchesSearch(ord)); 
                 const cEl = document.getElementById(`count-${k}`); if(cEl) cEl.innerText = o.length; 
                 o.forEach(or => l.appendChild(createCard(or, c.color))); 
             });
@@ -325,10 +256,7 @@
             const c = document.getElementById('timelineView'); if(!c) return; c.innerHTML = ''; 
             const s = [...orders].sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); 
             s.forEach(o => { 
-                if (!visibleColumns.includes(o.status)) return;
-                if (hideWaiting && o.waiting) return;
-                if (!matchesSearch(o)) return; // FILTRO DE BUSCA NA TIMELINE
-
+                if (!visibleColumns.includes(o.status)) return; if (hideWaiting && o.waiting) return; if (!matchesSearch(o)) return;
                 const col = columnsConfig[o.status]||{color:'#ccc',title:'?'}; const dt = new Date(o.dueDate); const df = Math.ceil((dt - new Date()) / (86400000)); let cl = '#36b37e'; if (df < 0) cl = '#bf2600'; else if (df <= 2) cl = '#ffab00'; if (o.status === 'done') cl = '#42526e'; let opts = ''; columnOrder.forEach(k => { if(columnsConfig[k]) opts += `<option value="${k}" ${o.status === k ? 'selected' : ''}>${columnsConfig[k].title}</option>`; }); const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
                 const wa = o.phone ? `<button class="btn-icon btn-wa" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
                 c.innerHTML += `<div class="timeline-item" style="border-left-color:${col.color}"><div class="tl-info"><div class="tl-client"><span class="status-dot ${dotClass}"></span>${o.client}</div><div class="tl-product">${o.product}</div><div class="tl-meta"><span class="tl-date" style="color:${cl};border:1px solid ${cl}">${formatDate(o.dueDate)}</span><span style="font-size:0.8em;color:${col.color}"><i class="fa-solid fa-circle" style="font-size:0.6em"></i> ${col.title}</span></div></div><div class="tl-actions">${wa}<select class="status-select" onchange="changeStatus('${o.id}',this.value)">${opts}</select><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button></div></div>`; 
@@ -339,67 +267,20 @@
             const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; 
             const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
             const wa = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
-            
             const times = calculateTime(o);
-
-            d.innerHTML = `
-                <div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div>
-                <div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div>
-                <div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div>
-                
-                <div class="card-timers">
-                    <span title="Tempo nesta etapa"><i class="fa-regular fa-clock"></i> ${times.stage}d</span>
-                    <span title="Tempo total do pedido"><i class="fa-solid fa-history"></i> ${times.total}d</span>
-                </div>
-
-                <div class="card-actions">${wa}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
+            d.innerHTML = `<div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-timers"><span title="Nesta etapa"><i class="fa-regular fa-clock"></i> ${times.stage}d</span><span title="Total"><i class="fa-solid fa-history"></i> ${times.total}d</span></div><div class="card-actions">${wa}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
         }
 
         function renderReports() {
-            document.getElementById('kpi-total').innerText = orders.length;
-            const doneCount = orders.filter(o => o.status === 'done').length;
-            document.getElementById('kpi-done').innerText = doneCount;
-            document.getElementById('kpi-active').innerText = orders.length - doneCount;
-            let totalDur = 0; let counted = 0;
-            orders.forEach(o => {
-                if(o.status === 'done' && o.createdAt) { const end = o.finishedAt || Date.now(); totalDur += (end - o.createdAt); counted++; }
-                else if (o.id && o.id.startsWith('ped-') && o.status === 'done') { const created = parseInt(o.id.split('-')[1]); if(!isNaN(created)) { totalDur += (Date.now() - created); counted++; } }
-            });
-            document.getElementById('kpi-avg').innerText = (counted > 0 ? Math.ceil(totalDur/counted/(1000*60*60*24)) : 0) + 'd';
-            
-            const ctx = document.getElementById('chartStatus');
-            if(ctx) {
-                const statusCounts = columnOrder.map(k => orders.filter(o => o.status === k).length);
-                const statusLabels = columnOrder.map(k => columnsConfig[k] ? columnsConfig[k].title : k);
-                const statusColors = columnOrder.map(k => columnsConfig[k] ? columnsConfig[k].color : '#ccc');
-                if(myChart) myChart.destroy();
-                myChart = new Chart(ctx.getContext('2d'), { type: 'bar', data: { labels: statusLabels, datasets: [{ label: 'Pedidos', data: statusCounts, backgroundColor: statusColors }] }, options: { responsive: true, scales: { y: { beginAtZero: true } } } });
-            }
-            
-            const clientCounts = {}; orders.forEach(o => { clientCounts[o.client] = (clientCounts[o.client] || 0) + 1; });
-            const sortedClients = Object.entries(clientCounts).sort((a,b) => b[1] - a[1]).slice(0, 10);
-            const tbody = document.querySelector('#tableClients tbody'); 
-            if(tbody) { tbody.innerHTML = ''; sortedClients.forEach(([name, count]) => { tbody.innerHTML += `<tr><td>${name}</td><td><b>${count}</b></td></tr>`; }); }
+            document.getElementById('kpi-total').innerText = orders.length; const doneCount = orders.filter(o => o.status === 'done').length; document.getElementById('kpi-done').innerText = doneCount; document.getElementById('kpi-active').innerText = orders.length - doneCount; let totalDur = 0; let counted = 0; orders.forEach(o => { if(o.status === 'done' && o.createdAt) { const end = o.finishedAt || Date.now(); totalDur += (end - o.createdAt); counted++; } else if (o.id && o.id.startsWith('ped-') && o.status === 'done') { const created = parseInt(o.id.split('-')[1]); if(!isNaN(created)) { totalDur += (Date.now() - created); counted++; } } }); document.getElementById('kpi-avg').innerText = (counted > 0 ? Math.ceil(totalDur/counted/(1000*60*60*24)) : 0) + 'd';
+            const ctx = document.getElementById('chartStatus'); if(ctx) { const statusCounts = columnOrder.map(k => orders.filter(o => o.status === k).length); const statusLabels = columnOrder.map(k => columnsConfig[k] ? columnsConfig[k].title : k); const statusColors = columnOrder.map(k => columnsConfig[k] ? columnsConfig[k].color : '#ccc'); if(myChart) myChart.destroy(); myChart = new Chart(ctx.getContext('2d'), { type: 'bar', data: { labels: statusLabels, datasets: [{ label: 'Pedidos', data: statusCounts, backgroundColor: statusColors }] }, options: { responsive: true, scales: { y: { beginAtZero: true } } } }); }
+            const clientCounts = {}; orders.forEach(o => { clientCounts[o.client] = (clientCounts[o.client] || 0) + 1; }); const sortedClients = Object.entries(clientCounts).sort((a,b) => b[1] - a[1]).slice(0, 10); const tbody = document.querySelector('#tableClients tbody'); if(tbody) { tbody.innerHTML = ''; sortedClients.forEach(([name, count]) => { tbody.innerHTML += `<tr><td>${name}</td><td><b>${count}</b></td></tr>`; }); }
         }
 
         function exportCSV() {
             let csv = "ID,Cliente,Telefone,Produto,Etapa,Situação,Data Prazo,Criado Em\n";
-            orders.forEach(o => {
-                const created = o.createdAt ? new Date(o.createdAt).toLocaleDateString() : (o.id.startsWith('ped-') ? new Date(parseInt(o.id.split('-')[1])).toLocaleDateString() : '-');
-                const statusName = columnsConfig[o.status] ? columnsConfig[o.status].title : o.status;
-                const situacao = o.waiting ? 'Aguardando Cliente' : 'Em Execução';
-                const line = `"${o.id}","${o.client}","${o.phone||''}","${o.product}","${statusName}","${situacao}","${o.dueDate}","${created}"`;
-                csv += line + "\n";
-            });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", "relatorio_crm.csv");
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            orders.forEach(o => { const created = o.createdAt ? new Date(o.createdAt).toLocaleDateString() : (o.id.startsWith('ped-') ? new Date(parseInt(o.id.split('-')[1])).toLocaleDateString() : '-'); const statusName = columnsConfig[o.status] ? columnsConfig[o.status].title : o.status; const situacao = o.waiting ? 'Aguardando Cliente' : 'Em Execução'; const line = `"${o.id}","${o.client}","${o.phone||''}","${o.product}","${statusName}","${situacao}","${o.dueDate}","${created}"`; csv += line + "\n"; });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); const url = URL.createObjectURL(blob); link.setAttribute("href", url); link.setAttribute("download", "relatorio_crm.csv"); link.style.visibility = 'hidden'; document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
         // --- INTEGRADOR & UTILS ---
@@ -407,28 +288,21 @@
         function toggleIntegratorOptions() { const type = document.getElementById('integrationActionType').value; document.getElementById('opt-move').style.display = type === 'move' ? 'block' : 'none'; document.getElementById('opt-color').style.display = type === 'color' ? 'block' : 'none'; updateIntegratorCode(); }
         function updateIntegratorCode() { const tkEl = document.getElementById('integrationToken'); const token = tkEl ? tkEl.value.trim() : ''; if(token) localStorage.setItem('warrior_gh_token', token); const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`; document.getElementById('dispUrl').innerText = url; const headers = [{ k: 'Authorization', v: `token ${token || 'ghp_SEU_TOKEN'}` }, { k: 'Accept', v: 'application/vnd.github.v3+json' }, { k: 'Content-Type', v: 'application/json' }, { k: 'User-Agent', v: 'WarriorBot' }]; const list = document.getElementById('headersList'); if(list) { list.innerHTML = ''; headers.forEach(h => { const safeKey = h.k.replace(/-/g,''); list.innerHTML += `<div class="header-row"><span class="header-key">${h.k}</span><span class="header-val" id="val-${safeKey}">${h.v}</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('val-${safeKey}')">Copiar</button></span></div>`; }); } const type = document.getElementById('integrationActionType').value; let json = {}; if (type === 'move') { const col = document.getElementById('integrationColSelect').value; json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}" } }; } else if (type === 'color') { const isWaiting = document.getElementById('integrationColorSelect').value === 'true'; json = { "event_type": "crm_event", "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; } else if (type === 'delete') { json = { "event_type": "crm_event", "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; } document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); }
         async function sendToGitHub(realAction, payload) { const t = getToken(); if(!t) { alert("Token?"); return; } const body = { event_type: "crm_event", client_payload: { real_action: realAction, ...payload } }; try { const r = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, { method: 'POST', headers: { 'Authorization': `token ${t}`, 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) }); if(!r.ok) throw new Error(r.status); } catch(e) { alert("Erro Envio: "+e.message); throw e; } }
-        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); } function copyLink(id) { navigator.clipboard.writeText(window.location.href.replace('index.html','').split('?')[0] + 'rastreio/?id='+id); alert("Link Rastreio Copiado!"); } function closeModal(id) { document.getElementById(id).close(); } function showStatus(m,c) { const e=document.getElementById('statusMsg'); if(e) { e.innerText=m; e.style.background=c; e.style.display='block'; } } function hideStatus() { const e=document.getElementById('statusMsg'); if(e) e.style.display='none'; } function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; } function sortColumn(k, t) { let c = orders.filter(o => o.status === k); let o = orders.filter(o => o.status !== k); if (t === 'date') c.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); else c.sort((a,b) => a.client.localeCompare(b.client)); orders = [...o, ...c]; renderBoard(); } 
-        function allowDrop(ev) { ev.preventDefault(); } function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); } 
-        function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
+        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); } function copyLink(id) { navigator.clipboard.writeText(window.location.href.replace('index.html','').split('?')[0] + 'rastreio/?id='+id); alert("Link Rastreio Copiado!"); } function closeModal(id) { document.getElementById(id).close(); } function showStatus(m,c) { const e=document.getElementById('statusMsg'); if(e) { e.innerText=m; e.style.background=c; e.style.display='block'; } } function hideStatus() { const e=document.getElementById('statusMsg'); if(e) e.style.display='none'; } function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; } function sortColumn(k, t) { let c = orders.filter(o => o.status === k); let o = orders.filter(o => o.status !== k); if (t === 'date') c.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); else c.sort((a,b) => a.client.localeCompare(b.client)); orders = [...o, ...c]; renderBoard(); } function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
+        function openFilterModal() { const l = document.getElementById('filterList'); l.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) l.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${k}" value="${k}" ${visibleColumns.includes(k)?'checked':''}><div style="width:15px;height:15px;background:${columnsConfig[k].color};border-radius:50%;"></div><label for="chk-${k}">${columnsConfig[k].title}</label></div>`; }); document.getElementById('chk-hideWaiting').checked = hideWaiting; document.getElementById('filterModal').showModal(); }
+        function applyFilters() { visibleColumns = []; document.querySelectorAll('#filterList input[type="checkbox"]').forEach(c => { if(c.checked) visibleColumns.push(c.value); }); localStorage.setItem('warrior_crm_filters', JSON.stringify(visibleColumns)); hideWaiting = document.getElementById('chk-hideWaiting').checked; localStorage.setItem('warrior_crm_hideWaiting', JSON.stringify(hideWaiting)); closeModal('filterModal'); if(currentView==='timeline') renderTimeline(); }
+        function openNewOrderModal() { document.getElementById('manualName').value=''; document.getElementById('manualChatId').value=''; document.getElementById('manualProduct').value=''; document.getElementById('manualPhone').value=''; document.getElementById('manualDate').valueAsDate=new Date(); const s = document.getElementById('manualColumn'); s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); document.getElementById('newOrderModal').showModal(); }
+        function autoDateManual(s) { const d = columnsConfig[s]?.days || 0; if(d>0) { const dt = new Date(); dt.setDate(dt.getDate()+d); document.getElementById('manualDate').valueAsDate = dt; } }
+        async function createManualOrder() { const n = document.getElementById('manualName').value; if(!n) return alert("Nome!"); const pay = { id: 'ped-'+Date.now(), nome: n, telefone: document.getElementById('manualPhone').value, chat_id: document.getElementById('manualChatId').value, produto: document.getElementById('manualProduct').value || 'Manual', prazo: document.getElementById('manualDate').value, status: document.getElementById('manualColumn').value, waiting: false }; const newOrder = { id: pay.id, client: pay.nome, phone: pay.telefone, chat_id: pay.chat_id, product: pay.produto, dueDate: pay.prazo, status: pay.status, waiting: false, createdAt: Date.now() }; orders.push(newOrder); const pending = JSON.parse(localStorage.getItem('warrior_pending') || '[]'); pending.push(newOrder); localStorage.setItem('warrior_pending', JSON.stringify(pending)); closeModal('newOrderModal'); if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); showStatus('Enviando...', '#36b37e'); try { await sendToGitHub('novo_pedido', pay); showStatus('✅ Enviado!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro Envio!', '#bf2600'); } }
+        function openEditOrder(id) { const o = orders.find(ord => ord.id === id); if(!o) return; document.getElementById('editOrderId').value = o.id; document.getElementById('editClientName').value = o.client; document.getElementById('editPhone').value = o.phone||''; document.getElementById('editProduct').value = o.product; document.getElementById('editDueDate').value = o.dueDate; document.getElementById('editOrderModal').showModal(); }
+        async function saveOrderEdits() { const id = document.getElementById('editOrderId').value; const c = document.getElementById('editClientName').value; const ph = document.getElementById('editPhone').value; const p = document.getElementById('editProduct').value; const d = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=c; orders[idx].phone=ph; orders[idx].product=p; orders[idx].dueDate=d; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); } closeModal('editOrderModal'); try { await sendToGitHub('update_order', { id, client: c, phone: ph, product: p, dueDate: d }); } catch(e) {} }
+        async function changeStatus(id, st) { const i = orders.findIndex(o => o.id === id); if(i === -1) return; const days = columnsConfig[st]?.days || 0; let nd = null; if(days>0) { const d = new Date(); d.setDate(d.getDate()+days); nd = d.toISOString().split('T')[0]; orders[i].dueDate = nd; } orders[i].status = st; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToGitHub('update_status', { id, status: st, newDate: nd }); } catch(e) {} }
+        async function drop(ev) { ev.preventDefault(); const id = ev.dataTransfer.getData("text"); const col = ev.target.closest('.card-list'); if (!col) return; const ns = col.id; if(orders.find(o=>o.id===id).status !== ns) changeStatus(id, ns); }
+        async function addColumn() { const t = document.getElementById('newColTitle').value; if(!t) return; const id = t.toLowerCase().replace(/[^a-z0-9]/g, '')+'_'+Math.floor(Math.random()*1000); columnsConfig[id] = { title: t, color: document.getElementById('newColColor').value, days: parseInt(document.getElementById('newColDays').value)||0 }; columnOrder.push(id); document.getElementById('newColTitle').value = ''; openSettings(); }
+        async function removeColumn(k) { if(!confirm("Remover?")) return; delete columnsConfig[k]; columnOrder = columnOrder.filter(id => id !== k); openSettings(); }
+        async function deleteOrder(id) { if(confirm('Apagar?')) { orders = orders.filter(o => o.id !== id); if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToGitHub('delete_order', { id }); } catch(e) {} } }
         
-        // --- FUNÇÃO DE REORDENAÇÃO NUMÉRICA ---
-        function reorderColumn(key, newPos) {
-            let newIndex = parseInt(newPos) - 1; 
-            if (isNaN(newIndex)) return;
-            const oldIndex = columnOrder.indexOf(key);
-            
-            // Bounds check
-            if (newIndex < 0) newIndex = 0;
-            if (newIndex >= columnOrder.length) newIndex = columnOrder.length - 1;
-
-            // Move
-            columnOrder.splice(oldIndex, 1);
-            columnOrder.splice(newIndex, 0, key);
-            
-            // Re-render settings to show new numbers
-            openSettings();
-        }
-
+        // --- SALVAR EM LOTE (A MÁGICA ACONTECE AQUI) ---
         function openSettings() { 
             const l = document.getElementById('columnsList'); 
             l.innerHTML = ''; 
@@ -437,23 +311,50 @@
                     const c = columnsConfig[k]; 
                     const d = document.createElement('div'); 
                     d.className='col-item'; 
+                    // Input sem onchange! Só um ID para ler depois.
                     d.innerHTML = `
-                        <input type="number" class="order-input" value="${index + 1}" onchange="reorderColumn('${k}', this.value)">
+                        <input type="number" class="order-input" data-key="${k}" value="${index + 1}">
                         <div class="status-dot" style="background:${c.color}; margin-left:5px;"></div>
-                        <div class="col-inputs">
-                            <input class="inp-full" style="margin:0;padding:5px;" value="${c.title}" onchange="columnsConfig['${k}'].title=this.value">
-                            <div class="col-row">
-                                <input type="number" class="inp-mini" value="${c.days}" onchange="columnsConfig['${k}'].days=parseInt(this.value)">
-                                <input type="color" style="height:30px;" value="${c.color}" onchange="columnsConfig['${k}'].color=this.value">
-                            </div>
-                        </div>
-                        <button onclick="removeColumn('${k}')" style="color:red;border:none;background:none;"><i class="fa-solid fa-trash"></i></button>`; 
+                        <div class="col-inputs"><input class="inp-full" style="margin:0;padding:5px;" value="${c.title}" onchange="columnsConfig['${k}'].title=this.value"><div class="col-row"><input type="number" class="inp-mini" value="${c.days}" onchange="columnsConfig['${k}'].days=parseInt(this.value)"><input type="color" style="height:30px;" value="${c.color}" onchange="columnsConfig['${k}'].color=this.value"></div></div><button onclick="removeColumn('${k}')" style="color:red;border:none;background:none;"><i class="fa-solid fa-trash"></i></button>`; 
                     l.appendChild(d); 
                 } 
             }); 
             document.getElementById('settingsModal').showModal(); 
         }
-        function handleDragStart(e) { dragSrcEl = this; e.dataTransfer.effectAllowed = 'move'; } function handleDragOver(e) { e.preventDefault(); return false; } function handleDrop(e) { e.stopPropagation(); if (dragSrcEl !== this) { const s = dragSrcEl.dataset.key; const t = this.dataset.key; const si = columnOrder.indexOf(s); const ti = columnOrder.indexOf(t); if(si>-1 && ti>-1) { columnOrder.splice(si, 1); columnOrder.splice(ti, 0, s); openSettings(); } } return false; }
+
+        async function saveAllColumns() {
+            // 1. Lê todos os inputs de ordem
+            const inputs = document.querySelectorAll('.order-input');
+            const newOrderMap = [];
+            
+            inputs.forEach(inp => {
+                newOrderMap.push({
+                    key: inp.dataset.key,
+                    order: parseInt(inp.value) || 999 // Se vazio, joga pro fim
+                });
+            });
+
+            // 2. Ordena o array baseado no input do usuário
+            newOrderMap.sort((a, b) => a.order - b.order);
+
+            // 3. Atualiza a ordem global
+            columnOrder = newOrderMap.map(item => item.key);
+
+            // 4. Salva e atualiza visual
+            if(currentView === 'kanban') renderBoard();
+            showStatus('Salvando...', '#ffab00');
+            
+            try { 
+                await sendToGitHub('save_columns', { columns: columnsConfig, order: columnOrder }); 
+                showStatus('✅ Salvo!', '#36b37e'); 
+                setTimeout(hideStatus, 2000); 
+            } catch(e) { 
+                showStatus('❌ Erro!', '#bf2600'); 
+            }
+        }
+
+        // Sem drag handles
+        function handleDragStart(e) {} function handleDragOver(e) {} function handleDrop(e) {}
 
         document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
         document.addEventListener('DOMContentLoaded', init);
