@@ -649,8 +649,8 @@
       "phone": "+554299783258",
       "chat_id": "762236340",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-01",
-      "status": "review",
+      "dueDate": "2026-01-06",
+      "status": "filadeproduo_612",
       "waiting": true,
       "createdAt": 1766721717857,
       "history": [
@@ -673,6 +673,11 @@
           "from": "emproduo_216",
           "to": "review",
           "date": 1766869091254
+        },
+        {
+          "from": "review",
+          "to": "filadeproduo_612",
+          "date": 1766870030345
         }
       ],
       "hiddenUntil": null
