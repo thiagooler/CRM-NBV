@@ -2001,11 +2001,17 @@
       "phone": "+554299434751",
       "chat_id": "841865637",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "aguardandoseleo_897",
-      "waiting": true,
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
       "createdAt": 1766858952722,
-      "history": []
+      "history": [
+        {
+          "from": "aguardandoseleo_897",
+          "to": "doing",
+          "date": 1766863384579
+        }
+      ]
     },
     {
       "id": "ped-1766859027235",
