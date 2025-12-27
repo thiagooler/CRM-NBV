@@ -3671,6 +3671,18 @@
       "waiting": false,
       "createdAt": 1766862530923,
       "history": []
+    },
+    {
+      "id": "ped-1766862551456",
+      "client": "Lucineia do Nascimento Simão",
+      "phone": "+554298617714",
+      "chat_id": "813735501",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862551456,
+      "history": []
     }
   ]
 }
