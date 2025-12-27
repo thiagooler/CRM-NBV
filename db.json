@@ -2020,6 +2020,18 @@
       "waiting": false,
       "createdAt": 1766859856208,
       "history": []
+    },
+    {
+      "id": "ped-1766860321542",
+      "client": "Daiane Forkevicz",
+      "phone": "+554284237858",
+      "chat_id": "515528719",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-30",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "createdAt": 1766860321542,
+      "history": []
     }
   ]
 }
