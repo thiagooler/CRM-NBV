@@ -3755,6 +3755,18 @@
       "waiting": false,
       "createdAt": 1766862677300,
       "history": []
+    },
+    {
+      "id": "ped-1766862737335",
+      "client": "thalia",
+      "phone": "+554284337863",
+      "chat_id": "573016518",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862737335,
+      "history": []
     }
   ]
 }
