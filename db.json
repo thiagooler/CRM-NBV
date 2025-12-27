@@ -1288,11 +1288,17 @@
       "phone": "+554298519785",
       "chat_id": "849580721",
       "product": "Pedido via Bot",
-      "dueDate": "",
-      "status": "approval",
+      "dueDate": "2026-01-26",
+      "status": "doing",
       "waiting": false,
       "createdAt": 1766849450516,
-      "history": []
+      "history": [
+        {
+          "from": "approval",
+          "to": "doing",
+          "date": 1766862576794
+        }
+      ]
     },
     {
       "id": "ped-1766850444409",
