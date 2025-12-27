@@ -3914,6 +3914,18 @@
       "waiting": false,
       "createdAt": 1766862892620,
       "history": []
+    },
+    {
+      "id": "ped-1766862905406",
+      "client": "Eduardo Anschau",
+      "phone": "+554284032856",
+      "chat_id": "638852337",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862905406,
+      "history": []
     }
   ]
 }
