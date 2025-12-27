@@ -1629,6 +1629,18 @@
       "waiting": true,
       "createdAt": 1766857852958,
       "history": []
+    },
+    {
+      "id": "ped-1766857896051",
+      "client": "Cleverson Padilha",
+      "phone": "+554299462757",
+      "chat_id": "847846909",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766857896051,
+      "history": []
     }
   ]
 }
