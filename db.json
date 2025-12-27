@@ -2952,6 +2952,18 @@
       "waiting": true,
       "createdAt": 1766861272109,
       "history": []
+    },
+    {
+      "id": "ped-1766861278805",
+      "client": "Claudineia",
+      "phone": "+554299587570",
+      "chat_id": "777792274",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861278805,
+      "history": []
     }
   ]
 }
