@@ -2237,7 +2237,7 @@
       "chat_id": "848223634",
       "product": "Pedido via Bot",
       "dueDate": "2026-01-26",
-      "status": "doing",
+      "status": "approval",
       "waiting": false,
       "createdAt": 1766859856208,
       "history": [
@@ -2245,8 +2245,14 @@
           "from": "approval",
           "to": "doing",
           "date": 1766863366493
+        },
+        {
+          "from": "doing",
+          "to": "approval",
+          "date": 1766877213098
         }
-      ]
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766860321542",
