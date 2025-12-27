@@ -3803,6 +3803,18 @@
       "waiting": false,
       "createdAt": 1766862760854,
       "history": []
+    },
+    {
+      "id": "ped-1766862768795",
+      "client": "Tiago Rocha",
+      "phone": "+554298294464",
+      "chat_id": "849494830",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862768795,
+      "history": []
     }
   ]
 }
