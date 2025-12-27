@@ -3779,6 +3779,18 @@
       "waiting": false,
       "createdAt": 1766862745702,
       "history": []
+    },
+    {
+      "id": "ped-1766862754253",
+      "client": "Cliente Bot",
+      "phone": "+554299461903",
+      "chat_id": "569275106",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862754253,
+      "history": []
     }
   ]
 }
