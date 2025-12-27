@@ -3588,6 +3588,18 @@
       "waiting": false,
       "createdAt": 1766862426667,
       "history": []
+    },
+    {
+      "id": "ped-1766862458842",
+      "client": "Lariani",
+      "phone": "+554298058649",
+      "chat_id": "849496649",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862458842,
+      "history": []
     }
   ]
 }
