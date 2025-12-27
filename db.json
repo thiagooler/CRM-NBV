@@ -1401,6 +1401,18 @@
       "waiting": false,
       "createdAt": 1766856559964,
       "history": []
+    },
+    {
+      "id": "ped-1766856668220",
+      "client": "Claudineia",
+      "phone": "+554298731123",
+      "chat_id": "457652621",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766856668220,
+      "history": []
     }
   ]
 }
