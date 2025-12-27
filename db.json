@@ -3863,6 +3863,18 @@
       "waiting": false,
       "createdAt": 1766862820534,
       "history": []
+    },
+    {
+      "id": "ped-1766862858872",
+      "client": "Bianca bini kfaszeniak",
+      "phone": "+554299974114",
+      "chat_id": "477662653",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862858872,
+      "history": []
     }
   ]
 }
