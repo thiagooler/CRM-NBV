@@ -182,10 +182,12 @@
             </select>
             <div id="opt-move">
                 <label>Mover para:</label><select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select>
-                <div style="margin-top:10px; background:#e3f2fd; padding:10px; border-radius:4px;">
-                    <input type="checkbox" id="chkMoveWait" onchange="updateIntegratorCode()">
-                    <label for="chkMoveWait">Já marcar como <b>Aguardando Cliente</b>?</label>
-                </div>
+                <label style="margin-top:10px; display:block;">Status do Semáforo:</label>
+                <select id="moveWaitSelect" class="inp-full" onchange="updateIntegratorCode()">
+                    <option value="keep">🔄 Manter atual (Não alterar)</option>
+                    <option value="true">🟡 Mudar para Aguardando</option>
+                    <option value="false">🟢 Mudar para Execução</option>
+                </select>
             </div>
             <div id="opt-color" style="display:none;"><label>Definir Status:</label><select id="integrationColorSelect" class="inp-full" onchange="updateIntegratorCode()"><option value="true">🟡 Aguardando Cliente</option><option value="false">🟢 Em Execução</option></select></div>
             <h4 style="margin-bottom:5px; color:#333;">1. URL</h4><div class="header-row"><span class="header-val" id="dispUrl" style="width:80%">...</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('dispUrl')">Copiar</button></span></div>
@@ -221,7 +223,7 @@
             setInterval(() => loadData(true), 30000); // 30s para performance
         }
 
-        // --- GLOBAL HELPERS (RESTAURADOS) ---
+        // --- GLOBAL HELPERS (FUNÇÕES OBRIGATÓRIAS) ---
         function showStatus(m,c) { const e=document.getElementById('statusMsg'); if(e) { e.innerText=m; e.style.background=c; e.style.display='block'; } } 
         function hideStatus() { const e=document.getElementById('statusMsg'); if(e) e.style.display='none'; } 
 
@@ -364,7 +366,18 @@
         // --- INTEGRADOR & UTILS ---
         function openIntegrator() { const t = localStorage.getItem('warrior_gh_token'); const tkInput = document.getElementById('integrationToken'); if(t && tkInput) tkInput.value = t; const s = document.getElementById('integrationColSelect'); if(s) { s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); } toggleIntegratorOptions(); document.getElementById('integratorModal').showModal(); }
         function toggleIntegratorOptions() { const type = document.getElementById('integrationActionType').value; document.getElementById('opt-move').style.display = type === 'move' ? 'block' : 'none'; document.getElementById('opt-color').style.display = type === 'color' ? 'block' : 'none'; updateIntegratorCode(); }
-        function updateIntegratorCode() { const tkEl = document.getElementById('integrationToken'); const token = tkEl ? tkEl.value.trim() : ''; if(token) localStorage.setItem('warrior_gh_token', token); const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`; document.getElementById('dispUrl').innerText = url; const headers = [{ k: 'Authorization', v: `token ${token || 'ghp_SEU_TOKEN'}` }, { k: 'Accept', v: 'application/vnd.github.v3+json' }, { k: 'Content-Type', v: 'application/json' }, { k: 'User-Agent', v: 'WarriorBot' }]; const list = document.getElementById('headersList'); if(list) { list.innerHTML = ''; headers.forEach(h => { const safeKey = h.k.replace(/-/g,''); list.innerHTML += `<div class="header-row"><span class="header-key">${h.k}</span><span class="header-val" id="val-${safeKey}">${h.v}</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('val-${safeKey}')">Copiar</button></span></div>`; }); } const type = document.getElementById('integrationActionType').value; let json = {}; if (type === 'move') { const col = document.getElementById('integrationColSelect').value; const waitChk = document.getElementById('chkMoveWait'); const isWait = waitChk ? waitChk.checked : false; json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}", "waiting": isWait } }; } else if (type === 'color') { const isWaiting = document.getElementById('integrationColorSelect').value === 'true'; json = { "event_type": "crm_event", "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; } else if (type === 'delete') { json = { "event_type": "crm_event", "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; } document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); }
+        function updateIntegratorCode() { const tkEl = document.getElementById('integrationToken'); const token = tkEl ? tkEl.value.trim() : ''; if(token) localStorage.setItem('warrior_gh_token', token); const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`; document.getElementById('dispUrl').innerText = url; const headers = [{ k: 'Authorization', v: `token ${token || 'ghp_SEU_TOKEN'}` }, { k: 'Accept', v: 'application/vnd.github.v3+json' }, { k: 'Content-Type', v: 'application/json' }, { k: 'User-Agent', v: 'WarriorBot' }]; const list = document.getElementById('headersList'); if(list) { list.innerHTML = ''; headers.forEach(h => { const safeKey = h.k.replace(/-/g,''); list.innerHTML += `<div class="header-row"><span class="header-key">${h.k}</span><span class="header-val" id="val-${safeKey}">${h.v}</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('val-${safeKey}')">Copiar</button></span></div>`; }); } const type = document.getElementById('integrationActionType').value; let json = {}; 
+        if (type === 'move') { 
+            const col = document.getElementById('integrationColSelect').value; 
+            const waitSel = document.getElementById('moveWaitSelect').value;
+            let waitPayload; 
+            if(waitSel === 'true') waitPayload = true; 
+            else if(waitSel === 'false') waitPayload = false; 
+            // if 'keep', waitPayload stays undefined
+            
+            json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}", "waiting": waitPayload } }; 
+        } 
+        else if (type === 'color') { const isWaiting = document.getElementById('integrationColorSelect').value === 'true'; json = { "event_type": "crm_event", "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; } else if (type === 'delete') { json = { "event_type": "crm_event", "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; } document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); }
         async function sendToGitHub(realAction, payload) { const t = getToken(); if(!t) { alert("Token?"); return; } const body = { event_type: "crm_event", client_payload: { real_action: realAction, ...payload } }; try { const r = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, { method: 'POST', headers: { 'Authorization': `token ${t}`, 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) }); if(!r.ok) throw new Error(r.status); } catch(e) { alert("Erro Envio: "+e.message); throw e; } }
         function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); } function copyLink(id) { navigator.clipboard.writeText(window.location.href.replace('index.html','').split('?')[0] + 'rastreio/?id='+id); alert("Link Rastreio Copiado!"); } function closeModal(id) { document.getElementById(id).close(); } 
         function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; } 
