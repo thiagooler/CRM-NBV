@@ -4160,6 +4160,18 @@
       "waiting": false,
       "createdAt": 1766863195032,
       "history": []
+    },
+    {
+      "id": "ped-1766863207484",
+      "client": "Nadir Muller",
+      "phone": "+554284135487",
+      "chat_id": "481368068",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766863207484,
+      "history": []
     }
   ]
 }
