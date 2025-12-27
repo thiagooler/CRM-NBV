@@ -1289,6 +1289,18 @@
       "waiting": true,
       "createdAt": 1766850444409,
       "history": []
+    },
+    {
+      "id": "ped-1766850806080",
+      "client": "Letice Pacheco",
+      "phone": "+554284278119",
+      "chat_id": "850061489",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766850806080,
+      "history": []
     }
   ]
 }
