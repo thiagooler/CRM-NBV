@@ -1385,24 +1385,6 @@
       ]
     },
     {
-      "id": "ped-1766852124863",
-      "client": "Selma Santos",
-      "phone": "+554299066049",
-      "chat_id": "674403945",
-      "product": "Pedido via Bot",
-      "dueDate": "2025-12-30",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "createdAt": 1766852124863,
-      "history": [
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1766867585543
-        }
-      ]
-    },
-    {
       "id": "ped-1766853602843",
       "client": "Jesilaine",
       "phone": "+554299732944",
