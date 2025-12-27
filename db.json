@@ -1473,6 +1473,18 @@
       "waiting": false,
       "createdAt": 1766857537107,
       "history": []
+    },
+    {
+      "id": "ped-1766857562918",
+      "client": "Lhs",
+      "phone": "+554298314648",
+      "chat_id": "847841464",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766857562918,
+      "history": []
     }
   ]
 }
