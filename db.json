@@ -4076,6 +4076,18 @@
       "waiting": false,
       "createdAt": 1766863090593,
       "history": []
+    },
+    {
+      "id": "ped-1766863098475",
+      "client": "Juliane Marcondes",
+      "phone": "+554284440925",
+      "chat_id": "477998770",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766863098475,
+      "history": []
     }
   ]
 }
