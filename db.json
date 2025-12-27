@@ -2892,6 +2892,18 @@
       "waiting": true,
       "createdAt": 1766861227718,
       "history": []
+    },
+    {
+      "id": "ped-1766861237761",
+      "client": "Jeise",
+      "phone": "+554299119703",
+      "chat_id": "506126285",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861237761,
+      "history": []
     }
   ]
 }
