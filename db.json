@@ -4178,6 +4178,18 @@
       "waiting": false,
       "createdAt": 1766863207484,
       "history": []
+    },
+    {
+      "id": "ped-1766863336775",
+      "client": "maristela",
+      "phone": "+554284335403",
+      "chat_id": "573016980",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766863336775,
+      "history": []
     }
   ]
 }
