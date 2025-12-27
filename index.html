@@ -92,7 +92,7 @@
         .btn-wa { background: #dcf8c6; color: #075e54; display: flex; align-items: center; gap: 5px; padding: 6px 12px; } .btn-wa:hover { background: #25d366; color: white; }
         .btn-csv { background: #36b37e; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         
-        /* COL ITEM (CONFIG) - NOVO */
+        /* COL ITEM (CONFIG) */
         .col-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px; border: 1px solid #eee; }
         .col-inputs { flex-grow: 1; display: flex; gap: 5px; flex-direction: column; }
         .col-row { display: flex; gap: 5px; }
@@ -189,7 +189,7 @@
         const REPO_OWNER = 'thiagooler'; const REPO_NAME = 'CRM-NBV';
         let columnsConfig = {'todo': { title: '📥 Novos', color: '#ff5630', days: 0 }, 'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 }, 'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }};
         let columnOrder = ['todo', 'doing', 'done'];
-        let orders = []; let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let dragSrcEl = null; let myChart = null;
+        let orders = []; let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let myChart = null;
         let searchTerm = ''; 
 
         function getToken() { const p = new URLSearchParams(window.location.search); const t = p.get('token'); if(t) { localStorage.setItem('warrior_gh_token', t); return t; } return localStorage.getItem('warrior_gh_token'); }
@@ -197,13 +197,20 @@
             const t = getToken(); const tkDisp = document.getElementById('tokenDisplay'); if(tkDisp) tkDisp.value = t ? t.substring(0,10) + '...' : 'Não configurado'; if(!t) alert("Configure seu Token!"); 
             const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
             const savedWait = localStorage.getItem('warrior_crm_hideWaiting'); if(savedWait) hideWaiting = JSON.parse(savedWait);
+            
+            // MAGIC SCROLL NO KANBAN
             const slider = document.getElementById('kanbanView');
-            if (slider) { slider.addEventListener('wheel', (e) => { if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; } }); }
+            if (slider) {
+                slider.addEventListener('wheel', (e) => {
+                    if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; }
+                });
+            }
+
             await loadData();
             setInterval(() => loadData(true), 15000);
         }
 
-        // --- BUSCA AVANÇADA ---
+        // --- BUSCA ---
         function handleSearch(val) { searchTerm = val.toLowerCase(); if(currentView === 'kanban') renderBoard(); else if(currentView === 'timeline') renderTimeline(); }
         function matchesSearch(order) { if(!searchTerm) return true; const term = searchTerm; const name = (order.client || '').toLowerCase(); const id = (order.id || '').toLowerCase(); const prod = (order.product || '').toLowerCase(); const rawPhone = (order.phone || '').toLowerCase(); const cleanPhone = rawPhone.replace(/\D/g, ''); return name.includes(term) || id.includes(term) || prod.includes(term) || rawPhone.includes(term) || cleanPhone.includes(term); }
         function scrollBoard(direction) { const slider = document.getElementById('kanbanView'); slider.scrollBy({ left: direction * 320, behavior: 'smooth' }); }
@@ -240,6 +247,7 @@
             return { total: totalDays, stage: stageDays };
         }
 
+        // --- DRAG FUNCTIONS RESTAURADAS ---
         function renderBoard() {
             const b = document.getElementById('kanbanView'); if(!b) return; b.innerHTML = ''; 
             columnOrder.forEach(k => { 
@@ -252,6 +260,27 @@
             });
         }
 
+        function createCard(o, c) { 
+            const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; 
+            const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
+            const wa = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
+            const times = calculateTime(o);
+            d.innerHTML = `<div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-timers"><span title="Nesta etapa"><i class="fa-regular fa-clock"></i> ${times.stage}d</span><span title="Total"><i class="fa-solid fa-history"></i> ${times.total}d</span></div><div class="card-actions">${wa}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
+        }
+
+        // FUNÇÕES DE DRAG PARA CARDS
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); } 
+        function allowDrop(ev) { ev.preventDefault(); } 
+        async function drop(ev) { 
+            ev.preventDefault(); 
+            const id = ev.dataTransfer.getData("text"); 
+            const col = ev.target.closest('.card-list'); 
+            if (!col) return; 
+            const ns = col.id; 
+            if(orders.find(o=>o.id===id).status !== ns) changeStatus(id, ns); 
+        }
+
+        // --- RESTO ---
         function renderTimeline() {
             const c = document.getElementById('timelineView'); if(!c) return; c.innerHTML = ''; 
             const s = [...orders].sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); 
@@ -261,14 +290,6 @@
                 const wa = o.phone ? `<button class="btn-icon btn-wa" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
                 c.innerHTML += `<div class="timeline-item" style="border-left-color:${col.color}"><div class="tl-info"><div class="tl-client"><span class="status-dot ${dotClass}"></span>${o.client}</div><div class="tl-product">${o.product}</div><div class="tl-meta"><span class="tl-date" style="color:${cl};border:1px solid ${cl}">${formatDate(o.dueDate)}</span><span style="font-size:0.8em;color:${col.color}"><i class="fa-solid fa-circle" style="font-size:0.6em"></i> ${col.title}</span></div></div><div class="tl-actions">${wa}<select class="status-select" onchange="changeStatus('${o.id}',this.value)">${opts}</select><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button></div></div>`; 
             }); 
-        }
-
-        function createCard(o, c) { 
-            const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; 
-            const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
-            const wa = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
-            const times = calculateTime(o);
-            d.innerHTML = `<div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-timers"><span title="Nesta etapa"><i class="fa-regular fa-clock"></i> ${times.stage}d</span><span title="Total"><i class="fa-solid fa-history"></i> ${times.total}d</span></div><div class="card-actions">${wa}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
         }
 
         function renderReports() {
@@ -297,59 +318,20 @@
         function openEditOrder(id) { const o = orders.find(ord => ord.id === id); if(!o) return; document.getElementById('editOrderId').value = o.id; document.getElementById('editClientName').value = o.client; document.getElementById('editPhone').value = o.phone||''; document.getElementById('editProduct').value = o.product; document.getElementById('editDueDate').value = o.dueDate; document.getElementById('editOrderModal').showModal(); }
         async function saveOrderEdits() { const id = document.getElementById('editOrderId').value; const c = document.getElementById('editClientName').value; const ph = document.getElementById('editPhone').value; const p = document.getElementById('editProduct').value; const d = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=c; orders[idx].phone=ph; orders[idx].product=p; orders[idx].dueDate=d; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); } closeModal('editOrderModal'); try { await sendToGitHub('update_order', { id, client: c, phone: ph, product: p, dueDate: d }); } catch(e) {} }
         async function changeStatus(id, st) { const i = orders.findIndex(o => o.id === id); if(i === -1) return; const days = columnsConfig[st]?.days || 0; let nd = null; if(days>0) { const d = new Date(); d.setDate(d.getDate()+days); nd = d.toISOString().split('T')[0]; orders[i].dueDate = nd; } orders[i].status = st; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToGitHub('update_status', { id, status: st, newDate: nd }); } catch(e) {} }
-        async function drop(ev) { ev.preventDefault(); const id = ev.dataTransfer.getData("text"); const col = ev.target.closest('.card-list'); if (!col) return; const ns = col.id; if(orders.find(o=>o.id===id).status !== ns) changeStatus(id, ns); }
-        async function addColumn() { const t = document.getElementById('newColTitle').value; if(!t) return; const id = t.toLowerCase().replace(/[^a-z0-9]/g, '')+'_'+Math.floor(Math.random()*1000); columnsConfig[id] = { title: t, color: document.getElementById('newColColor').value, days: parseInt(document.getElementById('newColDays').value)||0 }; columnOrder.push(id); document.getElementById('newColTitle').value = ''; openSettings(); }
-        async function removeColumn(k) { if(!confirm("Remover?")) return; delete columnsConfig[k]; columnOrder = columnOrder.filter(id => id !== k); openSettings(); }
-        async function deleteOrder(id) { if(confirm('Apagar?')) { orders = orders.filter(o => o.id !== id); if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToGitHub('delete_order', { id }); } catch(e) {} } }
-        
-        // --- SALVAR EM LOTE (A MÁGICA ACONTECE AQUI) ---
-        function openSettings() { 
-            const l = document.getElementById('columnsList'); 
-            l.innerHTML = ''; 
-            columnOrder.forEach((k, index) => { 
-                if(columnsConfig[k]) { 
-                    const c = columnsConfig[k]; 
-                    const d = document.createElement('div'); 
-                    d.className='col-item'; 
-                    d.innerHTML = `
-                        <input type="number" class="order-input" data-key="${k}" value="${index + 1}">
-                        <div class="status-dot" style="background:${c.color}; margin-left:5px;"></div>
-                        <div class="col-inputs"><input class="inp-full" style="margin:0;padding:5px;" value="${c.title}" onchange="columnsConfig['${k}'].title=this.value"><div class="col-row"><input type="number" class="inp-mini" value="${c.days}" onchange="columnsConfig['${k}'].days=parseInt(this.value)"><input type="color" style="height:30px;" value="${c.color}" onchange="columnsConfig['${k}'].color=this.value"></div></div><button onclick="removeColumn('${k}')" style="color:red;border:none;background:none;"><i class="fa-solid fa-trash"></i></button>`; 
-                    l.appendChild(d); 
-                } 
-            }); 
-            document.getElementById('settingsModal').showModal(); 
-        }
-
         async function saveAllColumns() {
             const inputs = document.querySelectorAll('.order-input');
             const newOrderMap = [];
-            
-            inputs.forEach(inp => {
-                newOrderMap.push({
-                    key: inp.dataset.key,
-                    order: parseInt(inp.value) || 999 
-                });
-            });
-
+            inputs.forEach(inp => { newOrderMap.push({ key: inp.dataset.key, order: parseInt(inp.value) || 999 }); });
             newOrderMap.sort((a, b) => a.order - b.order);
             columnOrder = newOrderMap.map(item => item.key);
-
             if(currentView === 'kanban') renderBoard();
             showStatus('Salvando...', '#ffab00');
-            
-            try { 
-                await sendToGitHub('save_columns', { columns: columnsConfig, order: columnOrder }); 
-                showStatus('✅ Salvo!', '#36b37e'); 
-                setTimeout(hideStatus, 2000); 
-            } catch(e) { 
-                showStatus('❌ Erro!', '#bf2600'); 
-            }
+            try { await sendToGitHub('save_columns', { columns: columnsConfig, order: columnOrder }); showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); }
         }
-
-        function handleDragStart(e) { e.dataTransfer.setData("text", e.target.id); } 
-        function handleDragOver(e) { e.preventDefault(); } 
-        function handleDrop(e) { e.preventDefault(); }
+        async function addColumn() { const t = document.getElementById('newColTitle').value; if(!t) return; const id = t.toLowerCase().replace(/[^a-z0-9]/g, '')+'_'+Math.floor(Math.random()*1000); columnsConfig[id] = { title: t, color: document.getElementById('newColColor').value, days: parseInt(document.getElementById('newColDays').value)||0 }; columnOrder.push(id); document.getElementById('newColTitle').value = ''; openSettings(); }
+        async function removeColumn(k) { if(!confirm("Remover?")) return; delete columnsConfig[k]; columnOrder = columnOrder.filter(id => id !== k); openSettings(); }
+        async function deleteOrder(id) { if(confirm('Apagar?')) { orders = orders.filter(o => o.id !== id); if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToGitHub('delete_order', { id }); } catch(e) {} } }
+        function openSettings() { const l = document.getElementById('columnsList'); l.innerHTML = ''; columnOrder.forEach((k, index) => { if(columnsConfig[k]) { const c = columnsConfig[k]; const d = document.createElement('div'); d.className='col-item'; d.innerHTML = `<input type="number" class="order-input" data-key="${k}" value="${index + 1}"><div class="status-dot" style="background:${c.color}; margin-left:5px;"></div><div class="col-inputs"><input class="inp-full" style="margin:0;padding:5px;" value="${c.title}" onchange="columnsConfig['${k}'].title=this.value"><div class="col-row"><input type="number" class="inp-mini" value="${c.days}" onchange="columnsConfig['${k}'].days=parseInt(this.value)"><input type="color" style="height:30px;" value="${c.color}" onchange="columnsConfig['${k}'].color=this.value"></div></div><button onclick="removeColumn('${k}')" style="color:red;border:none;background:none;"><i class="fa-solid fa-trash"></i></button>`; l.appendChild(d); } }); document.getElementById('settingsModal').showModal(); }
 
         document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
         document.addEventListener('DOMContentLoaded', init);
