@@ -1461,6 +1461,18 @@
       "waiting": false,
       "createdAt": 1766857437817,
       "history": []
+    },
+    {
+      "id": "ped-1766857537107",
+      "client": "Adriane",
+      "phone": "+554298175704",
+      "chat_id": "846330543",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766857537107,
+      "history": []
     }
   ]
 }
