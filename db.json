@@ -3234,6 +3234,18 @@
       "waiting": false,
       "createdAt": 1766861875471,
       "history": []
+    },
+    {
+      "id": "ped-1766861934660",
+      "client": "vanessa sibelee",
+      "phone": "+554298478721",
+      "chat_id": "847832974",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766861934660,
+      "history": []
     }
   ]
 }
