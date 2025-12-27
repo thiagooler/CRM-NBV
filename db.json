@@ -2490,6 +2490,18 @@
       "waiting": true,
       "createdAt": 1766860934291,
       "history": []
+    },
+    {
+      "id": "ped-1766860937442",
+      "client": "NELCI",
+      "phone": "+554299932278",
+      "chat_id": "633357392",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766860937442,
+      "history": []
     }
   ]
 }
