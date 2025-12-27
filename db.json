@@ -3474,6 +3474,18 @@
       "waiting": false,
       "createdAt": 1766862259468,
       "history": []
+    },
+    {
+      "id": "ped-1766862267944",
+      "client": "Vilsinei",
+      "phone": "+554284240994",
+      "chat_id": "473291639",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862267944,
+      "history": []
     }
   ]
 }
