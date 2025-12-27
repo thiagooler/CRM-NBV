@@ -1900,6 +1900,18 @@
       "waiting": true,
       "createdAt": 1766859033911,
       "history": []
+    },
+    {
+      "id": "ped-1766859390324",
+      "client": "Emilii",
+      "phone": "+554299977258",
+      "chat_id": "847841292",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-06",
+      "status": "filadeproduo_612",
+      "waiting": false,
+      "createdAt": 1766859390324,
+      "history": []
     }
   ]
 }
