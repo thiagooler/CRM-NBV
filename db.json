@@ -3108,6 +3108,18 @@
       "waiting": true,
       "createdAt": 1766861374177,
       "history": []
+    },
+    {
+      "id": "ped-1766861385108",
+      "client": "Consegue me manda as fotos da festa junina da cresche",
+      "phone": "+554299919787",
+      "chat_id": "495595130",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861385108,
+      "history": []
     }
   ]
 }
