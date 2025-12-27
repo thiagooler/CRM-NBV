@@ -1177,11 +1177,17 @@
       "phone": "+554298089308",
       "chat_id": "851904176",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "doing",
+      "dueDate": "2025-12-30",
+      "status": "filadeatendimento_988",
       "waiting": false,
       "createdAt": 1766794927672,
-      "history": []
+      "history": [
+        {
+          "from": "doing",
+          "to": "filadeatendimento_988",
+          "date": 1766845269421
+        }
+      ]
     },
     {
       "id": "ped-1766831622522",
