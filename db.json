@@ -1325,6 +1325,18 @@
       "waiting": false,
       "createdAt": 1766853713079,
       "history": []
+    },
+    {
+      "id": "ped-1766853888315",
+      "client": "josneibraz86",
+      "phone": "+554284094703",
+      "chat_id": "849435438",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766853888315,
+      "history": []
     }
   ]
 }
