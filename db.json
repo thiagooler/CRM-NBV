@@ -2694,6 +2694,18 @@
       "waiting": true,
       "createdAt": 1766861054296,
       "history": []
+    },
+    {
+      "id": "ped-1766861066748",
+      "client": "Ana Elisa",
+      "phone": "+554299859814",
+      "chat_id": "497127951",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861066748,
+      "history": []
     }
   ]
 }
