@@ -4040,6 +4040,18 @@
       "waiting": false,
       "createdAt": 1766863065818,
       "history": []
+    },
+    {
+      "id": "ped-1766863075114",
+      "client": ".",
+      "phone": "+554298311589",
+      "chat_id": "760511798",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766863075114,
+      "history": []
     }
   ]
 }
