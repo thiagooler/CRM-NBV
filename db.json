@@ -2364,6 +2364,18 @@
       "waiting": true,
       "createdAt": 1766860827520,
       "history": []
+    },
+    {
+      "id": "ped-1766860834619",
+      "client": "Tatiane de Fátima Grando",
+      "phone": "+554298224787",
+      "chat_id": "682524465",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766860834619,
+      "history": []
     }
   ]
 }
