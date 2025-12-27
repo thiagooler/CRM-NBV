@@ -2478,6 +2478,18 @@
       "waiting": true,
       "createdAt": 1766860926885,
       "history": []
+    },
+    {
+      "id": "ped-1766860934291",
+      "client": "maryclaudia Cordeirob",
+      "phone": "+554284127762",
+      "chat_id": "775762342",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766860934291,
+      "history": []
     }
   ]
 }
