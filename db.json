@@ -3132,6 +3132,18 @@
       "waiting": true,
       "createdAt": 1766861396162,
       "history": []
+    },
+    {
+      "id": "ped-1766861406376",
+      "client": "Luciana dos Santos Antunes",
+      "phone": "+554298616067",
+      "chat_id": "464170311",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861406376,
+      "history": []
     }
   ]
 }
