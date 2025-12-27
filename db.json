@@ -3438,6 +3438,18 @@
       "waiting": false,
       "createdAt": 1766862174812,
       "history": []
+    },
+    {
+      "id": "ped-1766862197009",
+      "client": "Rosane",
+      "phone": "+554298071967",
+      "chat_id": "510102804",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862197009,
+      "history": []
     }
   ]
 }
