@@ -2145,11 +2145,17 @@
       "phone": "+554299831056",
       "chat_id": "848223634",
       "product": "Pedido via Bot",
-      "dueDate": "",
-      "status": "approval",
+      "dueDate": "2026-01-26",
+      "status": "doing",
       "waiting": false,
       "createdAt": 1766859856208,
-      "history": []
+      "history": [
+        {
+          "from": "approval",
+          "to": "doing",
+          "date": 1766863366493
+        }
+      ]
     },
     {
       "id": "ped-1766860321542",
