@@ -1666,6 +1666,19 @@
       "waiting": false,
       "createdAt": 1766858196128,
       "history": []
+    },
+    {
+      "id": "ped-1766858457785",
+      "client": "Márcia Brune",
+      "phone": "554299000667",
+      "chat_id": "847224803",
+      "product": "Manual",
+      "dueDate": "2025-12-27",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "createdAt": 1766858466656,
+      "finishedAt": null,
+      "history": []
     }
   ]
 }
