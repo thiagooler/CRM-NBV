@@ -3731,6 +3731,18 @@
       "waiting": false,
       "createdAt": 1766862608467,
       "history": []
+    },
+    {
+      "id": "ped-1766862677300",
+      "client": "Edenir De Castro",
+      "phone": "+554299606153",
+      "chat_id": "510106415",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862677300,
+      "history": []
     }
   ]
 }
