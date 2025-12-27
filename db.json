@@ -2274,6 +2274,18 @@
       "waiting": true,
       "createdAt": 1766860757440,
       "history": []
+    },
+    {
+      "id": "ped-1766860765991",
+      "client": "Neideliane vieira de Freitas",
+      "phone": "+554284159858",
+      "chat_id": "460485349",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766860765991,
+      "history": []
     }
   ]
 }
