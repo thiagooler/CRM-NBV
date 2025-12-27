@@ -3636,6 +3636,18 @@
       "waiting": false,
       "createdAt": 1766862478736,
       "history": []
+    },
+    {
+      "id": "ped-1766862487219",
+      "client": "Daniela aparecida Ribeiro de lima",
+      "phone": "+554298193828",
+      "chat_id": "456036906",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862487219,
+      "history": []
     }
   ]
 }
