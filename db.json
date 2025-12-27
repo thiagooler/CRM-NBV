@@ -3318,6 +3318,18 @@
       "waiting": false,
       "createdAt": 1766862016386,
       "history": []
+    },
+    {
+      "id": "ped-1766862035248",
+      "client": "Luana Kelner",
+      "phone": "+554299104547",
+      "chat_id": "463404354",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862035248,
+      "history": []
     }
   ]
 }
