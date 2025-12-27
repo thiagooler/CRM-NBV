@@ -1830,6 +1830,18 @@
       "waiting": true,
       "createdAt": 1766858800866,
       "history": []
+    },
+    {
+      "id": "ped-1766858805605",
+      "client": "Israel❤️❤️",
+      "phone": "+554299558505",
+      "chat_id": "847359061",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766858805605,
+      "history": []
     }
   ]
 }
