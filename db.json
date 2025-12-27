@@ -1485,6 +1485,18 @@
       "waiting": true,
       "createdAt": 1766857562918,
       "history": []
+    },
+    {
+      "id": "ped-1766857582212",
+      "client": "Maristela Da vega",
+      "phone": "+554299252276",
+      "chat_id": "523182277",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766857582212,
+      "history": []
     }
   ]
 }
