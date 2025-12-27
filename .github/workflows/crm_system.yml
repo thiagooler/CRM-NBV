@@ -1,4 +1,4 @@
-name: CRM Backend (Delete via Bot)
+name: CRM Backend (Combo Action)
 
 on:
   workflow_dispatch:
@@ -76,7 +76,7 @@ jobs:
                   product: payload.produto || 'Pedido',
                   dueDate: payload.prazo || '',
                   status: payload.status || 'todo',
-                  waiting: false,
+                  waiting: payload.waiting !== undefined ? payload.waiting : false, // ACEITA STATUS INICIAL
                   createdAt: now,
                   finishedAt: null,
                   history: []
@@ -108,15 +108,11 @@ jobs:
                 }
             }
 
-            // --- CORREÇÃO AQUI: DELETAR PELO BOT ---
             else if (action === 'delete_order') {
                 const targetId = payload.id;
                 const targetChatId = payload.chat_id;
-                
                 db.orders = db.orders.filter(o => {
-                    // Se o ID bater, apaga.
                     if (targetId && o.id === targetId) return false;
-                    // Se o CHAT_ID bater, apaga.
                     if (targetChatId && o.chat_id == targetChatId) return false;
                     return true;
                 });
@@ -143,9 +139,13 @@ jobs:
                     if (!db.orders[index].history) db.orders[index].history = [];
                     db.orders[index].history.push({ from: db.orders[index].status, to: newStatus, date: Date.now() });
                     if (newStatus === 'done') db.orders[index].finishedAt = Date.now();
+                    
                     db.orders[index].status = newStatus;
                     if (newDate) db.orders[index].dueDate = newDate;
                     if (payload.telefone) db.orders[index].phone = payload.telefone;
+                    
+                    // --- COMBO: ATUALIZA O SEMÁFORO JUNTO ---
+                    if (payload.waiting !== undefined) db.orders[index].waiting = payload.waiting;
                  } else {
                     const now = Date.now();
                     const novo = {
@@ -156,7 +156,7 @@ jobs:
                       product: 'Pedido via Bot',
                       dueDate: newDate || '',
                       status: newStatus,
-                      waiting: false,
+                      waiting: payload.waiting !== undefined ? payload.waiting : false, // STATUS INICIAL
                       createdAt: now,
                       history: []
                     };
