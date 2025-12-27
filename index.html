@@ -189,7 +189,7 @@
         const REPO_OWNER = 'thiagooler'; const REPO_NAME = 'CRM-NBV';
         let columnsConfig = {'todo': { title: '📥 Novos', color: '#ff5630', days: 0 }, 'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 }, 'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }};
         let columnOrder = ['todo', 'doing', 'done'];
-        let orders = []; let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let myChart = null;
+        let orders = []; let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let dragSrcEl = null; let myChart = null;
         let searchTerm = ''; 
 
         function getToken() { const p = new URLSearchParams(window.location.search); const t = p.get('token'); if(t) { localStorage.setItem('warrior_gh_token', t); return t; } return localStorage.getItem('warrior_gh_token'); }
@@ -203,7 +203,7 @@
             setInterval(() => loadData(true), 15000);
         }
 
-        // --- BUSCA ---
+        // --- BUSCA AVANÇADA ---
         function handleSearch(val) { searchTerm = val.toLowerCase(); if(currentView === 'kanban') renderBoard(); else if(currentView === 'timeline') renderTimeline(); }
         function matchesSearch(order) { if(!searchTerm) return true; const term = searchTerm; const name = (order.client || '').toLowerCase(); const id = (order.id || '').toLowerCase(); const prod = (order.product || '').toLowerCase(); const rawPhone = (order.phone || '').toLowerCase(); const cleanPhone = rawPhone.replace(/\D/g, ''); return name.includes(term) || id.includes(term) || prod.includes(term) || rawPhone.includes(term) || cleanPhone.includes(term); }
         function scrollBoard(direction) { const slider = document.getElementById('kanbanView'); slider.scrollBy({ left: direction * 320, behavior: 'smooth' }); }
@@ -311,7 +311,6 @@
                     const c = columnsConfig[k]; 
                     const d = document.createElement('div'); 
                     d.className='col-item'; 
-                    // Input sem onchange! Só um ID para ler depois.
                     d.innerHTML = `
                         <input type="number" class="order-input" data-key="${k}" value="${index + 1}">
                         <div class="status-dot" style="background:${c.color}; margin-left:5px;"></div>
@@ -323,24 +322,19 @@
         }
 
         async function saveAllColumns() {
-            // 1. Lê todos os inputs de ordem
             const inputs = document.querySelectorAll('.order-input');
             const newOrderMap = [];
             
             inputs.forEach(inp => {
                 newOrderMap.push({
                     key: inp.dataset.key,
-                    order: parseInt(inp.value) || 999 // Se vazio, joga pro fim
+                    order: parseInt(inp.value) || 999 
                 });
             });
 
-            // 2. Ordena o array baseado no input do usuário
             newOrderMap.sort((a, b) => a.order - b.order);
-
-            // 3. Atualiza a ordem global
             columnOrder = newOrderMap.map(item => item.key);
 
-            // 4. Salva e atualiza visual
             if(currentView === 'kanban') renderBoard();
             showStatus('Salvando...', '#ffab00');
             
@@ -353,8 +347,9 @@
             }
         }
 
-        // Sem drag handles
-        function handleDragStart(e) {} function handleDragOver(e) {} function handleDrop(e) {}
+        function handleDragStart(e) { e.dataTransfer.setData("text", e.target.id); } 
+        function handleDragOver(e) { e.preventDefault(); } 
+        function handleDrop(e) { e.preventDefault(); }
 
         document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
         document.addEventListener('DOMContentLoaded', init);
