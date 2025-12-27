@@ -1790,7 +1790,7 @@
       "product": "quer compra rminha moto",
       "dueDate": "2025-12-27",
       "status": "filadeatendimento_988",
-      "waiting": false,
+      "waiting": true,
       "createdAt": 1766858698636,
       "finishedAt": null,
       "history": []
