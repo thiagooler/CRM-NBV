@@ -3156,6 +3156,18 @@
       "waiting": false,
       "createdAt": 1766861415060,
       "history": []
+    },
+    {
+      "id": "ped-1766861425221",
+      "client": "Vanderleia",
+      "phone": "+554284112789",
+      "chat_id": "455604280",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766861425221,
+      "history": []
     }
   ]
 }
