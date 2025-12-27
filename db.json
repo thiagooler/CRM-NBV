@@ -1587,7 +1587,13 @@
       "status": "aguardandoseleo_897",
       "waiting": true,
       "createdAt": 1766857683162,
-      "history": []
+      "history": [
+        {
+          "from": "aguardandoseleo_897",
+          "to": "aguardandoseleo_897",
+          "date": 1766860646997
+        }
+      ]
     },
     {
       "id": "ped-1766857693444",
