@@ -3048,6 +3048,18 @@
       "waiting": true,
       "createdAt": 1766861338048,
       "history": []
+    },
+    {
+      "id": "ped-1766861345914",
+      "client": "Eroni Kuassniak",
+      "phone": "+554299665347",
+      "chat_id": "510100832",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861345914,
+      "history": []
     }
   ]
 }
