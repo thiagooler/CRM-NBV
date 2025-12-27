@@ -1177,8 +1177,8 @@
       "phone": "+554298089308",
       "chat_id": "851904176",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-30",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-01-26",
+      "status": "doing",
       "waiting": false,
       "createdAt": 1766794927672,
       "history": [
@@ -1186,6 +1186,11 @@
           "from": "doing",
           "to": "filadeatendimento_988",
           "date": 1766845269421
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "doing",
+          "date": 1766845910695
         }
       ]
     },
