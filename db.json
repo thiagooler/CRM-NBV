@@ -3390,6 +3390,18 @@
       "waiting": false,
       "createdAt": 1766862091256,
       "history": []
+    },
+    {
+      "id": "ped-1766862097702",
+      "client": "Mih",
+      "phone": "+554284212783",
+      "chat_id": "735221490",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862097702,
+      "history": []
     }
   ]
 }
