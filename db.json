@@ -649,8 +649,8 @@
       "phone": "+554299783258",
       "chat_id": "762236340",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-05",
-      "status": "filadeproduo_612",
+      "dueDate": "2026-01-16",
+      "status": "emproduo_216",
       "waiting": false,
       "createdAt": 1766721717857,
       "history": [
@@ -663,8 +663,14 @@
           "from": "payment",
           "to": "filadeproduo_612",
           "date": 1766788777676
+        },
+        {
+          "from": "filadeproduo_612",
+          "to": "emproduo_216",
+          "date": 1766868314600
         }
-      ]
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766721884409",
