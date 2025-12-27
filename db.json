@@ -4486,6 +4486,19 @@
       "waiting": false,
       "createdAt": 1766864195030,
       "history": []
+    },
+    {
+      "id": "ped-1766870455433",
+      "client": "Izabel Lima",
+      "phone": "+554284093726",
+      "chat_id": "455999916",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-30",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1766870455433,
+      "history": []
     }
   ]
 }
