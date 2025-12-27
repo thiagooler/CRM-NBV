@@ -75,8 +75,17 @@
       "client": "Marta ♥️ Alaelson",
       "chat_id": "841862022",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-22",
-      "status": "doing"
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "history": [
+        {
+          "from": "doing",
+          "to": "doing",
+          "date": 1766862866586
+        }
+      ],
+      "phone": "+554299025970",
+      "waiting": false
     },
     {
       "id": "ped-1766536646102",
