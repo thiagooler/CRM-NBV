@@ -2106,8 +2106,8 @@
       "phone": "+554299977258",
       "chat_id": "847841292",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-30",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-01-26",
+      "status": "payment",
       "waiting": false,
       "createdAt": 1766859390324,
       "history": [
@@ -2115,6 +2115,11 @@
           "from": "filadeproduo_612",
           "to": "filadeatendimento_988",
           "date": 1766862884626
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "payment",
+          "date": 1766866862856
         }
       ]
     },
