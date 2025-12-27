@@ -3,107 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acompanhe seu Pedido</title>
+    <title>Status do Pedido</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #0052cc; --bg: #f4f5f7; --text: #172b4d; --success: #36b37e; }
+        :root { --primary: #0052cc; --bg: #f4f5f7; --text: #172b4d; --success: #36b37e; --warning: #ffab00; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        .container { background: white; width: 100%; max-width: 450px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; padding: 25px; text-align: center; }
+        .container { background: white; width: 100%; max-width: 450px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); overflow: hidden; padding: 30px 25px; text-align: center; position: relative; }
         
-        h1 { margin: 0 0 10px 0; color: var(--primary); font-size: 1.5rem; }
-        p { color: #666; margin: 5px 0; font-size: 0.95rem; }
+        h1 { margin: 0 0 5px 0; color: var(--primary); font-size: 1.4rem; }
+        .subtitle { color: #666; margin: 0 0 25px 0; font-size: 0.9rem; }
         
-        /* CAIXA DE STATUS */
-        .status-box { background: #ebecf0; padding: 15px; border-radius: 8px; margin: 25px 0; border-left: 5px solid #ccc; text-align: left; transition: all 0.3s; }
-        .status-label { font-size: 0.8rem; text-transform: uppercase; font-weight: bold; color: #555; }
-        .status-current { font-size: 1.2rem; font-weight: bold; color: #333; margin-top: 5px; }
+        /* STATUS CARD PRINCIPAL */
+        .status-card { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 25px; border: 1px solid #eee; position: relative; overflow: hidden; }
+        .status-icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
+        .status-text { font-size: 1.3rem; font-weight: 800; color: #333; margin: 0; }
+        .status-sub { font-size: 0.85rem; color: #666; margin-top: 5px; }
         
-        /* TIMELINE DE PROGRESSO */
-        .timeline { display: flex; justify-content: space-between; margin-top: 30px; position: relative; }
-        .timeline::before { content: ''; position: absolute; top: 15px; left: 0; right: 0; height: 3px; background: #dfe1e6; z-index: 0; }
+        /* VARIAÇÕES DE STATUS */
+        .st-waiting { background: #fff8e1; border-color: #ffe082; }
+        .st-waiting .status-text { color: #ff8f00; }
+        .st-waiting .status-icon { animation: pulse 2s infinite; }
         
-        .step { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .step-dot { width: 30px; height: 30px; background: #dfe1e6; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.8rem; color: #fff; font-weight: bold; transition: 0.3s; border: 3px solid #fff; }
-        
-        .step.active .step-dot { background: var(--primary); box-shadow: 0 0 0 3px rgba(0,82,204,0.2); }
-        .step.completed .step-dot { background: var(--success); }
-        .step-title { font-size: 0.7rem; color: #999; margin-top: 8px; font-weight: bold; text-align: center; max-width: 60px; line-height: 1.2; }
-        .step.active .step-title { color: var(--primary); }
-        .step.completed .step-title { color: var(--success); }
+        .st-done { background: #e3fcef; border-color: #abf5d1; }
+        .st-done .status-text { color: #006644; }
 
-        /* INFO PEDIDO */
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px; }
-        .info-item label { display: block; font-size: 0.75rem; color: #888; font-weight: bold; text-transform: uppercase; }
-        .info-item div { font-weight: bold; color: #333; margin-top: 3px; }
+        /* METRICAS DE TEMPO */
+        .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; }
+        .metric-box { background: #f4f5f7; padding: 12px; border-radius: 8px; text-align: center; }
+        .metric-val { font-size: 1.1rem; font-weight: bold; color: #333; display: block; }
+        .metric-lbl { font-size: 0.7rem; text-transform: uppercase; color: #888; font-weight: bold; letter-spacing: 0.5px; }
 
-        .loading { color: #888; font-style: italic; }
-        .error { color: #bf2600; background: #ffebe6; padding: 10px; border-radius: 4px; display: none; }
+        /* TIMELINE */
+        .timeline-wrapper { margin: 30px 0; position: relative; padding: 0 10px; }
+        .timeline-line { position: absolute; top: 15px; left: 20px; right: 20px; height: 4px; background: #ebecf0; z-index: 0; border-radius: 2px; }
+        .timeline-steps { display: flex; justify-content: space-between; position: relative; z-index: 1; }
         
-        .btn-whatsapp { display: block; width: 100%; background: #25D366; color: white; text-decoration: none; padding: 12px; border-radius: 6px; font-weight: bold; margin-top: 25px; }
-        .btn-whatsapp:hover { background: #1ebc57; }
+        .step { display: flex; flex-direction: column; align-items: center; flex: 1; opacity: 0.5; transition: 0.3s; }
+        .step.active { opacity: 1; transform: scale(1.05); }
+        .step.completed { opacity: 1; }
+        
+        .step-dot { width: 32px; height: 32px; background: #fff; border: 4px solid #dfe1e6; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.8rem; color: #fff; font-weight: bold; margin-bottom: 8px; transition: 0.3s; }
+        
+        .step.active .step-dot { border-color: var(--primary); background: var(--primary); box-shadow: 0 0 0 4px rgba(0,82,204,0.1); }
+        .step.completed .step-dot { border-color: var(--success); background: var(--success); }
+        
+        .step-label { font-size: 0.7rem; font-weight: bold; color: #42526e; line-height: 1.2; max-width: 60px; }
+
+        /* INFO FOOTER */
+        .info-footer { border-top: 1px solid #eee; padding-top: 20px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        .info-group h4 { margin: 0 0 3px 0; font-size: 0.8rem; color: #888; text-transform: uppercase; }
+        .info-group div { font-weight: bold; color: #333; font-size: 0.95rem; }
+
+        .btn-whatsapp { background: #25D366; color: white; text-decoration: none; padding: 10px 15px; border-radius: 25px; font-weight: bold; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-whatsapp:hover { background: #1ebc57; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+
+        .loading { color: #888; font-style: italic; margin-top: 20px; }
+        .error { color: #bf2600; background: #ffebe6; padding: 15px; border-radius: 8px; display: none; margin-top: 20px; }
+        
+        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1><i class="fa-solid fa-box-open"></i> Status do Pedido</h1>
+        <h1>Status do Pedido</h1>
+        <div class="subtitle">Acompanhe o progresso em tempo real</div>
         
-        <div id="loading" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Buscando seu pedido...</div>
-        <div id="error" class="error">Pedido não encontrado. Verifique o link.</div>
+        <div id="loading" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Localizando seu pedido...</div>
+        <div id="error" class="error"></div>
 
         <div id="content" style="display:none;">
-            <p>Olá, <b id="clientName">...</b></p>
             
-            <div class="status-box" id="statusBox">
-                <div class="status-label">Situação Atual</div>
-                <div class="status-current" id="currentStatus">...</div>
+            <div id="statusCard" class="status-card">
+                <span id="statusIcon" class="status-icon">🚀</span>
+                <h2 id="statusTitle" class="status-text">...</h2>
+                <div id="statusMsg" class="status-sub">...</div>
             </div>
 
-            <div class="timeline" id="progressBar"></div>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <span class="metric-val" id="timeStage">0 dias</span>
+                    <span class="metric-lbl">Nesta Etapa</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-val" id="timeTotal">0 dias</span>
+                    <span class="metric-lbl">Tempo Total</span>
+                </div>
+            </div>
 
-            <div class="info-grid">
-                <div class="info-item">
-                    <label>Produto</label>
+            <div class="timeline-wrapper">
+                <div class="timeline-line"></div>
+                <div class="timeline-steps" id="timelineSteps"></div>
+            </div>
+
+            <div class="info-footer">
+                <div class="info-group">
+                    <h4>Produto</h4>
                     <div id="productName">...</div>
                 </div>
-                <div class="info-item">
-                    <label>Previsão</label>
-                    <div id="dueDate">...</div>
-                </div>
+                <a href="#" id="waLink" class="btn-whatsapp" target="_blank">
+                    <i class="fa-brands fa-whatsapp"></i> Ajuda
+                </a>
             </div>
-
-            <a href="https://wa.me/5500000000000" class="btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Entrar em contato</a>
         </div>
     </div>
 
     <script>
-        // CONFIGURAÇÃO: Coloque seu número de whats aqui se quiser
-        const WHATSAPP_NUM = "5542998370150"; 
+        // CONFIG: SEU NÚMERO DE SUPORTE
+        const SUPPORT_NUMBER = "5500000000000"; 
 
         async function loadOrder() {
             const urlParams = new URLSearchParams(window.location.search);
-            const searchId = urlParams.get('id'); // Pega o ID da URL
+            const searchId = urlParams.get('id');
 
-            if (!searchId) {
-                showError("Link inválido (sem ID).");
-                return;
-            }
+            if (!searchId) { showError("Link inválido. Verifique o endereço."); return; }
 
             try {
-                // Sobe um nível (../) para pegar o db.json na raiz
                 const response = await fetch('../db.json?t=' + new Date().getTime());
                 if (!response.ok) throw new Error("Erro de conexão");
                 const data = await response.json();
 
-                let orders = [];
-                let columns = {};
-                let orderList = [];
+                let orders = []; let columns = {}; let orderList = [];
 
-                // Lida com a estrutura do JSON (Antigo ou Novo)
                 if (Array.isArray(data)) {
                     orders = data;
-                    // Se for antigo, cria colunas padrão
                     columns = {'todo':{title:'Novos', color:'#ff5630'}, 'doing':{title:'Produção', color:'#ffab00'}, 'done':{title:'Finalizado', color:'#36b37e'}};
                     orderList = ['todo', 'doing', 'done'];
                 } else {
@@ -112,86 +137,152 @@
                     orderList = data.columnOrder || Object.keys(columns);
                 }
 
-                // PROCURA O CLIENTE (Pelo ID Interno OU Pelo ID do BotConversa)
                 const order = orders.find(o => o.id === searchId || o.chat_id === searchId);
 
-                if (!order) {
-                    showError("Pedido não localizado.");
-                    return;
-                }
+                if (!order) { showError("Pedido não encontrado."); return; }
 
-                renderOrder(order, columns, orderList);
+                renderPage(order, columns, orderList);
 
             } catch (e) {
                 console.error(e);
-                showError("Erro ao buscar dados.");
+                showError("Não foi possível carregar os dados.");
             }
         }
 
-        function renderOrder(order, columns, orderList) {
+        function calculateTime(order) {
+            const now = new Date();
+            const created = new Date(order.createdAt || Date.now()); // Fallback para hoje se for antigo
+            
+            // Total
+            const totalMs = now - created;
+            const totalDays = Math.floor(totalMs / (1000 * 60 * 60 * 24));
+
+            // Etapa
+            let lastMove = created;
+            if (order.history && order.history.length > 0) {
+               const lastEntry = order.history[order.history.length - 1];
+               if(lastEntry && lastEntry.date) lastMove = new Date(lastEntry.date);
+            }
+            const stageMs = now - lastMove;
+            const stageDays = Math.floor(stageMs / (1000 * 60 * 60 * 24));
+
+            return { 
+                total: totalDays === 0 ? 'Hoje' : totalDays + 'd', 
+                stage: stageDays === 0 ? 'Hoje' : stageDays + 'd' 
+            };
+        }
+
+        function renderPage(order, columns, orderList) {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('content').style.display = 'block';
 
-            // Preenche Textos
-            document.getElementById('clientName').innerText = order.client;
-            document.getElementById('productName').innerText = order.product;
+            // 1. Dados Básicos
+            document.getElementById('productName').innerText = order.product.length > 20 ? order.product.substring(0,20)+'...' : order.product;
+            document.getElementById('waLink').href = `https://wa.me/${SUPPORT_NUMBER}?text=Olá, preciso de ajuda com o pedido: ${order.product}`;
+
+            // 2. Cálculo de Tempo
+            const times = calculateTime(order);
+            document.getElementById('timeStage').innerText = times.stage;
+            document.getElementById('timeTotal').innerText = times.total;
+
+            // 3. Status Principal (Lógica do Semáforo)
+            const card = document.getElementById('statusCard');
+            const icon = document.getElementById('statusIcon');
+            const title = document.getElementById('statusTitle');
+            const msg = document.getElementById('statusMsg');
             
-            // Formata Data
-            if (order.dueDate) {
-                const dateParts = order.dueDate.split('-');
-                document.getElementById('dueDate').innerText = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+            const currentStatusName = columns[order.status] ? columns[order.status].title : 'Processando';
+
+            // Reset classes
+            card.className = 'status-card';
+
+            if (order.status === 'done') {
+                // FINALIZADO
+                card.classList.add('st-done');
+                icon.innerText = '🎉';
+                title.innerText = 'Concluído!';
+                msg.innerText = 'Seu pedido foi finalizado com sucesso.';
+                launchConfetti(); // Solta confetes!
+            } else if (order.waiting) {
+                // AGUARDANDO CLIENTE (Bolinha Amarela)
+                card.classList.add('st-waiting');
+                icon.innerText = '🔔';
+                title.innerText = 'Aguardando Você';
+                msg.innerText = 'Precisamos de uma resposta sua no WhatsApp.';
             } else {
-                document.getElementById('dueDate').innerText = "A definir";
+                // EM ANDAMENTO NORMAL
+                icon.innerText = '🔨'; // Ou ícone dinâmico baseada na etapa
+                title.innerText = currentStatusName;
+                msg.innerText = 'Estamos trabalhando no seu pedido.';
             }
 
-            // Status Atual
-            const currentStatusKey = order.status;
-            const currentConfig = columns[currentStatusKey] || { title: 'Desconhecido', color: '#ccc' };
+            // 4. Timeline (Janela Deslizante)
+            renderTimeline(orderList, columns, order.status);
+        }
+
+        function renderTimeline(fullList, columns, currentKey) {
+            const container = document.getElementById('timelineSteps');
+            container.innerHTML = '';
+
+            let idx = fullList.indexOf(currentKey);
+            if (idx === -1) idx = 0;
+
+            // Lógica da Janela (Max 5 itens)
+            let start = idx - 2;
+            let end = idx + 3;
             
-            const statusBox = document.getElementById('statusBox');
-            statusBox.style.borderLeftColor = currentConfig.color;
-            document.getElementById('currentStatus').innerText = currentConfig.title;
-            document.getElementById('currentStatus').style.color = currentConfig.color;
+            if (start < 0) { end += Math.abs(start); start = 0; }
+            if (end > fullList.length) { start -= (end - fullList.length); end = fullList.length; if(start < 0) start = 0; }
+            if (end - start > 5) end = start + 5;
 
-            // Renderiza a Barra de Progresso (Timeline)
-            const timeline = document.getElementById('progressBar');
-            timeline.innerHTML = '';
+            const visibleList = fullList.slice(start, end);
+            let passed = false;
 
-            let foundCurrent = false;
-            
-            // Só mostra as primeiras 4 ou 5 etapas pra não quebrar no celular se tiver muitas
-            const displayList = orderList.length > 5 ? orderList.slice(0, 5) : orderList;
-
-            displayList.forEach((key, index) => {
-                const col = columns[key];
-                if(!col) return;
-
-                const step = document.createElement('div');
-                step.className = 'step';
+            visibleList.forEach(key => {
+                if(!columns[key]) return;
+                const realIdx = fullList.indexOf(key);
                 
-                // Lógica de Ativo/Completado
-                if (key === currentStatusKey) {
-                    step.classList.add('active');
-                    foundCurrent = true;
-                } else if (!foundCurrent) {
-                    step.classList.add('completed');
+                const div = document.createElement('div');
+                div.className = 'step';
+                
+                if (key === currentKey) {
+                    div.classList.add('active');
+                    passed = true;
+                } else if (!passed && realIdx < idx) {
+                    div.classList.add('completed');
                 }
 
-                step.innerHTML = `
+                div.innerHTML = `
                     <div class="step-dot">
-                        ${!foundCurrent && key !== currentStatusKey ? '<i class="fa-solid fa-check"></i>' : (index + 1)}
+                        ${div.classList.contains('completed') ? '<i class="fa-solid fa-check"></i>' : (realIdx + 1)}
                     </div>
-                    <div class="step-title">${col.title}</div>
+                    <div class="step-label">${columns[key].title}</div>
                 `;
-                timeline.appendChild(step);
+                container.appendChild(div);
             });
+        }
+
+        function launchConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function random(min, max) { return Math.random() * (max - min) + min; }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) { return clearInterval(interval); }
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
         }
 
         function showError(msg) {
             document.getElementById('loading').style.display = 'none';
-            const err = document.getElementById('error');
-            err.innerText = msg;
-            err.style.display = 'block';
+            const e = document.getElementById('error');
+            e.innerText = msg;
+            e.style.display = 'block';
         }
 
         loadOrder();
