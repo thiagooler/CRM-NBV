@@ -1733,6 +1733,18 @@
       "waiting": true,
       "createdAt": 1766858584892,
       "history": []
+    },
+    {
+      "id": "ped-1766858589626",
+      "client": "Nelci Zampier",
+      "phone": "+554299551864",
+      "chat_id": "735811448",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766858589626,
+      "history": []
     }
   ]
 }
