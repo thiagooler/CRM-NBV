@@ -4148,6 +4148,18 @@
       "waiting": false,
       "createdAt": 1766863186612,
       "history": []
+    },
+    {
+      "id": "ped-1766863195032",
+      "client": "Geysianne Rojas da Silva",
+      "phone": "+554797183345",
+      "chat_id": "605337583",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766863195032,
+      "history": []
     }
   ]
 }
