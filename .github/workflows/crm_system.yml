@@ -1,8 +1,14 @@
-name: CRM Backend (Combo Action)
+name: CRM Backend (Com Fila de Espera)
 
 on:
   workflow_dispatch:
   repository_dispatch:
+
+# --- AQUI ESTÁ A PROTEÇÃO ---
+concurrency:
+  group: crm-database-lock
+  cancel-in-progress: false
+# ----------------------------
 
 jobs:
   crm-core:
@@ -22,7 +28,9 @@ jobs:
           git config --global user.name 'CRM Robot'
           git config --global user.email 'bot@warrior.com'
           git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}
-          git pull origin main || echo "Já atualizado"
+          
+          # Tenta puxar a versão mais recente antes de começar
+          git pull origin main || echo "Repositório recém clonado"
 
           node -e "
             const fs = require('fs');
@@ -76,7 +84,7 @@ jobs:
                   product: payload.produto || 'Pedido',
                   dueDate: payload.prazo || '',
                   status: payload.status || 'todo',
-                  waiting: payload.waiting !== undefined ? payload.waiting : false, // ACEITA STATUS INICIAL
+                  waiting: payload.waiting !== undefined ? payload.waiting : false,
                   createdAt: now,
                   finishedAt: null,
                   history: []
@@ -143,8 +151,6 @@ jobs:
                     db.orders[index].status = newStatus;
                     if (newDate) db.orders[index].dueDate = newDate;
                     if (payload.telefone) db.orders[index].phone = payload.telefone;
-                    
-                    // --- COMBO: ATUALIZA O SEMÁFORO JUNTO ---
                     if (payload.waiting !== undefined) db.orders[index].waiting = payload.waiting;
                  } else {
                     const now = Date.now();
@@ -156,7 +162,7 @@ jobs:
                       product: 'Pedido via Bot',
                       dueDate: newDate || '',
                       status: newStatus,
-                      waiting: payload.waiting !== undefined ? payload.waiting : false, // STATUS INICIAL
+                      waiting: payload.waiting !== undefined ? payload.waiting : false,
                       createdAt: now,
                       history: []
                     };
@@ -168,5 +174,6 @@ jobs:
           "
 
           git add db.json
+          # O pull --rebase aqui é a segunda camada de proteção
           git commit -m "CRM Action: ${{ github.event.action }}" || echo "Nada mudou"
           git push origin main || (git pull --rebase origin main && git push origin main)
