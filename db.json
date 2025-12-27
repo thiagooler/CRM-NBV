@@ -2622,6 +2622,18 @@
       "waiting": true,
       "createdAt": 1766861014390,
       "history": []
+    },
+    {
+      "id": "ped-1766861024445",
+      "client": "ESTEFANY & ENZO",
+      "phone": "+554299190848",
+      "chat_id": "620015897",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861024445,
+      "history": []
     }
   ]
 }
