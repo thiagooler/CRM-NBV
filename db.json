@@ -4088,6 +4088,18 @@
       "waiting": false,
       "createdAt": 1766863098475,
       "history": []
+    },
+    {
+      "id": "ped-1766863106706",
+      "client": "terezinha",
+      "phone": "+554299131217",
+      "chat_id": "468288374",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766863106706,
+      "history": []
     }
   ]
 }
