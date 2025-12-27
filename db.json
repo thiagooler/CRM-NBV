@@ -3192,6 +3192,18 @@
       "waiting": false,
       "createdAt": 1766861658292,
       "history": []
+    },
+    {
+      "id": "ped-1766861838987",
+      "client": "Sonia",
+      "phone": "+554299728641",
+      "chat_id": "509072219",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766861838987,
+      "history": []
     }
   ]
 }
