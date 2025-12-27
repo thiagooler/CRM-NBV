@@ -307,10 +307,16 @@
           "from": "filadeatendimento_988",
           "to": "psvenda_619",
           "date": 1766867353065
+        },
+        {
+          "from": "psvenda_619",
+          "to": "psvenda_619",
+          "date": 1766875041346
         }
       ],
       "phone": "+554284112049",
-      "waiting": false
+      "waiting": false,
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766596931491",
