@@ -1265,6 +1265,18 @@
           "date": 1766845766742
         }
       ]
+    },
+    {
+      "id": "ped-1766849450516",
+      "client": "Pedro Vitor",
+      "phone": "+554298519785",
+      "chat_id": "849580721",
+      "product": "Pedido via Bot",
+      "dueDate": "",
+      "status": "approval",
+      "waiting": false,
+      "createdAt": 1766849450516,
+      "history": []
     }
   ]
 }
