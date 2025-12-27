@@ -1164,6 +1164,18 @@
       "waiting": true,
       "createdAt": 1766791227444,
       "history": []
+    },
+    {
+      "id": "ped-1766794927672",
+      "client": "Cleide Michalichen",
+      "phone": "+554298089308",
+      "chat_id": "851904176",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766794927672,
+      "history": []
     }
   ]
 }
