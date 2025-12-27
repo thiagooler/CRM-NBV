@@ -206,21 +206,22 @@
         let columnOrder = ['todo', 'doing', 'done'];
         let orders = []; let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let dragSrcEl = null; let myChart = null;
         let searchTerm = ''; 
-        let timelineLimit = 50; // PERFORMANCE PAGINATION
+        let timelineLimit = 50; 
 
         function getToken() { const p = new URLSearchParams(window.location.search); const t = p.get('token'); if(t) { localStorage.setItem('warrior_gh_token', t); return t; } return localStorage.getItem('warrior_gh_token'); }
         async function init() { 
             const t = getToken(); const tkDisp = document.getElementById('tokenDisplay'); if(tkDisp) tkDisp.value = t ? t.substring(0,10) + '...' : 'Não configurado'; if(!t) alert("Configure seu Token!"); 
             const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
             const savedWait = localStorage.getItem('warrior_crm_hideWaiting'); if(savedWait) hideWaiting = JSON.parse(savedWait);
+            
             const slider = document.getElementById('kanbanView');
             if (slider) { slider.addEventListener('wheel', (e) => { if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; } }); }
+
             await loadData();
-            // AUMENTADO PARA 30s PARA PERFORMANCE
-            setInterval(() => loadData(true), 30000);
+            setInterval(() => loadData(true), 30000); // 30s para performance
         }
 
-        // --- GLOBAL HELPERS (FUNÇÕES QUE FALTAVAM) ---
+        // --- GLOBAL HELPERS (RESTAURADOS) ---
         function showStatus(m,c) { const e=document.getElementById('statusMsg'); if(e) { e.innerText=m; e.style.background=c; e.style.display='block'; } } 
         function hideStatus() { const e=document.getElementById('statusMsg'); if(e) e.style.display='none'; } 
 
@@ -283,7 +284,6 @@
                 const o = orders.filter(ord => ord.status === k && matchesSearch(ord)); 
                 const cEl = document.getElementById(`count-${k}`); if(cEl) cEl.innerText = o.length; 
                 
-                // FRAGMENTO PARA PERFORMANCE
                 const frag = document.createDocumentFragment();
                 o.forEach(or => frag.appendChild(createCard(or, c.color)));
                 l.appendChild(frag);
@@ -301,7 +301,6 @@
             s.forEach(o => { 
                 if (!visibleColumns.includes(o.status)) return; if (hideWaiting && o.waiting) return; if (!matchesSearch(o)) return;
                 
-                // PAGINAÇÃO
                 if (count >= timelineLimit) { hiddenCount++; return; }
                 count++;
 
@@ -316,7 +315,6 @@
             });
             c.appendChild(frag);
 
-            // CONTROLE DO BOTÃO CARREGAR MAIS
             const btnContainer = document.getElementById('loadMoreContainer');
             if (hiddenCount > 0) {
                 btnContainer.style.display = 'block';
@@ -363,7 +361,16 @@
         function openFilterModal() { const l = document.getElementById('filterList'); l.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) l.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${k}" value="${k}" ${visibleColumns.includes(k)?'checked':''}><div style="width:15px;height:15px;background:${columnsConfig[k].color};border-radius:50%;"></div><label for="chk-${k}">${columnsConfig[k].title}</label></div>`; }); document.getElementById('chk-hideWaiting').checked = hideWaiting; document.getElementById('filterModal').showModal(); }
         function applyFilters() { visibleColumns = []; document.querySelectorAll('#filterList input[type="checkbox"]').forEach(c => { if(c.checked) visibleColumns.push(c.value); }); localStorage.setItem('warrior_crm_filters', JSON.stringify(visibleColumns)); hideWaiting = document.getElementById('chk-hideWaiting').checked; localStorage.setItem('warrior_crm_hideWaiting', JSON.stringify(hideWaiting)); closeModal('filterModal'); if(currentView==='timeline') renderTimeline(); }
 
-        // DRAG FUNCTIONS REINSERIDAS
+        // --- INTEGRADOR & UTILS ---
+        function openIntegrator() { const t = localStorage.getItem('warrior_gh_token'); const tkInput = document.getElementById('integrationToken'); if(t && tkInput) tkInput.value = t; const s = document.getElementById('integrationColSelect'); if(s) { s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); } toggleIntegratorOptions(); document.getElementById('integratorModal').showModal(); }
+        function toggleIntegratorOptions() { const type = document.getElementById('integrationActionType').value; document.getElementById('opt-move').style.display = type === 'move' ? 'block' : 'none'; document.getElementById('opt-color').style.display = type === 'color' ? 'block' : 'none'; updateIntegratorCode(); }
+        function updateIntegratorCode() { const tkEl = document.getElementById('integrationToken'); const token = tkEl ? tkEl.value.trim() : ''; if(token) localStorage.setItem('warrior_gh_token', token); const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`; document.getElementById('dispUrl').innerText = url; const headers = [{ k: 'Authorization', v: `token ${token || 'ghp_SEU_TOKEN'}` }, { k: 'Accept', v: 'application/vnd.github.v3+json' }, { k: 'Content-Type', v: 'application/json' }, { k: 'User-Agent', v: 'WarriorBot' }]; const list = document.getElementById('headersList'); if(list) { list.innerHTML = ''; headers.forEach(h => { const safeKey = h.k.replace(/-/g,''); list.innerHTML += `<div class="header-row"><span class="header-key">${h.k}</span><span class="header-val" id="val-${safeKey}">${h.v}</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('val-${safeKey}')">Copiar</button></span></div>`; }); } const type = document.getElementById('integrationActionType').value; let json = {}; if (type === 'move') { const col = document.getElementById('integrationColSelect').value; const waitChk = document.getElementById('chkMoveWait'); const isWait = waitChk ? waitChk.checked : false; json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}", "waiting": isWait } }; } else if (type === 'color') { const isWaiting = document.getElementById('integrationColorSelect').value === 'true'; json = { "event_type": "crm_event", "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; } else if (type === 'delete') { json = { "event_type": "crm_event", "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; } document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); }
+        async function sendToGitHub(realAction, payload) { const t = getToken(); if(!t) { alert("Token?"); return; } const body = { event_type: "crm_event", client_payload: { real_action: realAction, ...payload } }; try { const r = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, { method: 'POST', headers: { 'Authorization': `token ${t}`, 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) }); if(!r.ok) throw new Error(r.status); } catch(e) { alert("Erro Envio: "+e.message); throw e; } }
+        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); } function copyLink(id) { navigator.clipboard.writeText(window.location.href.replace('index.html','').split('?')[0] + 'rastreio/?id='+id); alert("Link Rastreio Copiado!"); } function closeModal(id) { document.getElementById(id).close(); } 
+        function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; } 
+        function sortColumn(k, t) { let c = orders.filter(o => o.status === k); let o = orders.filter(o => o.status !== k); if (t === 'date') c.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); else c.sort((a,b) => a.client.localeCompare(b.client)); orders = [...o, ...c]; renderBoard(); } 
+        function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
+
         function handleDragStart(e) { dragSrcEl = this; e.dataTransfer.effectAllowed = 'move'; } 
         function handleDragOver(e) { e.preventDefault(); return false; } 
         function handleDrop(e) { e.stopPropagation(); if (dragSrcEl !== this) { /* Nada para colunas */ } return false; }
@@ -378,14 +385,6 @@
             const ns = col.id; 
             if(orders.find(o=>o.id===id).status !== ns) changeStatus(id, ns); 
         }
-
-        // --- UTILS ---
-        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); } 
-        function copyLink(id) { navigator.clipboard.writeText(window.location.href.replace('index.html','').split('?')[0] + 'rastreio/?id='+id); alert("Link Rastreio Copiado!"); } 
-        function closeModal(id) { document.getElementById(id).close(); } 
-        function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; } 
-        function sortColumn(k, t) { let c = orders.filter(o => o.status === k); let o = orders.filter(o => o.status !== k); if (t === 'date') c.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); else c.sort((a,b) => a.client.localeCompare(b.client)); orders = [...o, ...c]; renderBoard(); } 
-        function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
 
         document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
         document.addEventListener('DOMContentLoaded', init);
