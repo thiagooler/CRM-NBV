@@ -1,5 +1,10 @@
 {
   "columns": {
+    "aguardandoseleo_897": {
+      "color": "#68b0b1",
+      "days": 7,
+      "title": "Aguardando seleção"
+    },
     "disponivelpararetirada_769": {
       "color": "#1e9816",
       "days": 30,
@@ -61,7 +66,8 @@
     "emproduo_216",
     "prontoparaentrega_2",
     "disponivelpararetirada_769",
-    "psvenda_619"
+    "psvenda_619",
+    "aguardandoseleo_897"
   ],
   "orders": [
     {
