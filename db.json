@@ -2310,6 +2310,18 @@
       "waiting": true,
       "createdAt": 1766860795864,
       "history": []
+    },
+    {
+      "id": "ped-1766860805793",
+      "client": "Evandro Pauluk Fiuza",
+      "phone": "+554299248105",
+      "chat_id": "484648729",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766860805793,
+      "history": []
     }
   ]
 }
