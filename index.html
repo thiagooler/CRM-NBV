@@ -16,10 +16,21 @@
         .sync-icon.loading { animation: spin 1s linear infinite; color: #0052cc; }
         .sync-icon.success { color: #36b37e; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        .nav-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #dfe1e6; padding-bottom: 10px; margin-bottom: 20px; }
-        .view-tabs { display: flex; gap: 10px; }
-        .view-btn { border: none; background: none; font-size: 1.1rem; font-weight: bold; color: #6b778c; cursor: pointer; padding: 5px 15px; border-radius: 4px; transition: 0.2s; }
+
+        /* NAV & SEARCH */
+        .nav-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #dfe1e6; padding-bottom: 10px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .nav-left { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        
+        .view-btn { border: none; background: none; font-size: 1rem; font-weight: bold; color: #6b778c; cursor: pointer; padding: 5px 15px; border-radius: 4px; transition: 0.2s; }
         .view-btn.active { color: #0052cc; background: #e3f2fd; }
+        
+        /* BARRA DE PESQUISA NOVA */
+        .search-box { position: relative; }
+        .search-box input { padding: 8px 10px 8px 30px; border: 1px solid #dfe1e6; border-radius: 20px; font-size: 0.9rem; outline: none; width: 200px; transition: 0.3s; }
+        .search-box input:focus { border-color: #0052cc; width: 250px; box-shadow: 0 0 0 3px rgba(0,82,204,0.1); }
+        .search-box i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #6b778c; font-size: 0.8em; }
+
+        .extra-btns { display: flex; gap: 10px; }
         .filter-btn { display:none; background: #fff; border: 1px solid #dfe1e6; padding: 5px 15px; border-radius: 4px; cursor: pointer; color: #555; font-weight: bold; }
         .filter-btn:hover { background: #eee; color: #0052cc; }
         
@@ -31,7 +42,7 @@
         .scroll-btn.left { left: 0; border-radius: 0 50px 50px 0; }
         .scroll-btn.right { right: 0; border-radius: 50px 0 0 50px; }
         .scroll-btn:hover { background: #0052cc; width: 50px; }
-        @media (max-width: 768px) { .scroll-btn { display: none !important; } }
+        @media (max-width: 768px) { .scroll-btn { display: none !important; } .search-box input { width: 150px; } .search-box input:focus { width: 180px; } }
 
         .column { background: #ebecf0; border-radius: 10px; width: 320px; min-width: 320px; padding: 12px; display: flex; flex-direction: column; max-height: 85vh; border-top: 4px solid transparent; position: relative; }
         .column-header { font-weight: 700; margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; color: #42526e; display: flex; justify-content: space-between; align-items: center;}
@@ -43,8 +54,6 @@
         .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
         .card-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; color: #172b4d; display: flex; align-items: center; }
         .card-meta { font-size: 0.85em; color: #666; display: flex; align-items: center; gap: 6px; margin-top: 6px; }
-        
-        /* CARD TIMERS - NOVO */
         .card-timers { display: flex; gap: 15px; font-size: 0.75em; color: #5e6c84; background: #f4f5f7; padding: 6px 10px; border-radius: 4px; margin-top: 10px; align-items: center; }
         .card-timers span { display: flex; align-items: center; gap: 5px; font-weight: 600; }
         .card-actions { margin-top: 12px; border-top: 1px solid #f4f5f7; padding-top: 8px; display: flex; justify-content: flex-end; gap: 8px; align-items: center; flex-wrap: wrap;}
@@ -61,6 +70,7 @@
         .status-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; border: 2px solid white; box-shadow: 0 0 3px rgba(0,0,0,0.2); }
         .dot-green { background: #36b37e; } .dot-yellow { background: #ffab00; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
+        
         .header-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .header-row { display: flex; align-items: center; justify-content: space-between; background: #172b4d; padding: 8px 12px; margin-bottom: 5px; border-radius: 4px; color: #a5adba; font-family: monospace; font-size: 0.9em; }
         .header-key { font-weight: bold; color: #fff; width: 30%; }
@@ -77,6 +87,7 @@
         .report-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .report-table th, .report-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
         .report-table th { background: #ebecf0; color: #42526e; }
+        
         .btn-icon { background: #f4f5f7; border: none; cursor: pointer; color: #6b778c; border-radius: 4px; padding: 6px 10px; font-size: 0.8em; margin-left: 5px;}
         .btn-config { background: white; border: 1px solid #dfe1e6; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; margin-left:5px;}
         .btn-add-new { background: #36b37e; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;}
@@ -107,11 +118,18 @@
     </div>
 
     <div class="nav-container">
-        <div class="view-tabs">
-            <button class="view-btn active" onclick="switchView('kanban')" id="btn-kanban"><i class="fa-solid fa-columns"></i> Kanban</button>
-            <button class="view-btn" onclick="switchView('timeline')" id="btn-timeline"><i class="fa-solid fa-hourglass-half"></i> Prazos</button>
-            <button class="view-btn" onclick="switchView('reports')" id="btn-reports"><i class="fa-solid fa-chart-line"></i> Relatórios</button>
+        <div class="nav-left">
+            <div class="view-tabs">
+                <button class="view-btn active" onclick="switchView('kanban')" id="btn-kanban"><i class="fa-solid fa-columns"></i> Kanban</button>
+                <button class="view-btn" onclick="switchView('timeline')" id="btn-timeline"><i class="fa-solid fa-hourglass-half"></i> Prazos</button>
+                <button class="view-btn" onclick="switchView('reports')" id="btn-reports"><i class="fa-solid fa-chart-line"></i> Relatórios</button>
+            </div>
+            <div class="search-box">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Nome, ID ou Tel..." oninput="handleSearch(this.value)">
+            </div>
         </div>
+        
         <div class="extra-btns">
             <button class="filter-btn" id="filterBtn" onclick="openFilterModal()"><i class="fa-solid fa-filter"></i> Filtrar</button>
         </div>
@@ -172,6 +190,7 @@
         let columnsConfig = {'todo': { title: '📥 Novos', color: '#ff5630', days: 0 }, 'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 }, 'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }};
         let columnOrder = ['todo', 'doing', 'done'];
         let orders = []; let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let dragSrcEl = null; let myChart = null;
+        let searchTerm = ''; // VARIAVEL DE BUSCA
 
         function getToken() { const p = new URLSearchParams(window.location.search); const t = p.get('token'); if(t) { localStorage.setItem('warrior_gh_token', t); return t; } return localStorage.getItem('warrior_gh_token'); }
         async function init() { 
@@ -181,11 +200,35 @@
             const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
             const savedWait = localStorage.getItem('warrior_crm_hideWaiting'); if(savedWait) hideWaiting = JSON.parse(savedWait);
             
+            // MAGIC SCROLL NO KANBAN
+            const slider = document.getElementById('kanbanView');
+            if (slider) {
+                slider.addEventListener('wheel', (e) => {
+                    if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; }
+                });
+            }
+
             await loadData();
             setInterval(() => loadData(true), 15000);
         }
 
-        // --- NAVEGAÇÃO LATERAL ---
+        // --- BUSCA ---
+        function handleSearch(val) {
+            searchTerm = val.toLowerCase();
+            if(currentView === 'kanban') renderBoard();
+            else if(currentView === 'timeline') renderTimeline();
+        }
+
+        function matchesSearch(order) {
+            if(!searchTerm) return true;
+            const name = (order.client || '').toLowerCase();
+            const id = (order.id || '').toLowerCase();
+            const phone = (order.phone || '').toLowerCase();
+            const prod = (order.product || '').toLowerCase();
+            return name.includes(searchTerm) || id.includes(searchTerm) || phone.includes(searchTerm) || prod.includes(searchTerm);
+        }
+
+        // --- NAVEGAÇÃO LATERAL (SETAS) ---
         function scrollBoard(direction) {
             const slider = document.getElementById('kanbanView');
             const scrollAmount = 320; 
@@ -201,24 +244,28 @@
             const timelineDiv = document.getElementById('timelineView');
             const reportsDiv = document.getElementById('reportsView');
             const filterBtn = document.getElementById('filterBtn');
+            const searchBox = document.querySelector('.search-box');
 
             if(view === 'kanban') {
                 kanbanWrapper.style.display = 'block';
                 timelineDiv.style.display = 'none';
                 reportsDiv.style.display = 'none';
                 filterBtn.style.display = 'none'; 
+                if(searchBox) searchBox.style.display = 'block';
                 renderBoard(); 
             } else if (view === 'timeline') {
                 kanbanWrapper.style.display = 'none';
                 timelineDiv.style.display = 'block';
                 reportsDiv.style.display = 'none';
                 filterBtn.style.display = 'block'; 
+                if(searchBox) searchBox.style.display = 'block';
                 renderTimeline();
             } else {
                 kanbanWrapper.style.display = 'none';
                 timelineDiv.style.display = 'none';
                 reportsDiv.style.display = 'block';
                 filterBtn.style.display = 'none'; 
+                if(searchBox) searchBox.style.display = 'none'; // Esconde busca no relatório
                 renderReports();
             }
         }
@@ -245,21 +292,15 @@
         function calculateTime(order) {
             const now = new Date();
             const created = new Date(order.createdAt || Date.now());
-            
-            // Total
             const totalMs = now - created;
             const totalDays = Math.floor(totalMs / (1000 * 60 * 60 * 24));
-
-            // Stage (Busca no histórico o último movimento)
             let lastMove = created;
             if (order.history && order.history.length > 0) {
-               // Pega a data do último registro do histórico
                const lastEntry = order.history[order.history.length - 1];
                if(lastEntry && lastEntry.date) lastMove = new Date(lastEntry.date);
             }
             const stageMs = now - lastMove;
             const stageDays = Math.floor(stageMs / (1000 * 60 * 60 * 24));
-
             return { total: totalDays, stage: stageDays };
         }
 
@@ -269,7 +310,11 @@
                 const c = columnsConfig[k]; if(!c) return; 
                 const d = document.createElement('div'); d.className = 'column'; d.style.borderTopColor = c.color; 
                 d.innerHTML = `<div class="column-header" style="color:${c.color}"><span>${c.title} <span id="count-${k}" style="background:#fff;padding:2px 8px;border-radius:10px;font-size:0.8em;color:#333;">0</span></span><div style="position:relative"><i class="fa-solid fa-ellipsis-vertical col-menu-btn" onclick="toggleMenu('${k}')"></i><div id="menu-${k}" class="col-options"><div onclick="sortColumn('${k}','date')">📅 Prazo</div><div onclick="sortColumn('${k}','name')">🔤 Nome</div></div></div></div><div class="card-list" id="${k}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>`; b.appendChild(d); 
-                const l = d.querySelector('.card-list'); const o = orders.filter(ord => ord.status === k); 
+                const l = d.querySelector('.card-list'); 
+                
+                // FILTRO DE BUSCA NO KANBAN
+                const o = orders.filter(ord => ord.status === k && matchesSearch(ord)); 
+                
                 const cEl = document.getElementById(`count-${k}`); if(cEl) cEl.innerText = o.length; 
                 o.forEach(or => l.appendChild(createCard(or, c.color))); 
             });
@@ -281,6 +326,8 @@
             s.forEach(o => { 
                 if (!visibleColumns.includes(o.status)) return;
                 if (hideWaiting && o.waiting) return;
+                if (!matchesSearch(o)) return; // FILTRO DE BUSCA NA TIMELINE
+
                 const col = columnsConfig[o.status]||{color:'#ccc',title:'?'}; const dt = new Date(o.dueDate); const df = Math.ceil((dt - new Date()) / (86400000)); let cl = '#36b37e'; if (df < 0) cl = '#bf2600'; else if (df <= 2) cl = '#ffab00'; if (o.status === 'done') cl = '#42526e'; let opts = ''; columnOrder.forEach(k => { if(columnsConfig[k]) opts += `<option value="${k}" ${o.status === k ? 'selected' : ''}>${columnsConfig[k].title}</option>`; }); const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
                 const wa = o.phone ? `<button class="btn-icon btn-wa" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
                 c.innerHTML += `<div class="timeline-item" style="border-left-color:${col.color}"><div class="tl-info"><div class="tl-client"><span class="status-dot ${dotClass}"></span>${o.client}</div><div class="tl-product">${o.product}</div><div class="tl-meta"><span class="tl-date" style="color:${cl};border:1px solid ${cl}">${formatDate(o.dueDate)}</span><span style="font-size:0.8em;color:${col.color}"><i class="fa-solid fa-circle" style="font-size:0.6em"></i> ${col.title}</span></div></div><div class="tl-actions">${wa}<select class="status-select" onchange="changeStatus('${o.id}',this.value)">${opts}</select><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button></div></div>`; 
@@ -292,7 +339,6 @@
             const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
             const wa = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
             
-            // TIMERS CALC
             const times = calculateTime(o);
 
             d.innerHTML = `
