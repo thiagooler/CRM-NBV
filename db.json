@@ -2988,6 +2988,18 @@
       "waiting": true,
       "createdAt": 1766861295426,
       "history": []
+    },
+    {
+      "id": "ped-1766861304600",
+      "client": "Josiane",
+      "phone": "+554298206494",
+      "chat_id": "479398139",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861304600,
+      "history": []
     }
   ]
 }
