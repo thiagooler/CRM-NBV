@@ -4190,6 +4190,18 @@
       "waiting": false,
       "createdAt": 1766863336775,
       "history": []
+    },
+    {
+      "id": "ped-1766863357733",
+      "client": "Ivania Toebe",
+      "phone": "+554299080977",
+      "chat_id": "557137203",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766863357733,
+      "history": []
     }
   ]
 }
