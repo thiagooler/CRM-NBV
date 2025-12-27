@@ -3402,6 +3402,18 @@
       "waiting": false,
       "createdAt": 1766862097702,
       "history": []
+    },
+    {
+      "id": "ped-1766862116238",
+      "client": "Igor_Andrade",
+      "phone": "+5542933002627",
+      "chat_id": "638853868",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862116238,
+      "history": []
     }
   ]
 }
