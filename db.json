@@ -1236,10 +1236,16 @@
       "chat_id": "848104551",
       "product": "Pedido via Bot",
       "dueDate": "2026-01-26",
-      "status": "payment",
+      "status": "doing",
       "waiting": false,
       "createdAt": 1766845241344,
-      "history": []
+      "history": [
+        {
+          "from": "payment",
+          "to": "doing",
+          "date": 1766861926374
+        }
+      ]
     },
     {
       "id": "ped-1766845692092",
