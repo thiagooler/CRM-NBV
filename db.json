@@ -3791,6 +3791,18 @@
       "waiting": false,
       "createdAt": 1766862754253,
       "history": []
+    },
+    {
+      "id": "ped-1766862760854",
+      "client": "João Carlos",
+      "phone": "+554299127710",
+      "chat_id": "849494829",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862760854,
+      "history": []
     }
   ]
 }
