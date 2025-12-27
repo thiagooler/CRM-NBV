@@ -1996,6 +1996,18 @@
       "waiting": false,
       "createdAt": 1766859724855,
       "history": []
+    },
+    {
+      "id": "ped-1766859856208",
+      "client": "Joelma Czusz",
+      "phone": "+554299831056",
+      "chat_id": "848223634",
+      "product": "Pedido via Bot",
+      "dueDate": "",
+      "status": "approval",
+      "waiting": false,
+      "createdAt": 1766859856208,
+      "history": []
     }
   ]
 }
