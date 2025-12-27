@@ -43,6 +43,10 @@
         .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
         .card-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; color: #172b4d; display: flex; align-items: center; }
         .card-meta { font-size: 0.85em; color: #666; display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+        
+        /* CARD TIMERS - NOVO */
+        .card-timers { display: flex; gap: 15px; font-size: 0.75em; color: #5e6c84; background: #f4f5f7; padding: 6px 10px; border-radius: 4px; margin-top: 10px; align-items: center; }
+        .card-timers span { display: flex; align-items: center; gap: 5px; font-weight: 600; }
         .card-actions { margin-top: 12px; border-top: 1px solid #f4f5f7; padding-top: 8px; display: flex; justify-content: flex-end; gap: 8px; align-items: center; flex-wrap: wrap;}
         
         #timelineView, #reportsView { display: none; max-width: 1200px; margin: 0 auto; }
@@ -57,7 +61,6 @@
         .status-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; border: 2px solid white; box-shadow: 0 0 3px rgba(0,0,0,0.2); }
         .dot-green { background: #36b37e; } .dot-yellow { background: #ffab00; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
-        
         .header-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .header-row { display: flex; align-items: center; justify-content: space-between; background: #172b4d; padding: 8px 12px; margin-bottom: 5px; border-radius: 4px; color: #a5adba; font-family: monospace; font-size: 0.9em; }
         .header-key { font-weight: bold; color: #fff; width: 30%; }
@@ -182,7 +185,7 @@
             setInterval(() => loadData(true), 15000);
         }
 
-        // --- NAVEGAÇÃO LATERAL (SETAS) ---
+        // --- NAVEGAÇÃO LATERAL ---
         function scrollBoard(direction) {
             const slider = document.getElementById('kanbanView');
             const scrollAmount = 320; 
@@ -238,6 +241,28 @@
             } catch (e) { if(!isAuto) hideStatus(); if(syncIcon) syncIcon.classList.remove('loading'); } 
         }
 
+        // --- CÁLCULO DE TEMPO ---
+        function calculateTime(order) {
+            const now = new Date();
+            const created = new Date(order.createdAt || Date.now());
+            
+            // Total
+            const totalMs = now - created;
+            const totalDays = Math.floor(totalMs / (1000 * 60 * 60 * 24));
+
+            // Stage (Busca no histórico o último movimento)
+            let lastMove = created;
+            if (order.history && order.history.length > 0) {
+               // Pega a data do último registro do histórico
+               const lastEntry = order.history[order.history.length - 1];
+               if(lastEntry && lastEntry.date) lastMove = new Date(lastEntry.date);
+            }
+            const stageMs = now - lastMove;
+            const stageDays = Math.floor(stageMs / (1000 * 60 * 60 * 24));
+
+            return { total: totalDays, stage: stageDays };
+        }
+
         function renderBoard() {
             const b = document.getElementById('kanbanView'); if(!b) return; b.innerHTML = ''; 
             columnOrder.forEach(k => { 
@@ -266,7 +291,21 @@
             const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; 
             const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
             const wa = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
-            d.innerHTML = `<div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-actions">${wa}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
+            
+            // TIMERS CALC
+            const times = calculateTime(o);
+
+            d.innerHTML = `
+                <div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div>
+                <div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div>
+                <div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div>
+                
+                <div class="card-timers">
+                    <span title="Tempo nesta etapa"><i class="fa-regular fa-clock"></i> ${times.stage}d</span>
+                    <span title="Tempo total do pedido"><i class="fa-solid fa-history"></i> ${times.total}d</span>
+                </div>
+
+                <div class="card-actions">${wa}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
         }
 
         function renderReports() {
