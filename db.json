@@ -1224,6 +1224,18 @@
       "waiting": false,
       "createdAt": 1766845241344,
       "history": []
+    },
+    {
+      "id": "ped-1766845692092",
+      "client": "*₊˚𝓜𝓪𝓻𝔂",
+      "phone": "+554298269808",
+      "chat_id": "847136513",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "disponivelpararetirada_769",
+      "waiting": false,
+      "createdAt": 1766845692092,
+      "history": []
     }
   ]
 }
