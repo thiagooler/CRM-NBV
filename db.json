@@ -1854,6 +1854,18 @@
       "waiting": true,
       "createdAt": 1766858814868,
       "history": []
+    },
+    {
+      "id": "ped-1766858952722",
+      "client": "Janaina Galvão",
+      "phone": "+554299434751",
+      "chat_id": "841865637",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766858952722,
+      "history": []
     }
   ]
 }
