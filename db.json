@@ -1661,11 +1661,17 @@
       "phone": "+554299461817",
       "chat_id": "848452782",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-06",
-      "status": "filadeproduo_612",
+      "dueDate": "2025-12-30",
+      "status": "filadeatendimento_988",
       "waiting": false,
       "createdAt": 1766858196128,
-      "history": []
+      "history": [
+        {
+          "from": "filadeproduo_612",
+          "to": "filadeatendimento_988",
+          "date": 1766858523356
+        }
+      ]
     },
     {
       "id": "ped-1766858457785",
