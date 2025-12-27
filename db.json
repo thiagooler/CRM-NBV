@@ -3342,6 +3342,18 @@
       "waiting": false,
       "createdAt": 1766862048385,
       "history": []
+    },
+    {
+      "id": "ped-1766862058567",
+      "client": "Suele Marcondes",
+      "phone": "+554298729335",
+      "chat_id": "639739505",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862058567,
+      "history": []
     }
   ]
 }
