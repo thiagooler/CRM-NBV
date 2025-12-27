@@ -4052,6 +4052,18 @@
       "waiting": false,
       "createdAt": 1766863075114,
       "history": []
+    },
+    {
+      "id": "ped-1766863083415",
+      "client": "Vanderlei ribeiro dos Santos",
+      "phone": "+554299741089",
+      "chat_id": "488396318",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766863083415,
+      "history": []
     }
   ]
 }
