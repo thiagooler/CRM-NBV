@@ -1470,11 +1470,17 @@
       "phone": "+554284172098",
       "chat_id": "847966104",
       "product": "Pedido via Bot",
-      "dueDate": "",
-      "status": "approval",
+      "dueDate": "2026-01-26",
+      "status": "doing",
       "waiting": false,
       "createdAt": 1766855714038,
-      "history": []
+      "history": [
+        {
+          "from": "approval",
+          "to": "doing",
+          "date": 1766863766975
+        }
+      ]
     },
     {
       "id": "ped-1766856176895",
