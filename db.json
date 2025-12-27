@@ -3986,6 +3986,18 @@
       "waiting": false,
       "createdAt": 1766862945606,
       "history": []
+    },
+    {
+      "id": "ped-1766862955750",
+      "client": "Heverton Rodrigues",
+      "phone": "+554299503511",
+      "chat_id": "596521214",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862955750,
+      "history": []
     }
   ]
 }
