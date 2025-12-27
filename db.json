@@ -4344,6 +4344,18 @@
       "waiting": false,
       "createdAt": 1766863796409,
       "history": []
+    },
+    {
+      "id": "ped-1766863826151",
+      "client": "Cristina Marcondes",
+      "phone": "+554284184365",
+      "chat_id": "675014377",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766863826151,
+      "history": []
     }
   ]
 }
