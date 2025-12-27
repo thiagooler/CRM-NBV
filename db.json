@@ -2202,6 +2202,18 @@
       "waiting": true,
       "createdAt": 1766860715022,
       "history": []
+    },
+    {
+      "id": "ped-1766860716374",
+      "client": "Patricia Silvério",
+      "phone": "+554284143600",
+      "chat_id": "484986991",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766860716374,
+      "history": []
     }
   ]
 }
