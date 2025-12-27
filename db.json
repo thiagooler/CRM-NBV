@@ -1313,6 +1313,18 @@
       "waiting": false,
       "createdAt": 1766853602843,
       "history": []
+    },
+    {
+      "id": "ped-1766853713079",
+      "client": "cidiane rodrigues",
+      "phone": "+554299999621",
+      "chat_id": "842737902",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "disponivelpararetirada_769",
+      "waiting": false,
+      "createdAt": 1766853713079,
+      "history": []
     }
   ]
 }
