@@ -1509,6 +1509,18 @@
       "waiting": true,
       "createdAt": 1766857592350,
       "history": []
+    },
+    {
+      "id": "ped-1766857613857",
+      "client": "Neoliane",
+      "phone": "+554299686541",
+      "chat_id": "486168450",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766857613857,
+      "history": []
     }
   ]
 }
