@@ -2857,11 +2857,17 @@
       "phone": "+554284111604",
       "chat_id": "506445323",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "aguardandoseleo_897",
-      "waiting": true,
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
       "createdAt": 1766861054296,
-      "history": []
+      "history": [
+        {
+          "from": "aguardandoseleo_897",
+          "to": "doing",
+          "date": 1766863846765
+        }
+      ]
     },
     {
       "id": "ped-1766861066748",
