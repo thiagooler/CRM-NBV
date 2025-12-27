@@ -1912,6 +1912,18 @@
       "waiting": false,
       "createdAt": 1766859390324,
       "history": []
+    },
+    {
+      "id": "ped-1766859397817",
+      "client": "~Marciele Eurich",
+      "phone": "+554298113951",
+      "chat_id": "841858916",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-06",
+      "status": "filadeproduo_612",
+      "waiting": false,
+      "createdAt": 1766859397817,
+      "history": []
     }
   ]
 }
