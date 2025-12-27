@@ -1,14 +1,12 @@
-name: CRM Backend (Com Fila de Espera)
+name: CRM Backend (Smart Flow Protection)
 
 on:
   workflow_dispatch:
   repository_dispatch:
 
-# --- AQUI ESTÁ A PROTEÇÃO ---
 concurrency:
   group: crm-database-lock
   cancel-in-progress: false
-# ----------------------------
 
 jobs:
   crm-core:
@@ -29,7 +27,6 @@ jobs:
           git config --global user.email 'bot@warrior.com'
           git remote set-url origin https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}
           
-          # Tenta puxar a versão mais recente antes de começar
           git pull origin main || echo "Repositório recém clonado"
 
           node -e "
@@ -75,24 +72,34 @@ jobs:
             }
             
             else if (action === 'novo_pedido') {
-                const now = Date.now();
-                const novo = {
-                  id: payload.id || ('ped-' + now),
-                  client: payload.nome || 'Cliente',
-                  phone: payload.telefone || '',
-                  chat_id: payload.chat_id || '',
-                  product: payload.produto || 'Pedido',
-                  dueDate: payload.prazo || '',
-                  status: payload.status || 'todo',
-                  waiting: payload.waiting !== undefined ? payload.waiting : false,
-                  createdAt: now,
-                  finishedAt: null,
-                  history: []
-                };
-                db.orders.push(novo);
+                // REGRA 1: SE JÁ EXISTE, NÃO CRIA DUPLICADO NA FILA
+                const exists = db.orders.find(o => o.chat_id === payload.chat_id);
+                
+                if (!exists) {
+                    const now = Date.now();
+                    const novo = {
+                      id: payload.id || ('ped-' + now),
+                      client: payload.nome || 'Cliente',
+                      phone: payload.telefone || '',
+                      chat_id: payload.chat_id || '',
+                      product: payload.produto || 'Pedido',
+                      dueDate: payload.prazo || '',
+                      status: payload.status || db.columnOrder[0], // Usa a primeira coluna se não definida
+                      waiting: payload.waiting !== undefined ? payload.waiting : false,
+                      createdAt: now,
+                      finishedAt: null,
+                      history: []
+                    };
+                    db.orders.push(novo);
+                    console.log('Novo pedido criado.');
+                } else {
+                    console.log('Cliente já existe. Ignorando criação duplicada.');
+                    // Opcional: Se quiser apenas atualizar o telefone/nome do existente, faria aqui.
+                }
             }
 
             else if (action === 'update_status') {
+                // Movimento MANUAL (pelo site) - Sempre permitido
                 const index = db.orders.findIndex(o => o.id === payload.id);
                 if (index > -1) {
                   const oldStatus = db.orders[index].status;
@@ -136,23 +143,46 @@ jobs:
             else if (action === 'move_card_external') {
                  const newStatus = payload.status;
                  const index = db.orders.findIndex(o => o.chat_id === payload.chat_id);
-                 let newDate = '';
-                 const colConfig = (db.columns && db.columns[newStatus]) ? db.columns[newStatus] : { days: 0 };
-                 if (colConfig.days > 0) {
-                    const d = new Date(); d.setDate(d.getDate() + colConfig.days);
-                    newDate = d.toISOString().split('T')[0];
-                 }
+                 
+                 // REGRA 2: PROTEÇÃO CONTRA RETROCESSO PARA A FILA INICIAL
+                 const firstColumn = db.columnOrder[0];
                  
                  if (index > -1) {
-                    if (!db.orders[index].history) db.orders[index].history = [];
-                    db.orders[index].history.push({ from: db.orders[index].status, to: newStatus, date: Date.now() });
-                    if (newStatus === 'done') db.orders[index].finishedAt = Date.now();
+                    const currentStatus = db.orders[index].status;
                     
-                    db.orders[index].status = newStatus;
-                    if (newDate) db.orders[index].dueDate = newDate;
-                    if (payload.telefone) db.orders[index].phone = payload.telefone;
-                    if (payload.waiting !== undefined) db.orders[index].waiting = payload.waiting;
+                    // Se o bot tenta jogar pra primeira coluna, mas o card NÃO está nela...
+                    if (newStatus === firstColumn && currentStatus !== firstColumn) {
+                        console.log('BLOQUEIO: Tentativa de mover card avançado de volta para o início.');
+                        // Apenas atualiza o semáforo se solicitado, mas NÃO move a coluna
+                        if (payload.waiting !== undefined) db.orders[index].waiting = payload.waiting;
+                    } else {
+                        // Movimento permitido (Normal ou Avanço)
+                        let newDate = '';
+                        const colConfig = (db.columns && db.columns[newStatus]) ? db.columns[newStatus] : { days: 0 };
+                        if (colConfig.days > 0) {
+                            const d = new Date(); d.setDate(d.getDate() + colConfig.days);
+                            newDate = d.toISOString().split('T')[0];
+                        }
+
+                        if (!db.orders[index].history) db.orders[index].history = [];
+                        db.orders[index].history.push({ from: db.orders[index].status, to: newStatus, date: Date.now() });
+                        
+                        if (newStatus === 'done') db.orders[index].finishedAt = Date.now();
+                        
+                        db.orders[index].status = newStatus;
+                        if (newDate) db.orders[index].dueDate = newDate;
+                        if (payload.telefone) db.orders[index].phone = payload.telefone;
+                        if (payload.waiting !== undefined) db.orders[index].waiting = payload.waiting;
+                    }
                  } else {
+                    // Se não existe, cria novo (mesmo que seja na primeira coluna, pois é novo)
+                    let newDate = '';
+                    const colConfig = (db.columns && db.columns[newStatus]) ? db.columns[newStatus] : { days: 0 };
+                    if (colConfig.days > 0) {
+                        const d = new Date(); d.setDate(d.getDate() + colConfig.days);
+                        newDate = d.toISOString().split('T')[0];
+                    }
+
                     const now = Date.now();
                     const novo = {
                       id: 'ped-' + now,
@@ -174,6 +204,5 @@ jobs:
           "
 
           git add db.json
-          # O pull --rebase aqui é a segunda camada de proteção
           git commit -m "CRM Action: ${{ github.event.action }}" || echo "Nada mudou"
           git push origin main || (git pull --rebase origin main && git push origin main)
