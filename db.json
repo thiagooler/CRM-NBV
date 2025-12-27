@@ -4124,6 +4124,18 @@
       "waiting": false,
       "createdAt": 1766863124003,
       "history": []
+    },
+    {
+      "id": "ped-1766863134781",
+      "client": "Otávio Soethe",
+      "phone": "+554284148445",
+      "chat_id": "515814097",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766863134781,
+      "history": []
     }
   ]
 }
