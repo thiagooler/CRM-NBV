@@ -2352,6 +2352,18 @@
       "waiting": true,
       "createdAt": 1766860824834,
       "history": []
+    },
+    {
+      "id": "ped-1766860827520",
+      "client": "Agadir",
+      "phone": "+556796977830",
+      "chat_id": "756700728",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766860827520,
+      "history": []
     }
   ]
 }
