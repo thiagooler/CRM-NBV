@@ -3564,6 +3564,18 @@
       "waiting": false,
       "createdAt": 1766862387445,
       "history": []
+    },
+    {
+      "id": "ped-1766862396979",
+      "client": "Jocimara De Oliveira",
+      "phone": "+554284281219",
+      "chat_id": "569275062",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862396979,
+      "history": []
     }
   ]
 }
