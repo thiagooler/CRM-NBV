@@ -1277,6 +1277,18 @@
       "waiting": false,
       "createdAt": 1766849450516,
       "history": []
+    },
+    {
+      "id": "ped-1766850444409",
+      "client": "Siloé Coghetto Zanetti",
+      "phone": "+554291229305",
+      "chat_id": "850991822",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-30",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "createdAt": 1766850444409,
+      "history": []
     }
   ]
 }
