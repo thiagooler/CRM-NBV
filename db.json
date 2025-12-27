@@ -1685,6 +1685,18 @@
       "createdAt": 1766858466656,
       "finishedAt": null,
       "history": []
+    },
+    {
+      "id": "ped-1766858542752",
+      "client": "Thaty  lippk",
+      "phone": "+554299915493",
+      "chat_id": "848507089",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766858542752,
+      "history": []
     }
   ]
 }
