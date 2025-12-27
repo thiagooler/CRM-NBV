@@ -65,12 +65,9 @@
         .tl-date { font-weight: bold; font-size: 0.9rem; padding: 4px 8px; border-radius: 4px; background: #eee; }
         .tl-actions { display: flex; gap: 10px; align-items: center; }
         .status-select { padding: 8px; border-radius: 4px; border: 1px solid #dfe1e6; background: #f9f9f9; font-weight: bold; color: #444; max-width: 150px;}
-        
-        /* SEMÁFORO INTERATIVO */
         .status-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; border: 2px solid white; box-shadow: 0 0 3px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.2s; }
         .status-dot:hover { transform: scale(1.3); }
         .dot-green { background: #36b37e; } .dot-yellow { background: #ffab00; animation: pulse 1.5s infinite; }
-        
         @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
         
         .header-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
@@ -96,19 +93,16 @@
         .btn-wa { background: #dcf8c6; color: #075e54; display: flex; align-items: center; gap: 5px; padding: 6px 12px; } .btn-wa:hover { background: #25d366; color: white; }
         .btn-csv { background: #36b37e; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         
-        /* COL ITEM (CONFIG) - NOVO */
         .col-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px; border: 1px solid #eee; }
         .col-inputs { flex-grow: 1; display: flex; gap: 5px; flex-direction: column; }
         .col-row { display: flex; gap: 5px; }
-        
-        /* INPUT DE ORDEM MANUAL */
         .order-input { width: 45px; text-align: center; font-weight: bold; border: 2px solid #0052cc; color: #0052cc; border-radius: 6px; padding: 8px; font-size: 1rem; }
-
         .filter-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; }
         .filter-item input[type="checkbox"] { width: 20px; height: 20px; }
+        #statusMsg { background: #0052cc; color:white; padding:5px 10px; border-radius:4px; display:none; }
         
         @media (max-width: 768px) { body { padding: 10px; } .header-controls { width: 100%; justify-content: flex-end; } #kanbanView { gap: 10px; scroll-snap-type: x mandatory; padding-bottom: 20px; } .column { min-width: 85vw; width: 85vw; scroll-snap-align: center; } .timeline-item { flex-direction: column; align-items: flex-start; gap: 15px; } .tl-actions { width: 100%; justify-content: space-between; } .status-select { flex-grow: 1; } dialog { width: 95% !important; max-height: 90vh; margin: auto; } .btn-icon { padding: 10px; } .charts-grid { grid-template-columns: 1fr; } }
-        dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); padding: 0; width: 500px; font-family: inherit; overflow: hidden;} dialog::backdrop { background: rgba(0,0,0,0.6); } .modal-header { background: #f4f5f7; padding: 15px 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;} .modal-body { padding: 20px; max-height: 500px; overflow-y: auto; } .tab-btn { background: none; border: none; padding: 10px; cursor: pointer; font-weight: bold; color: #666; border-bottom: 2px solid transparent; width: 48%;} .tab-btn.active { color: #0052cc; border-bottom-color: #0052cc; } .tab-content { display: none; } .tab-content.active { display: block; } .inp-full { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #dfe1e6; border-radius: 4px; box-sizing: border-box; } .inp-mini { width: 70px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; } .btn-primary { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;} .code-block { background: #172b4d; color: #a5adba; padding: 15px; border-radius: 6px; font-family: monospace; white-space: pre-wrap; margin-bottom: 10px; position: relative; word-break: break-all;} .btn-copy { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8em; } label { font-size: 0.9em; font-weight: bold; color: #444; } #statusMsg { background: #0052cc; color:white; padding:5px 10px; border-radius:4px; display:none; }
+        dialog { border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); padding: 0; width: 500px; font-family: inherit; overflow: hidden;} dialog::backdrop { background: rgba(0,0,0,0.6); } .modal-header { background: #f4f5f7; padding: 15px 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;} .modal-body { padding: 20px; max-height: 500px; overflow-y: auto; } .tab-btn { background: none; border: none; padding: 10px; cursor: pointer; font-weight: bold; color: #666; border-bottom: 2px solid transparent; width: 48%;} .tab-btn.active { color: #0052cc; border-bottom-color: #0052cc; } .tab-content { display: none; } .tab-content.active { display: block; } .inp-full { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #dfe1e6; border-radius: 4px; box-sizing: border-box; } .inp-mini { width: 70px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; } .btn-primary { width: 100%; padding: 12px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;} .code-block { background: #172b4d; color: #a5adba; padding: 15px; border-radius: 6px; font-family: monospace; white-space: pre-wrap; margin-bottom: 10px; position: relative; word-break: break-all;} .btn-copy { position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8em; } label { font-size: 0.9em; font-weight: bold; color: #444; } 
     </style>
 </head>
 <body>
@@ -207,13 +201,20 @@
             const t = getToken(); const tkDisp = document.getElementById('tokenDisplay'); if(tkDisp) tkDisp.value = t ? t.substring(0,10) + '...' : 'Não configurado'; if(!t) alert("Configure seu Token!"); 
             const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
             const savedWait = localStorage.getItem('warrior_crm_hideWaiting'); if(savedWait) hideWaiting = JSON.parse(savedWait);
+            
             const slider = document.getElementById('kanbanView');
             if (slider) { slider.addEventListener('wheel', (e) => { if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; } }); }
+
             await loadData();
-            setInterval(() => loadData(true), 15000);
+            // AUMENTADO PARA 30s PARA EVITAR LATÊNCIA
+            setInterval(() => loadData(true), 30000);
         }
 
-        // --- BUSCA AVANÇADA ---
+        // --- GLOBAL HELPERS (MOVIDOS PARA CIMA PARA SEGURANÇA) ---
+        function showStatus(m,c) { const e=document.getElementById('statusMsg'); if(e) { e.innerText=m; e.style.background=c; e.style.display='block'; } } 
+        function hideStatus() { const e=document.getElementById('statusMsg'); if(e) e.style.display='none'; } 
+
+        // --- BUSCA ---
         function handleSearch(val) { searchTerm = val.toLowerCase(); if(currentView === 'kanban') renderBoard(); else if(currentView === 'timeline') renderTimeline(); }
         function matchesSearch(order) { if(!searchTerm) return true; const term = searchTerm; const name = (order.client || '').toLowerCase(); const id = (order.id || '').toLowerCase(); const prod = (order.product || '').toLowerCase(); const rawPhone = (order.phone || '').toLowerCase(); const cleanPhone = rawPhone.replace(/\D/g, ''); return name.includes(term) || id.includes(term) || prod.includes(term) || rawPhone.includes(term) || cleanPhone.includes(term); }
         function scrollBoard(direction) { const slider = document.getElementById('kanbanView'); slider.scrollBy({ left: direction * 320, behavior: 'smooth' }); }
@@ -229,12 +230,21 @@
         }
 
         async function loadData(isAuto = false) { 
-            const syncIcon = document.getElementById('syncIcon'); if(isAuto && syncIcon) syncIcon.classList.add('loading'); else showStatus('Carregando...', '#0052cc'); 
+            const syncIcon = document.getElementById('syncIcon'); 
+            if(isAuto && syncIcon) syncIcon.classList.add('loading'); 
+            else if(!isAuto) showStatus('Carregando...', '#0052cc'); 
+            
             try { 
                 const r = await fetch(`db.json?t=${new Date().getTime()}`); if(!r.ok) throw new Error("Erro DB"); const d = await r.json(); 
                 if (Array.isArray(d)) orders = d; else { orders = d.orders||[]; if(d.columns) columnsConfig = d.columns; if(d.columnOrder) columnOrder = d.columnOrder; else columnOrder = Object.keys(columnsConfig); } 
+                
                 const pending = JSON.parse(localStorage.getItem('warrior_pending') || '[]'); const realPending = pending.filter(p => !orders.find(o => o.id === p.id)); localStorage.setItem('warrior_pending', JSON.stringify(realPending)); orders = [...orders, ...realPending];
-                const currentHash = JSON.stringify({o: orders, c: columnsConfig}); if (isAuto && currentHash === lastDataHash) { if(syncIcon) syncIcon.classList.remove('loading'); return; } lastDataHash = currentHash;
+                
+                // SMART RENDER: SÓ DESENHA SE MUDOU ALGO
+                const currentHash = JSON.stringify({o: orders, c: columnsConfig}); 
+                if (isAuto && currentHash === lastDataHash) { if(syncIcon) syncIcon.classList.remove('loading'); return; } 
+                lastDataHash = currentHash;
+
                 if(visibleColumns.length === 0) visibleColumns = [...columnOrder];
                 if(currentView === 'kanban') renderBoard(); else if(currentView === 'timeline') renderTimeline(); else renderReports();
                 if(isAuto) { if(syncIcon) { syncIcon.classList.remove('loading'); syncIcon.classList.add('success'); setTimeout(()=>syncIcon.classList.remove('success'),2000); } } else hideStatus();
@@ -322,6 +332,14 @@
             const ns = col.id; 
             if(orders.find(o=>o.id===id).status !== ns) changeStatus(id, ns); 
         }
+
+        // --- UTILS ---
+        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); } 
+        function copyLink(id) { navigator.clipboard.writeText(window.location.href.replace('index.html','').split('?')[0] + 'rastreio/?id='+id); alert("Link Rastreio Copiado!"); } 
+        function closeModal(id) { document.getElementById(id).close(); } 
+        function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; } 
+        function sortColumn(k, t) { let c = orders.filter(o => o.status === k); let o = orders.filter(o => o.status !== k); if (t === 'date') c.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); else c.sort((a,b) => a.client.localeCompare(b.client)); orders = [...o, ...c]; renderBoard(); } 
+        function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
 
         document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
         document.addEventListener('DOMContentLoaded', init);
