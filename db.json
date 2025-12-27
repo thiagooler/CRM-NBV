@@ -1240,6 +1240,11 @@
           "from": "filadeatendimento_988",
           "to": "doing",
           "date": 1766845910695
+        },
+        {
+          "from": "doing",
+          "to": "doing",
+          "date": 1766863661319
         }
       ]
     },
