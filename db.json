@@ -3258,6 +3258,18 @@
       "waiting": false,
       "createdAt": 1766861954871,
       "history": []
+    },
+    {
+      "id": "ped-1766861985428",
+      "client": "Marciele",
+      "phone": "+554299552496",
+      "chat_id": "841856412",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766861985428,
+      "history": []
     }
   ]
 }
