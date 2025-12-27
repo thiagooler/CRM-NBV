@@ -2466,6 +2466,18 @@
       "waiting": true,
       "createdAt": 1766860915521,
       "history": []
+    },
+    {
+      "id": "ped-1766860926885",
+      "client": "Cliente Bot",
+      "phone": "+554298201433",
+      "chat_id": "638310939",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766860926885,
+      "history": []
     }
   ]
 }
