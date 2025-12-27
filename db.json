@@ -3552,6 +3552,18 @@
       "waiting": false,
       "createdAt": 1766862377339,
       "history": []
+    },
+    {
+      "id": "ped-1766862387445",
+      "client": "Cleusavieira",
+      "phone": "+554298125236",
+      "chat_id": "510091222",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862387445,
+      "history": []
     }
   ]
 }
