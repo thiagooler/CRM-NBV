@@ -2418,6 +2418,18 @@
       "waiting": true,
       "createdAt": 1766860855257,
       "history": []
+    },
+    {
+      "id": "ped-1766860856174",
+      "client": "Sabrina",
+      "phone": "+554298754605",
+      "chat_id": "495756378",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766860856174,
+      "history": []
     }
   ]
 }
