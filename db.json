@@ -4010,6 +4010,18 @@
       "waiting": false,
       "createdAt": 1766863025323,
       "history": []
+    },
+    {
+      "id": "ped-1766863032775",
+      "client": "Edgar Arno Wenski",
+      "phone": "+554299603144",
+      "chat_id": "844929343",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766863032775,
+      "history": []
     }
   ]
 }
