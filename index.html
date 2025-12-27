@@ -92,7 +92,7 @@
         .btn-wa { background: #dcf8c6; color: #075e54; display: flex; align-items: center; gap: 5px; padding: 6px 12px; } .btn-wa:hover { background: #25d366; color: white; }
         .btn-csv { background: #36b37e; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         
-        /* COL ITEM (CONFIG) */
+        /* COL ITEM (CONFIG) - NOVO */
         .col-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px; border: 1px solid #eee; }
         .col-inputs { flex-grow: 1; display: flex; gap: 5px; flex-direction: column; }
         .col-row { display: flex; gap: 5px; }
@@ -171,7 +171,13 @@
                 <option value="color">🎨 Alterar Cor (Semáforo)</option>
                 <option value="delete">❌ Deletar Pedido</option>
             </select>
-            <div id="opt-move"><label>Mover para:</label><select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select></div>
+            <div id="opt-move">
+                <label>Mover para:</label><select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select>
+                <div style="margin-top:10px; background:#e3f2fd; padding:10px; border-radius:4px;">
+                    <input type="checkbox" id="chkMoveWait" onchange="updateIntegratorCode()">
+                    <label for="chkMoveWait">Já marcar como <b>Aguardando Cliente</b>?</label>
+                </div>
+            </div>
             <div id="opt-color" style="display:none;"><label>Definir Status:</label><select id="integrationColorSelect" class="inp-full" onchange="updateIntegratorCode()"><option value="true">🟡 Aguardando Cliente</option><option value="false">🟢 Em Execução</option></select></div>
             <h4 style="margin-bottom:5px; color:#333;">1. URL</h4><div class="header-row"><span class="header-val" id="dispUrl" style="width:80%">...</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('dispUrl')">Copiar</button></span></div>
             <h4 style="margin-bottom:5px; color:#333;">2. Headers</h4><div id="headersList"></div>
@@ -189,7 +195,7 @@
         const REPO_OWNER = 'thiagooler'; const REPO_NAME = 'CRM-NBV';
         let columnsConfig = {'todo': { title: '📥 Novos', color: '#ff5630', days: 0 }, 'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 }, 'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }};
         let columnOrder = ['todo', 'doing', 'done'];
-        let orders = []; let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let myChart = null;
+        let orders = []; let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let dragSrcEl = null; let myChart = null;
         let searchTerm = ''; 
 
         function getToken() { const p = new URLSearchParams(window.location.search); const t = p.get('token'); if(t) { localStorage.setItem('warrior_gh_token', t); return t; } return localStorage.getItem('warrior_gh_token'); }
@@ -197,20 +203,12 @@
             const t = getToken(); const tkDisp = document.getElementById('tokenDisplay'); if(tkDisp) tkDisp.value = t ? t.substring(0,10) + '...' : 'Não configurado'; if(!t) alert("Configure seu Token!"); 
             const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
             const savedWait = localStorage.getItem('warrior_crm_hideWaiting'); if(savedWait) hideWaiting = JSON.parse(savedWait);
-            
-            // MAGIC SCROLL NO KANBAN
             const slider = document.getElementById('kanbanView');
-            if (slider) {
-                slider.addEventListener('wheel', (e) => {
-                    if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; }
-                });
-            }
-
+            if (slider) { slider.addEventListener('wheel', (e) => { if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; } }); }
             await loadData();
             setInterval(() => loadData(true), 15000);
         }
 
-        // --- BUSCA ---
         function handleSearch(val) { searchTerm = val.toLowerCase(); if(currentView === 'kanban') renderBoard(); else if(currentView === 'timeline') renderTimeline(); }
         function matchesSearch(order) { if(!searchTerm) return true; const term = searchTerm; const name = (order.client || '').toLowerCase(); const id = (order.id || '').toLowerCase(); const prod = (order.product || '').toLowerCase(); const rawPhone = (order.phone || '').toLowerCase(); const cleanPhone = rawPhone.replace(/\D/g, ''); return name.includes(term) || id.includes(term) || prod.includes(term) || rawPhone.includes(term) || cleanPhone.includes(term); }
         function scrollBoard(direction) { const slider = document.getElementById('kanbanView'); slider.scrollBy({ left: direction * 320, behavior: 'smooth' }); }
@@ -247,7 +245,6 @@
             return { total: totalDays, stage: stageDays };
         }
 
-        // --- DRAG FUNCTIONS RESTAURADAS ---
         function renderBoard() {
             const b = document.getElementById('kanbanView'); if(!b) return; b.innerHTML = ''; 
             columnOrder.forEach(k => { 
@@ -260,27 +257,6 @@
             });
         }
 
-        function createCard(o, c) { 
-            const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; 
-            const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
-            const wa = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
-            const times = calculateTime(o);
-            d.innerHTML = `<div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-timers"><span title="Nesta etapa"><i class="fa-regular fa-clock"></i> ${times.stage}d</span><span title="Total"><i class="fa-solid fa-history"></i> ${times.total}d</span></div><div class="card-actions">${wa}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
-        }
-
-        // FUNÇÕES DE DRAG PARA CARDS
-        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); } 
-        function allowDrop(ev) { ev.preventDefault(); } 
-        async function drop(ev) { 
-            ev.preventDefault(); 
-            const id = ev.dataTransfer.getData("text"); 
-            const col = ev.target.closest('.card-list'); 
-            if (!col) return; 
-            const ns = col.id; 
-            if(orders.find(o=>o.id===id).status !== ns) changeStatus(id, ns); 
-        }
-
-        // --- RESTO ---
         function renderTimeline() {
             const c = document.getElementById('timelineView'); if(!c) return; c.innerHTML = ''; 
             const s = [...orders].sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); 
@@ -290,6 +266,14 @@
                 const wa = o.phone ? `<button class="btn-icon btn-wa" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
                 c.innerHTML += `<div class="timeline-item" style="border-left-color:${col.color}"><div class="tl-info"><div class="tl-client"><span class="status-dot ${dotClass}"></span>${o.client}</div><div class="tl-product">${o.product}</div><div class="tl-meta"><span class="tl-date" style="color:${cl};border:1px solid ${cl}">${formatDate(o.dueDate)}</span><span style="font-size:0.8em;color:${col.color}"><i class="fa-solid fa-circle" style="font-size:0.6em"></i> ${col.title}</span></div></div><div class="tl-actions">${wa}<select class="status-select" onchange="changeStatus('${o.id}',this.value)">${opts}</select><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button></div></div>`; 
             }); 
+        }
+
+        function createCard(o, c) { 
+            const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; 
+            const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
+            const wa = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
+            const times = calculateTime(o);
+            d.innerHTML = `<div class="card-title"><span class="status-dot ${dotClass}"></span> ${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-timers"><span title="Nesta etapa"><i class="fa-regular fa-clock"></i> ${times.stage}d</span><span title="Total"><i class="fa-solid fa-history"></i> ${times.total}d</span></div><div class="card-actions">${wa}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
         }
 
         function renderReports() {
@@ -307,7 +291,7 @@
         // --- INTEGRADOR & UTILS ---
         function openIntegrator() { const t = localStorage.getItem('warrior_gh_token'); const tkInput = document.getElementById('integrationToken'); if(t && tkInput) tkInput.value = t; const s = document.getElementById('integrationColSelect'); if(s) { s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); } toggleIntegratorOptions(); document.getElementById('integratorModal').showModal(); }
         function toggleIntegratorOptions() { const type = document.getElementById('integrationActionType').value; document.getElementById('opt-move').style.display = type === 'move' ? 'block' : 'none'; document.getElementById('opt-color').style.display = type === 'color' ? 'block' : 'none'; updateIntegratorCode(); }
-        function updateIntegratorCode() { const tkEl = document.getElementById('integrationToken'); const token = tkEl ? tkEl.value.trim() : ''; if(token) localStorage.setItem('warrior_gh_token', token); const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`; document.getElementById('dispUrl').innerText = url; const headers = [{ k: 'Authorization', v: `token ${token || 'ghp_SEU_TOKEN'}` }, { k: 'Accept', v: 'application/vnd.github.v3+json' }, { k: 'Content-Type', v: 'application/json' }, { k: 'User-Agent', v: 'WarriorBot' }]; const list = document.getElementById('headersList'); if(list) { list.innerHTML = ''; headers.forEach(h => { const safeKey = h.k.replace(/-/g,''); list.innerHTML += `<div class="header-row"><span class="header-key">${h.k}</span><span class="header-val" id="val-${safeKey}">${h.v}</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('val-${safeKey}')">Copiar</button></span></div>`; }); } const type = document.getElementById('integrationActionType').value; let json = {}; if (type === 'move') { const col = document.getElementById('integrationColSelect').value; json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}" } }; } else if (type === 'color') { const isWaiting = document.getElementById('integrationColorSelect').value === 'true'; json = { "event_type": "crm_event", "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; } else if (type === 'delete') { json = { "event_type": "crm_event", "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; } document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); }
+        function updateIntegratorCode() { const tkEl = document.getElementById('integrationToken'); const token = tkEl ? tkEl.value.trim() : ''; if(token) localStorage.setItem('warrior_gh_token', token); const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`; document.getElementById('dispUrl').innerText = url; const headers = [{ k: 'Authorization', v: `token ${token || 'ghp_SEU_TOKEN'}` }, { k: 'Accept', v: 'application/vnd.github.v3+json' }, { k: 'Content-Type', v: 'application/json' }, { k: 'User-Agent', v: 'WarriorBot' }]; const list = document.getElementById('headersList'); if(list) { list.innerHTML = ''; headers.forEach(h => { const safeKey = h.k.replace(/-/g,''); list.innerHTML += `<div class="header-row"><span class="header-key">${h.k}</span><span class="header-val" id="val-${safeKey}">${h.v}</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('val-${safeKey}')">Copiar</button></span></div>`; }); } const type = document.getElementById('integrationActionType').value; let json = {}; if (type === 'move') { const col = document.getElementById('integrationColSelect').value; const waitChk = document.getElementById('chkMoveWait'); const isWait = waitChk ? waitChk.checked : false; json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}", "waiting": isWait } }; } else if (type === 'color') { const isWaiting = document.getElementById('integrationColorSelect').value === 'true'; json = { "event_type": "crm_event", "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; } else if (type === 'delete') { json = { "event_type": "crm_event", "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; } document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); }
         async function sendToGitHub(realAction, payload) { const t = getToken(); if(!t) { alert("Token?"); return; } const body = { event_type: "crm_event", client_payload: { real_action: realAction, ...payload } }; try { const r = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, { method: 'POST', headers: { 'Authorization': `token ${t}`, 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) }); if(!r.ok) throw new Error(r.status); } catch(e) { alert("Erro Envio: "+e.message); throw e; } }
         function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); } function copyLink(id) { navigator.clipboard.writeText(window.location.href.replace('index.html','').split('?')[0] + 'rastreio/?id='+id); alert("Link Rastreio Copiado!"); } function closeModal(id) { document.getElementById(id).close(); } function showStatus(m,c) { const e=document.getElementById('statusMsg'); if(e) { e.innerText=m; e.style.background=c; e.style.display='block'; } } function hideStatus() { const e=document.getElementById('statusMsg'); if(e) e.style.display='none'; } function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; } function sortColumn(k, t) { let c = orders.filter(o => o.status === k); let o = orders.filter(o => o.status !== k); if (t === 'date') c.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); else c.sort((a,b) => a.client.localeCompare(b.client)); orders = [...o, ...c]; renderBoard(); } function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
         function openFilterModal() { const l = document.getElementById('filterList'); l.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) l.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${k}" value="${k}" ${visibleColumns.includes(k)?'checked':''}><div style="width:15px;height:15px;background:${columnsConfig[k].color};border-radius:50%;"></div><label for="chk-${k}">${columnsConfig[k].title}</label></div>`; }); document.getElementById('chk-hideWaiting').checked = hideWaiting; document.getElementById('filterModal').showModal(); }
@@ -332,6 +316,14 @@
         async function removeColumn(k) { if(!confirm("Remover?")) return; delete columnsConfig[k]; columnOrder = columnOrder.filter(id => id !== k); openSettings(); }
         async function deleteOrder(id) { if(confirm('Apagar?')) { orders = orders.filter(o => o.id !== id); if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToGitHub('delete_order', { id }); } catch(e) {} } }
         function openSettings() { const l = document.getElementById('columnsList'); l.innerHTML = ''; columnOrder.forEach((k, index) => { if(columnsConfig[k]) { const c = columnsConfig[k]; const d = document.createElement('div'); d.className='col-item'; d.innerHTML = `<input type="number" class="order-input" data-key="${k}" value="${index + 1}"><div class="status-dot" style="background:${c.color}; margin-left:5px;"></div><div class="col-inputs"><input class="inp-full" style="margin:0;padding:5px;" value="${c.title}" onchange="columnsConfig['${k}'].title=this.value"><div class="col-row"><input type="number" class="inp-mini" value="${c.days}" onchange="columnsConfig['${k}'].days=parseInt(this.value)"><input type="color" style="height:30px;" value="${c.color}" onchange="columnsConfig['${k}'].color=this.value"></div></div><button onclick="removeColumn('${k}')" style="color:red;border:none;background:none;"><i class="fa-solid fa-trash"></i></button>`; l.appendChild(d); } }); document.getElementById('settingsModal').showModal(); }
+        
+        // DRAG FUNCTIONS REINSERIDAS
+        function handleDragStart(e) { dragSrcEl = this; e.dataTransfer.effectAllowed = 'move'; } 
+        function handleDragOver(e) { e.preventDefault(); return false; } 
+        function handleDrop(e) { e.stopPropagation(); if (dragSrcEl !== this) { /* Nada para colunas */ } return false; }
+        
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); } 
+        function allowDrop(ev) { ev.preventDefault(); } 
 
         document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
         document.addEventListener('DOMContentLoaded', init);
