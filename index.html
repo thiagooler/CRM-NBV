@@ -209,6 +209,7 @@
             setInterval(() => loadData(true), 15000);
         }
 
+        // --- BUSCA ---
         function handleSearch(val) { searchTerm = val.toLowerCase(); if(currentView === 'kanban') renderBoard(); else if(currentView === 'timeline') renderTimeline(); }
         function matchesSearch(order) { if(!searchTerm) return true; const term = searchTerm; const name = (order.client || '').toLowerCase(); const id = (order.id || '').toLowerCase(); const prod = (order.product || '').toLowerCase(); const rawPhone = (order.phone || '').toLowerCase(); const cleanPhone = rawPhone.replace(/\D/g, ''); return name.includes(term) || id.includes(term) || prod.includes(term) || rawPhone.includes(term) || cleanPhone.includes(term); }
         function scrollBoard(direction) { const slider = document.getElementById('kanbanView'); slider.scrollBy({ left: direction * 320, behavior: 'smooth' }); }
@@ -324,6 +325,14 @@
         
         function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); } 
         function allowDrop(ev) { ev.preventDefault(); } 
+        async function drop(ev) { 
+            ev.preventDefault(); 
+            const id = ev.dataTransfer.getData("text"); 
+            const col = ev.target.closest('.card-list'); 
+            if (!col) return; 
+            const ns = col.id; 
+            if(orders.find(o=>o.id===id).status !== ns) changeStatus(id, ns); 
+        }
 
         document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
         document.addEventListener('DOMContentLoaded', init);
