@@ -1353,6 +1353,18 @@
       "waiting": false,
       "createdAt": 1766853925123,
       "history": []
+    },
+    {
+      "id": "ped-1766855403717",
+      "client": "Chaiane",
+      "phone": "+554284280642",
+      "chat_id": "522198781",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766855403717,
+      "history": []
     }
   ]
 }
