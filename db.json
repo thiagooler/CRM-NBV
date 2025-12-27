@@ -1388,7 +1388,13 @@
       "status": "doing",
       "waiting": false,
       "createdAt": 1766853925123,
-      "history": []
+      "history": [
+        {
+          "from": "doing",
+          "to": "doing",
+          "date": 1766862567525
+        }
+      ]
     },
     {
       "id": "ped-1766855403717",
