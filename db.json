@@ -3366,6 +3366,18 @@
       "waiting": false,
       "createdAt": 1766862065916,
       "history": []
+    },
+    {
+      "id": "ped-1766862084892",
+      "client": "Maria de Lourdes de Oliveira",
+      "phone": "+554284027572",
+      "chat_id": "484678908",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862084892,
+      "history": []
     }
   ]
 }
