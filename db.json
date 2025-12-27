@@ -3306,6 +3306,18 @@
       "waiting": false,
       "createdAt": 1766862005440,
       "history": []
+    },
+    {
+      "id": "ped-1766862016386",
+      "client": "Raquel",
+      "phone": "+554284081918",
+      "chat_id": "835663300",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862016386,
+      "history": []
     }
   ]
 }
