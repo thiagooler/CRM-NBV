@@ -3540,6 +3540,18 @@
       "waiting": false,
       "createdAt": 1766862369347,
       "history": []
+    },
+    {
+      "id": "ped-1766862377339",
+      "client": "carol olnengue",
+      "phone": "+554299027714",
+      "chat_id": "573014252",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862377339,
+      "history": []
     }
   ]
 }
