@@ -2550,6 +2550,18 @@
       "waiting": true,
       "createdAt": 1766860975103,
       "history": []
+    },
+    {
+      "id": "ped-1766860976135",
+      "client": "rafa",
+      "phone": "+554298215848",
+      "chat_id": "573022156",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766860976135,
+      "history": []
     }
   ]
 }
