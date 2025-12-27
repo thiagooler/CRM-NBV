@@ -3174,6 +3174,18 @@
       "waiting": false,
       "createdAt": 1766861425221,
       "history": []
+    },
+    {
+      "id": "ped-1766861658292",
+      "client": "Zuelita Santos",
+      "phone": "+554291184923",
+      "chat_id": "835558414",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766861658292,
+      "history": []
     }
   ]
 }
