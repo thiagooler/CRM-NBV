@@ -1924,6 +1924,18 @@
       "waiting": false,
       "createdAt": 1766859397817,
       "history": []
+    },
+    {
+      "id": "ped-1766859456191",
+      "client": "Maria Eduarda",
+      "phone": "+554499975523",
+      "chat_id": "806873317",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-06",
+      "status": "filadeproduo_612",
+      "waiting": false,
+      "createdAt": 1766859456191,
+      "history": []
     }
   ]
 }
