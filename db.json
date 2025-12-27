@@ -1641,6 +1641,19 @@
       "waiting": true,
       "createdAt": 1766857896051,
       "history": []
+    },
+    {
+      "id": "ped-1766857971924",
+      "client": "Jean Gabriel Batista",
+      "phone": "4298407153",
+      "chat_id": "790908745",
+      "product": "Manual",
+      "dueDate": "2025-12-27",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "createdAt": 1766857979321,
+      "finishedAt": null,
+      "history": []
     }
   ]
 }
