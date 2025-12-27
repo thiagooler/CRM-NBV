@@ -1337,6 +1337,18 @@
       "waiting": false,
       "createdAt": 1766853888315,
       "history": []
+    },
+    {
+      "id": "ped-1766853925123",
+      "client": "Roseli Dos Santos Caetano",
+      "phone": "+554299320140",
+      "chat_id": "643239698",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766853925123,
+      "history": []
     }
   ]
 }
