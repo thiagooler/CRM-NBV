@@ -3462,6 +3462,18 @@
       "waiting": false,
       "createdAt": 1766862205884,
       "history": []
+    },
+    {
+      "id": "ped-1766862259468",
+      "client": "Leticia",
+      "phone": "+554298017318",
+      "chat_id": "481308443",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862259468,
+      "history": []
     }
   ]
 }
