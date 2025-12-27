@@ -3504,6 +3504,18 @@
       "waiting": false,
       "createdAt": 1766862310502,
       "history": []
+    },
+    {
+      "id": "ped-1766862318526",
+      "client": "Anadir",
+      "phone": "+554298313482",
+      "chat_id": "636182343",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862318526,
+      "history": []
     }
   ]
 }
