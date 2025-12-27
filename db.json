@@ -2796,6 +2796,18 @@
       "waiting": true,
       "createdAt": 1766861125973,
       "history": []
+    },
+    {
+      "id": "ped-1766861136065",
+      "client": "Sandra",
+      "phone": "+554298582214",
+      "chat_id": "660459798",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861136065,
+      "history": []
     }
   ]
 }
