@@ -220,10 +220,10 @@
             if (slider) { slider.addEventListener('wheel', (e) => { if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; } }); }
 
             await loadData();
-            setInterval(() => loadData(true), 30000); // 30s para performance
+            setInterval(() => loadData(true), 30000); 
         }
 
-        // --- GLOBAL HELPERS (FUNÇÕES OBRIGATÓRIAS) ---
+        // --- GLOBAL HELPERS ---
         function showStatus(m,c) { const e=document.getElementById('statusMsg'); if(e) { e.innerText=m; e.style.background=c; e.style.display='block'; } } 
         function hideStatus() { const e=document.getElementById('statusMsg'); if(e) e.style.display='none'; } 
 
@@ -359,10 +359,6 @@
         async function deleteOrder(id) { if(confirm('Apagar?')) { orders = orders.filter(o => o.id !== id); if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToGitHub('delete_order', { id }); } catch(e) {} } }
         function openSettings() { const l = document.getElementById('columnsList'); l.innerHTML = ''; columnOrder.forEach((k, index) => { if(columnsConfig[k]) { const c = columnsConfig[k]; const d = document.createElement('div'); d.className='col-item'; d.innerHTML = `<input type="number" class="order-input" data-key="${k}" value="${index + 1}"><div class="status-dot" style="background:${c.color}; margin-left:5px;"></div><div class="col-inputs"><input class="inp-full" style="margin:0;padding:5px;" value="${c.title}" onchange="columnsConfig['${k}'].title=this.value"><div class="col-row"><input type="number" class="inp-mini" value="${c.days}" onchange="columnsConfig['${k}'].days=parseInt(this.value)"><input type="color" style="height:30px;" value="${c.color}" onchange="columnsConfig['${k}'].color=this.value"></div></div><button onclick="removeColumn('${k}')" style="color:red;border:none;background:none;"><i class="fa-solid fa-trash"></i></button>`; l.appendChild(d); } }); document.getElementById('settingsModal').showModal(); }
         
-        // --- FILTRO (CORRIGIDO) ---
-        function openFilterModal() { const l = document.getElementById('filterList'); l.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) l.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${k}" value="${k}" ${visibleColumns.includes(k)?'checked':''}><div style="width:15px;height:15px;background:${columnsConfig[k].color};border-radius:50%;"></div><label for="chk-${k}">${columnsConfig[k].title}</label></div>`; }); document.getElementById('chk-hideWaiting').checked = hideWaiting; document.getElementById('filterModal').showModal(); }
-        function applyFilters() { visibleColumns = []; document.querySelectorAll('#filterList input[type="checkbox"]').forEach(c => { if(c.checked) visibleColumns.push(c.value); }); localStorage.setItem('warrior_crm_filters', JSON.stringify(visibleColumns)); hideWaiting = document.getElementById('chk-hideWaiting').checked; localStorage.setItem('warrior_crm_hideWaiting', JSON.stringify(hideWaiting)); closeModal('filterModal'); if(currentView==='timeline') renderTimeline(); }
-
         // --- MODAIS (NOVO & EDITAR) - RESTAURADOS ---
         function openNewOrderModal() { document.getElementById('manualName').value=''; document.getElementById('manualChatId').value=''; document.getElementById('manualProduct').value=''; document.getElementById('manualPhone').value=''; document.getElementById('manualDate').valueAsDate=new Date(); const s = document.getElementById('manualColumn'); s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); document.getElementById('newOrderModal').showModal(); }
         
@@ -374,26 +370,9 @@
         
         async function saveOrderEdits() { const id = document.getElementById('editOrderId').value; const c = document.getElementById('editClientName').value; const ph = document.getElementById('editPhone').value; const p = document.getElementById('editProduct').value; const d = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=c; orders[idx].phone=ph; orders[idx].product=p; orders[idx].dueDate=d; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); } closeModal('editOrderModal'); try { await sendToGitHub('update_order', { id, client: c, phone: ph, product: p, dueDate: d }); } catch(e) {} }
 
-        // --- INTEGRADOR & UTILS ---
-        function openIntegrator() { const t = localStorage.getItem('warrior_gh_token'); const tkInput = document.getElementById('integrationToken'); if(t && tkInput) tkInput.value = t; const s = document.getElementById('integrationColSelect'); if(s) { s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); } toggleIntegratorOptions(); document.getElementById('integratorModal').showModal(); }
-        function toggleIntegratorOptions() { const type = document.getElementById('integrationActionType').value; document.getElementById('opt-move').style.display = type === 'move' ? 'block' : 'none'; document.getElementById('opt-color').style.display = type === 'color' ? 'block' : 'none'; updateIntegratorCode(); }
-        function updateIntegratorCode() { const tkEl = document.getElementById('integrationToken'); const token = tkEl ? tkEl.value.trim() : ''; if(token) localStorage.setItem('warrior_gh_token', token); const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`; document.getElementById('dispUrl').innerText = url; const headers = [{ k: 'Authorization', v: `token ${token || 'ghp_SEU_TOKEN'}` }, { k: 'Accept', v: 'application/vnd.github.v3+json' }, { k: 'Content-Type', v: 'application/json' }, { k: 'User-Agent', v: 'WarriorBot' }]; const list = document.getElementById('headersList'); if(list) { list.innerHTML = ''; headers.forEach(h => { const safeKey = h.k.replace(/-/g,''); list.innerHTML += `<div class="header-row"><span class="header-key">${h.k}</span><span class="header-val" id="val-${safeKey}">${h.v}</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('val-${safeKey}')">Copiar</button></span></div>`; }); } const type = document.getElementById('integrationActionType').value; let json = {}; 
-        if (type === 'move') { 
-            const col = document.getElementById('integrationColSelect').value; 
-            const waitSel = document.getElementById('moveWaitSelect').value;
-            let waitPayload; 
-            if(waitSel === 'true') waitPayload = true; 
-            else if(waitSel === 'false') waitPayload = false; 
-            // if 'keep', waitPayload stays undefined
-            
-            json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}", "waiting": waitPayload } }; 
-        } 
-        else if (type === 'color') { const isWaiting = document.getElementById('integrationColorSelect').value === 'true'; json = { "event_type": "crm_event", "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; } else if (type === 'delete') { json = { "event_type": "crm_event", "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; } document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); }
-        async function sendToGitHub(realAction, payload) { const t = getToken(); if(!t) { alert("Token?"); return; } const body = { event_type: "crm_event", client_payload: { real_action: realAction, ...payload } }; try { const r = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, { method: 'POST', headers: { 'Authorization': `token ${t}`, 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) }); if(!r.ok) throw new Error(r.status); } catch(e) { alert("Erro Envio: "+e.message); throw e; } }
-        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); } function copyLink(id) { navigator.clipboard.writeText(window.location.href.replace('index.html','').split('?')[0] + 'rastreio/?id='+id); alert("Link Rastreio Copiado!"); } function closeModal(id) { document.getElementById(id).close(); } 
-        function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; } 
-        function sortColumn(k, t) { let c = orders.filter(o => o.status === k); let o = orders.filter(o => o.status !== k); if (t === 'date') c.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); else c.sort((a,b) => a.client.localeCompare(b.client)); orders = [...o, ...c]; renderBoard(); } 
-        function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
+        // --- FILTRO E DRAG/DROP ---
+        function openFilterModal() { const l = document.getElementById('filterList'); l.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) l.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${k}" value="${k}" ${visibleColumns.includes(k)?'checked':''}><div style="width:15px;height:15px;background:${columnsConfig[k].color};border-radius:50%;"></div><label for="chk-${k}">${columnsConfig[k].title}</label></div>`; }); document.getElementById('chk-hideWaiting').checked = hideWaiting; document.getElementById('filterModal').showModal(); }
+        function applyFilters() { visibleColumns = []; document.querySelectorAll('#filterList input[type="checkbox"]').forEach(c => { if(c.checked) visibleColumns.push(c.value); }); localStorage.setItem('warrior_crm_filters', JSON.stringify(visibleColumns)); hideWaiting = document.getElementById('chk-hideWaiting').checked; localStorage.setItem('warrior_crm_hideWaiting', JSON.stringify(hideWaiting)); closeModal('filterModal'); if(currentView==='timeline') renderTimeline(); }
 
         function handleDragStart(e) { dragSrcEl = this; e.dataTransfer.effectAllowed = 'move'; } 
         function handleDragOver(e) { e.preventDefault(); return false; } 
@@ -409,6 +388,28 @@
             const ns = col.id; 
             if(orders.find(o=>o.id===id).status !== ns) changeStatus(id, ns); 
         }
+        
+        async function changeStatus(id, st) { const i = orders.findIndex(o => o.id === id); if(i === -1) return; const days = columnsConfig[st]?.days || 0; let nd = null; if(days>0) { const d = new Date(); d.setDate(d.getDate()+days); nd = d.toISOString().split('T')[0]; orders[i].dueDate = nd; } orders[i].status = st; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToGitHub('update_status', { id, status: st, newDate: nd }); } catch(e) {} }
+
+        // --- INTEGRADOR & UTILS ---
+        function openIntegrator() { const t = localStorage.getItem('warrior_gh_token'); const tkInput = document.getElementById('integrationToken'); if(t && tkInput) tkInput.value = t; const s = document.getElementById('integrationColSelect'); if(s) { s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); } toggleIntegratorOptions(); document.getElementById('integratorModal').showModal(); }
+        function toggleIntegratorOptions() { const type = document.getElementById('integrationActionType').value; document.getElementById('opt-move').style.display = type === 'move' ? 'block' : 'none'; document.getElementById('opt-color').style.display = type === 'color' ? 'block' : 'none'; updateIntegratorCode(); }
+        function updateIntegratorCode() { const tkEl = document.getElementById('integrationToken'); const token = tkEl ? tkEl.value.trim() : ''; if(token) localStorage.setItem('warrior_gh_token', token); const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`; document.getElementById('dispUrl').innerText = url; const headers = [{ k: 'Authorization', v: `token ${token || 'ghp_SEU_TOKEN'}` }, { k: 'Accept', v: 'application/vnd.github.v3+json' }, { k: 'Content-Type', v: 'application/json' }, { k: 'User-Agent', v: 'WarriorBot' }]; const list = document.getElementById('headersList'); if(list) { list.innerHTML = ''; headers.forEach(h => { const safeKey = h.k.replace(/-/g,''); list.innerHTML += `<div class="header-row"><span class="header-key">${h.k}</span><span class="header-val" id="val-${safeKey}">${h.v}</span><span class="header-copy"><button class="copy-btn-sm" onclick="copyText('val-${safeKey}')">Copiar</button></span></div>`; }); } const type = document.getElementById('integrationActionType').value; let json = {}; 
+        if (type === 'move') { 
+            const col = document.getElementById('integrationColSelect').value; 
+            const waitSel = document.getElementById('moveWaitSelect').value;
+            let waitPayload; 
+            if(waitSel === 'true') waitPayload = true; 
+            else if(waitSel === 'false') waitPayload = false; 
+            
+            json = { "event_type": "crm_event", "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}", "waiting": waitPayload } }; 
+        } 
+        else if (type === 'color') { const isWaiting = document.getElementById('integrationColorSelect').value === 'true'; json = { "event_type": "crm_event", "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; } else if (type === 'delete') { json = { "event_type": "crm_event", "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; } document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); }
+        async function sendToGitHub(realAction, payload) { const t = getToken(); if(!t) { alert("Token?"); return; } const body = { event_type: "crm_event", client_payload: { real_action: realAction, ...payload } }; try { const r = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, { method: 'POST', headers: { 'Authorization': `token ${t}`, 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) }); if(!r.ok) throw new Error(r.status); } catch(e) { alert("Erro Envio: "+e.message); throw e; } }
+        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace('Copiar','').trim()).then(()=>alert("Copiado!")); } function copyLink(id) { navigator.clipboard.writeText(window.location.href.replace('index.html','').split('?')[0] + 'rastreio/?id='+id); alert("Link Rastreio Copiado!"); } function closeModal(id) { document.getElementById(id).close(); } 
+        function formatDate(d) { return d ? d.split('-').reverse().join('/') : '--'; } 
+        function sortColumn(k, t) { let c = orders.filter(o => o.status === k); let o = orders.filter(o => o.status !== k); if (t === 'date') c.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); else c.sort((a,b) => a.client.localeCompare(b.client)); orders = [...o, ...c]; renderBoard(); } 
+        function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
 
         document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
         document.addEventListener('DOMContentLoaded', init);
