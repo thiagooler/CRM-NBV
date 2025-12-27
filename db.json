@@ -3000,6 +3000,18 @@
       "waiting": true,
       "createdAt": 1766861304600,
       "history": []
+    },
+    {
+      "id": "ped-1766861313090",
+      "client": "Luciana",
+      "phone": "+554299281756",
+      "chat_id": "569274903",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861313090,
+      "history": []
     }
   ]
 }
