@@ -677,7 +677,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2025-12-31",
       "status": "approval",
-      "waiting": false,
+      "waiting": true,
       "createdAt": 1766722728563,
       "history": [
         {
