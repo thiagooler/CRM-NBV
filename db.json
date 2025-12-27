@@ -2868,6 +2868,18 @@
       "waiting": true,
       "createdAt": 1766861216412,
       "history": []
+    },
+    {
+      "id": "ped-1766861224079",
+      "client": "𝔈𝔡𝔦𝔫𝔞𝔩𝔳𝔞 𝔨𝔢𝔫𝔥𝔞𝔯",
+      "phone": "+554298272286",
+      "chat_id": "496734742",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861224079,
+      "history": []
     }
   ]
 }
