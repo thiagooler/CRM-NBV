@@ -1666,8 +1666,8 @@
       "phone": "+554299461817",
       "chat_id": "848452782",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-30",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-01-06",
+      "status": "filadeproduo_612",
       "waiting": false,
       "createdAt": 1766858196128,
       "history": [
@@ -1675,6 +1675,11 @@
           "from": "filadeproduo_612",
           "to": "filadeatendimento_988",
           "date": 1766858523356
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeproduo_612",
+          "date": 1766859310061
         }
       ]
     },
