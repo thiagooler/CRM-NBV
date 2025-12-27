@@ -2844,6 +2844,18 @@
       "waiting": true,
       "createdAt": 1766861195452,
       "history": []
+    },
+    {
+      "id": "ped-1766861205714",
+      "client": "Josiane De Fátima da Silv",
+      "phone": "+554284076382",
+      "chat_id": "748409146",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861205714,
+      "history": []
     }
   ]
 }
