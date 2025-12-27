@@ -3612,6 +3612,18 @@
       "waiting": false,
       "createdAt": 1766862465770,
       "history": []
+    },
+    {
+      "id": "ped-1766862472219",
+      "client": "Monique Miranda",
+      "phone": "+554284028631",
+      "chat_id": "495746387",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862472219,
+      "history": []
     }
   ]
 }
