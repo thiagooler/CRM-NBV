@@ -3426,6 +3426,18 @@
       "waiting": false,
       "createdAt": 1766862137088,
       "history": []
+    },
+    {
+      "id": "ped-1766862174812",
+      "client": "vera regina dos santos",
+      "phone": "+554299963703",
+      "chat_id": "515706570",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862174812,
+      "history": []
     }
   ]
 }
