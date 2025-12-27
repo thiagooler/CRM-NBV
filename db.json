@@ -2916,6 +2916,18 @@
       "waiting": true,
       "createdAt": 1766861244608,
       "history": []
+    },
+    {
+      "id": "ped-1766861256999",
+      "client": "Brotsko🇻🇦",
+      "phone": "+554299918841",
+      "chat_id": "630288246",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861256999,
+      "history": []
     }
   ]
 }
