@@ -2032,6 +2032,18 @@
       "waiting": false,
       "createdAt": 1766860321542,
       "history": []
+    },
+    {
+      "id": "ped-1766860480894",
+      "client": "Cleuzi aparecida fernandes",
+      "phone": "+554284050785",
+      "chat_id": "477621519",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766860480894,
+      "history": []
     }
   ]
 }
