@@ -196,6 +196,19 @@
             <div id="codeUrl" style="display:none;"></div><div id="codeBody" style="display:none;"></div>
         </div>
     </dialog>
+    
+    <dialog id="snoozeModal">
+        <div class="modal-header"><h3 style="margin:0">👁️ Ocultar Pedido</h3><button onclick="closeModal('snoozeModal')" style="border:none; background:none; cursor:pointer;">&times;</button></div>
+        <div class="modal-body">
+            <p>Por quantos dias você quer ocultar este pedido?</p>
+            <input type="hidden" id="snoozeOrderId">
+            <input type="number" id="snoozeDays" class="inp-full" placeholder="Ex: 5" value="1">
+            <div style="font-size:0.9em; color:#666; margin-bottom:15px;">
+                <i class="fa-solid fa-circle-info"></i> Se a data ultrapassar o vencimento, o sistema ajustará automaticamente.
+            </div>
+            <button class="btn-primary" onclick="confirmSnooze()">Ocultar</button>
+        </div>
+    </dialog>
 
     <dialog id="filterModal"><div class="modal-header"><h3 style="margin:0">👁️ Filtros</h3><button onclick="closeModal('filterModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><div id="filterList"></div><hr style="margin:15px 0; border:0; border-top:1px solid #eee;"><div class="filter-item"><input type="checkbox" id="chk-hideWaiting"><span class="status-dot dot-yellow"></span><label for="chk-hideWaiting"> Ocultar "Aguardando"</label></div><button class="btn-primary" onclick="applyFilters()">Aplicar</button></div></dialog>
     <dialog id="settingsModal"><div class="modal-header"><h3 style="margin:0">Configurações</h3><button onclick="closeModal('settingsModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><div class="tab-content active"><div style="background:#e3f2fd;padding:10px;margin-bottom:10px;border-radius:4px;">✋ Digite a posição (1, 2, 3...) e Salve.</div><div id="columnsList"></div><button class="btn-primary" onclick="saveAllColumns()">💾 Salvar Ordem</button><h4 style="margin-top:20px;">Nova Coluna</h4><input id="newColTitle" class="inp-full" placeholder="Nome"><div style="display:flex;gap:10px;"><input type="color" id="newColColor" style="height:40px;width:50px;"><input type="number" id="newColDays" class="inp-full" placeholder="Dias"></div><button class="btn-primary" onclick="addColumn()">+ Adicionar</button></div></div></dialog>
@@ -298,11 +311,17 @@
             
             let count = 0;
             let hiddenCount = 0;
+            const now = Date.now();
             const frag = document.createDocumentFragment();
 
             s.forEach(o => { 
-                if (!visibleColumns.includes(o.status)) return; if (hideWaiting && o.waiting) return; if (!matchesSearch(o)) return;
+                if (!visibleColumns.includes(o.status)) return; 
+                if (hideWaiting && o.waiting) return; 
+                if (!matchesSearch(o)) return;
                 
+                // FILTRO SNOOZE (OCULTO)
+                if (o.hiddenUntil && o.hiddenUntil > now) return;
+
                 if (count >= timelineLimit) { hiddenCount++; return; }
                 count++;
 
@@ -312,7 +331,23 @@
                 const div = document.createElement('div');
                 div.className = 'timeline-item';
                 div.style.borderLeftColor = col.color;
-                div.innerHTML = `<div class="tl-info"><div class="tl-client"><span class="status-dot ${dotClass}" onclick="toggleWaiting('${o.id}')" title="Alternar Status"></span>${o.client}</div><div class="tl-product">${o.product}</div><div class="tl-meta"><span class="tl-date" style="color:${cl};border:1px solid ${cl}">${formatDate(o.dueDate)}</span><span style="font-size:0.8em;color:${col.color}"><i class="fa-solid fa-circle" style="font-size:0.6em"></i> ${col.title}</span></div></div><div class="tl-actions">${wa}<select class="status-select" onchange="changeStatus('${o.id}',this.value)">${opts}</select><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button></div>`;
+                div.innerHTML = `
+                    <div class="tl-info">
+                        <div class="tl-client">
+                            <span class="status-dot ${dotClass}" onclick="toggleWaiting('${o.id}')" title="Alternar Status"></span>${o.client}
+                        </div>
+                        <div class="tl-product">${o.product}</div>
+                        <div class="tl-meta">
+                            <span class="tl-date" style="color:${cl};border:1px solid ${cl}">${formatDate(o.dueDate)}</span>
+                            <span style="font-size:0.8em;color:${col.color}"><i class="fa-solid fa-circle" style="font-size:0.6em"></i> ${col.title}</span>
+                        </div>
+                    </div>
+                    <div class="tl-actions">
+                        ${wa}
+                        <button class="btn-icon" onclick="openSnooze('${o.id}')" title="Ocultar"><i class="fa-solid fa-eye-slash"></i></button>
+                        <select class="status-select" onchange="changeStatus('${o.id}',this.value)">${opts}</select>
+                        <button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button>
+                    </div>`;
                 frag.appendChild(div);
             });
             c.appendChild(frag);
@@ -332,6 +367,52 @@
             const wa = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
             const times = calculateTime(o);
             d.innerHTML = `<div class="card-title"><span class="status-dot ${dotClass}" onclick="toggleWaiting('${o.id}')" title="Alternar Status"></span> ${o.client}</div><div class="card-meta"><i class="fa-solid fa-box"></i> ${o.product}</div><div class="card-meta" style="${late?'color:red;font-weight:bold':''}"><i class="fa-regular fa-calendar"></i> ${formatDate(o.dueDate)}</div><div class="card-timers"><span title="Nesta etapa"><i class="fa-regular fa-clock"></i> ${times.stage}d</span><span title="Total"><i class="fa-solid fa-history"></i> ${times.total}d</span></div><div class="card-actions">${wa}<button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button><button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button></div>`; return d; 
+        }
+
+        // --- SNOOZE LOGIC (NOVO) ---
+        function openSnooze(id) {
+            document.getElementById('snoozeOrderId').value = id;
+            document.getElementById('snoozeDays').value = 1;
+            document.getElementById('snoozeModal').showModal();
+        }
+
+        async function confirmSnooze() {
+            const id = document.getElementById('snoozeOrderId').value;
+            const days = parseInt(document.getElementById('snoozeDays').value);
+            const order = orders.find(o => o.id === id);
+            
+            if (!order || isNaN(days) || days < 1) return;
+
+            let targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + days);
+            
+            // Safety Check: Deadline
+            if (order.dueDate) {
+                const dueDate = new Date(order.dueDate);
+                // Reset time for comparison
+                const targetMidnight = new Date(targetDate.setHours(0,0,0,0));
+                const dueMidnight = new Date(dueDate.setHours(0,0,0,0));
+
+                if (targetMidnight > dueMidnight) {
+                    alert(`⚠️ Atenção: ${days} dias ultrapassa o vencimento (${formatDate(order.dueDate)}).\n\nOcultamento ajustado para reaparecer no dia do vencimento.`);
+                    targetDate = dueDate;
+                }
+            }
+
+            // Set hiddenUntil timestamp
+            order.hiddenUntil = targetDate.getTime();
+            
+            // Optimistic update
+            renderTimeline();
+            closeModal('snoozeModal');
+
+            try {
+                await sendToGitHub('hide_order', { id: id, hiddenUntil: targetDate.getTime() });
+                showStatus('💤 Ocultado', '#42526e');
+                setTimeout(hideStatus, 2000);
+            } catch(e) {
+                showStatus('Erro ao ocultar', '#bf2600');
+            }
         }
 
         // --- ACTIONS ---
@@ -359,7 +440,7 @@
         async function deleteOrder(id) { if(confirm('Apagar?')) { orders = orders.filter(o => o.id !== id); if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToGitHub('delete_order', { id }); } catch(e) {} } }
         function openSettings() { const l = document.getElementById('columnsList'); l.innerHTML = ''; columnOrder.forEach((k, index) => { if(columnsConfig[k]) { const c = columnsConfig[k]; const d = document.createElement('div'); d.className='col-item'; d.innerHTML = `<input type="number" class="order-input" data-key="${k}" value="${index + 1}"><div class="status-dot" style="background:${c.color}; margin-left:5px;"></div><div class="col-inputs"><input class="inp-full" style="margin:0;padding:5px;" value="${c.title}" onchange="columnsConfig['${k}'].title=this.value"><div class="col-row"><input type="number" class="inp-mini" value="${c.days}" onchange="columnsConfig['${k}'].days=parseInt(this.value)"><input type="color" style="height:30px;" value="${c.color}" onchange="columnsConfig['${k}'].color=this.value"></div></div><button onclick="removeColumn('${k}')" style="color:red;border:none;background:none;"><i class="fa-solid fa-trash"></i></button>`; l.appendChild(d); } }); document.getElementById('settingsModal').showModal(); }
         
-        // --- MODAIS (NOVO & EDITAR) - RESTAURADOS ---
+        // --- MODAIS (NOVO & EDITAR) ---
         function openNewOrderModal() { document.getElementById('manualName').value=''; document.getElementById('manualChatId').value=''; document.getElementById('manualProduct').value=''; document.getElementById('manualPhone').value=''; document.getElementById('manualDate').valueAsDate=new Date(); const s = document.getElementById('manualColumn'); s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); document.getElementById('newOrderModal').showModal(); }
         
         function autoDateManual(s) { const d = columnsConfig[s]?.days || 0; if(d>0) { const dt = new Date(); dt.setDate(dt.getDate()+d); document.getElementById('manualDate').valueAsDate = dt; } }
