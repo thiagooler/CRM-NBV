@@ -3827,6 +3827,18 @@
       "waiting": false,
       "createdAt": 1766862775087,
       "history": []
+    },
+    {
+      "id": "ped-1766862804825",
+      "client": "gustavo",
+      "phone": "+554299941253",
+      "chat_id": "635342337",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766862804825,
+      "history": []
     }
   ]
 }
