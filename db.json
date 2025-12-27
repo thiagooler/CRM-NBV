@@ -1182,6 +1182,18 @@
       "waiting": false,
       "createdAt": 1766794927672,
       "history": []
+    },
+    {
+      "id": "ped-1766831622522",
+      "client": "Lucimeri Grudeski",
+      "phone": "+554299905716",
+      "chat_id": "846030809",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766831622522,
+      "history": []
     }
   ]
 }
