@@ -1389,6 +1389,18 @@
       "waiting": true,
       "createdAt": 1766856176895,
       "history": []
+    },
+    {
+      "id": "ped-1766856559964",
+      "client": "Jucelia",
+      "phone": "+554299021147",
+      "chat_id": "509539652",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
+      "createdAt": 1766856559964,
+      "history": []
     }
   ]
 }
