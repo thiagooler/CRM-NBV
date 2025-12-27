@@ -59,6 +59,7 @@
   "columnOrder": [
     "filadeatendimento_988",
     "doing",
+    "aguardandoseleo_897",
     "review",
     "done",
     "payment",
@@ -66,8 +67,7 @@
     "emproduo_216",
     "prontoparaentrega_2",
     "disponivelpararetirada_769",
-    "psvenda_619",
-    "aguardandoseleo_897"
+    "psvenda_619"
   ],
   "orders": [
     {
