@@ -2754,6 +2754,18 @@
       "waiting": true,
       "createdAt": 1766861104786,
       "history": []
+    },
+    {
+      "id": "ped-1766861114577",
+      "client": "Lucineia Kruger",
+      "phone": "+554284133687",
+      "chat_id": "765745357",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766861114577,
+      "history": []
     }
   ]
 }
