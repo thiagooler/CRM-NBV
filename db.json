@@ -673,8 +673,8 @@
       "phone": "+554288480377",
       "chat_id": "849469349",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-31",
-      "status": "approval",
+      "dueDate": "2026-01-26",
+      "status": "payment",
       "waiting": false,
       "createdAt": 1766722728563,
       "history": [
@@ -682,6 +682,11 @@
           "from": "review",
           "to": "approval",
           "date": 1766800169615
+        },
+        {
+          "from": "approval",
+          "to": "payment",
+          "date": 1766859136853
         }
       ]
     },
