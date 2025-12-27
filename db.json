@@ -92,14 +92,19 @@
       "client": "Taiz Grando",
       "chat_id": "503653240",
       "product": "Manual",
-      "dueDate": "2026-01-03",
-      "status": "aguardandoseleo_897",
-      "waiting": true,
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
       "history": [
         {
           "from": "todo",
           "to": "aguardandoseleo_897",
           "date": 1766860515749
+        },
+        {
+          "from": "aguardandoseleo_897",
+          "to": "doing",
+          "date": 1766863935157
         }
       ],
       "phone": "+554284056441"
