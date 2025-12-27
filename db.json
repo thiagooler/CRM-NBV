@@ -2185,11 +2185,17 @@
       "phone": "+554299606256",
       "chat_id": "481054123",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "aguardandoseleo_897",
-      "waiting": true,
+      "dueDate": "2026-01-26",
+      "status": "doing",
+      "waiting": false,
       "createdAt": 1766860576704,
-      "history": []
+      "history": [
+        {
+          "from": "aguardandoseleo_897",
+          "to": "doing",
+          "date": 1766862300046
+        }
+      ]
     },
     {
       "id": "ped-1766860654366",
