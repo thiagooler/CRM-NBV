@@ -850,11 +850,17 @@
       "phone": "+554298528836",
       "chat_id": "848250413",
       "product": "Pedido via Bot",
-      "dueDate": "",
-      "status": "approval",
+      "dueDate": "2026-01-26",
+      "status": "doing",
       "waiting": false,
       "createdAt": 1766770546191,
-      "history": []
+      "history": [
+        {
+          "from": "approval",
+          "to": "doing",
+          "date": 1766863566312
+        }
+      ]
     },
     {
       "id": "ped-1766772046467",
