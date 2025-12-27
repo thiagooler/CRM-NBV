@@ -1745,6 +1745,18 @@
       "waiting": true,
       "createdAt": 1766858589626,
       "history": []
+    },
+    {
+      "id": "ped-1766858616388",
+      "client": "Thais Paula de Faria",
+      "phone": "+554299694634",
+      "chat_id": "456120168",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
+      "createdAt": 1766858616388,
+      "history": []
     }
   ]
 }
