@@ -1206,6 +1206,18 @@
       "waiting": false,
       "createdAt": 1766844681190,
       "history": []
+    },
+    {
+      "id": "ped-1766845241344",
+      "client": "Lauana😶",
+      "phone": "+555196044669",
+      "chat_id": "848104551",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-26",
+      "status": "payment",
+      "waiting": false,
+      "createdAt": 1766845241344,
+      "history": []
     }
   ]
 }
