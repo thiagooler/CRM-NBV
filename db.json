@@ -4634,6 +4634,19 @@
       "hiddenUntil": null,
       "createdAt": 1766962812569,
       "history": []
+    },
+    {
+      "id": "ped-1766964201059",
+      "client": "Vladmir",
+      "phone": "+554284349985",
+      "chat_id": "520620238",
+      "product": "Pedido via Bot",
+      "dueDate": "2025-12-31",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1766964201059,
+      "history": []
     }
   ]
 }
