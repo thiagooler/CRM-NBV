@@ -1678,8 +1678,8 @@
       "phone": "+554299686541",
       "chat_id": "486168450",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "aguardandoseleo_897",
+      "dueDate": "2026-01-27",
+      "status": "doing",
       "waiting": true,
       "createdAt": 1766857613857,
       "history": [
@@ -1687,8 +1687,14 @@
           "from": "aguardandoseleo_897",
           "to": "aguardandoseleo_897",
           "date": 1766860835071
+        },
+        {
+          "from": "aguardandoseleo_897",
+          "to": "doing",
+          "date": 1766919562651
         }
-      ]
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766857617269",
