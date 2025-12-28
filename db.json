@@ -4573,6 +4573,19 @@
           "date": 1766938531632
         }
       ]
+    },
+    {
+      "id": "ped-1766938583581",
+      "client": "viviane",
+      "phone": "+554699831223",
+      "chat_id": "841858402",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-27",
+      "status": "psvenda_619",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1766938583581,
+      "history": []
     }
   ]
 }
