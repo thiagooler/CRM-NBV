@@ -1666,7 +1666,8 @@
       "status": "aguardandoseleo_897",
       "waiting": true,
       "createdAt": 1766857562918,
-      "history": []
+      "history": [],
+      "hiddenUntil": 1766977200000
     },
     {
       "id": "ped-1766857582212",
