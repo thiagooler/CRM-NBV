@@ -4585,7 +4585,13 @@
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1766938583581,
-      "history": []
+      "history": [
+        {
+          "from": "psvenda_619",
+          "to": "psvenda_619",
+          "date": 1766938593365
+        }
+      ]
     }
   ]
 }
