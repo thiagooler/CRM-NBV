@@ -4592,6 +4592,19 @@
           "date": 1766938593365
         }
       ]
+    },
+    {
+      "id": "ped-1766938614059",
+      "client": "Letícia",
+      "phone": "+554299553215",
+      "chat_id": "849492417",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-27",
+      "status": "psvenda_619",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1766938614059,
+      "history": []
     }
   ]
 }
