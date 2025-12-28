@@ -871,7 +871,7 @@
       "phone": "+554291482885",
       "chat_id": "847702714",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-25",
+      "dueDate": "2026-01-27",
       "status": "psvenda_619",
       "waiting": false,
       "createdAt": 1766766507851,
@@ -880,8 +880,14 @@
           "from": "filadeatendimento_988",
           "to": "psvenda_619",
           "date": 1766789716095
+        },
+        {
+          "from": "psvenda_619",
+          "to": "psvenda_619",
+          "date": 1766938539599
         }
-      ]
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766770546191",
