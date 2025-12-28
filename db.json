@@ -4548,6 +4548,19 @@
       "hiddenUntil": null,
       "createdAt": 1766933090298,
       "history": []
+    },
+    {
+      "id": "ped-1766938524448",
+      "client": "Lucineia Almeida",
+      "phone": "+554284230542",
+      "chat_id": "477667884",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-27",
+      "status": "psvenda_619",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1766938524448,
+      "history": []
     }
   ]
 }
