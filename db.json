@@ -212,9 +212,18 @@
       "client": "Samara Dziecinny Machado Gralak",
       "chat_id": "480623426",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-29",
+      "dueDate": "2026-01-02",
       "status": "review",
-      "waiting": false
+      "waiting": false,
+      "history": [
+        {
+          "from": "review",
+          "to": "review",
+          "date": 1766949312140
+        }
+      ],
+      "hiddenUntil": null,
+      "phone": "+554299859186"
     },
     {
       "id": "ped-1766591881505",
