@@ -533,8 +533,8 @@
       "phone": "+554284159571",
       "chat_id": "849317124",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-28",
-      "status": "payment",
+      "dueDate": "2026-01-08",
+      "status": "filadeproduo_612",
       "waiting": true,
       "createdAt": 1766616798176,
       "history": [
@@ -542,6 +542,11 @@
           "from": "review",
           "to": "payment",
           "date": 1767036694236
+        },
+        {
+          "from": "payment",
+          "to": "filadeproduo_612",
+          "date": 1767036878011
         }
       ],
       "hiddenUntil": null
