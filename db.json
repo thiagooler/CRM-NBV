@@ -533,11 +533,18 @@
       "phone": "+554284159571",
       "chat_id": "849317124",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-29",
-      "status": "review",
+      "dueDate": "2026-01-28",
+      "status": "payment",
       "waiting": false,
       "createdAt": 1766616798176,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1767036694236
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766618319146",
