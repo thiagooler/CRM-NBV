@@ -4795,6 +4795,19 @@
       "hiddenUntil": null,
       "createdAt": 1767023422711,
       "history": []
+    },
+    {
+      "id": "ped-1767025880656",
+      "client": "Rodinei matiazzo",
+      "phone": "+554298157220",
+      "chat_id": "477621155",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-01",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767025880656,
+      "history": []
     }
   ]
 }
