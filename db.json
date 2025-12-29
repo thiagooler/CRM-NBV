@@ -3649,7 +3649,7 @@
       "chat_id": "847439849",
       "product": "Pedido via Bot",
       "dueDate": "2026-01-05",
-      "status": "aguardandoseleo_897",
+      "status": "approval",
       "waiting": true,
       "createdAt": 1766862137088,
       "history": [
@@ -3657,6 +3657,11 @@
           "from": "doing",
           "to": "aguardandoseleo_897",
           "date": 1767029018241
+        },
+        {
+          "from": "aguardandoseleo_897",
+          "to": "approval",
+          "date": 1767041389949
         }
       ],
       "hiddenUntil": null
