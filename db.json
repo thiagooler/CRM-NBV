@@ -4769,6 +4769,19 @@
           "date": 1767020365676
         }
       ]
+    },
+    {
+      "id": "ped-1767021282778",
+      "client": "Debora Camargo",
+      "phone": "+554499283900",
+      "chat_id": "838115146",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-01",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767021282778,
+      "history": []
     }
   ]
 }
