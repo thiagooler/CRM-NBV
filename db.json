@@ -162,7 +162,8 @@
       "chat_id": "710183164",
       "product": "Pedido via Bot",
       "dueDate": "2026-01-13",
-      "status": "emproduo_216"
+      "status": "emproduo_216",
+      "waiting": false
     },
     {
       "id": "ped-1766583146797",
