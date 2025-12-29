@@ -4658,6 +4658,19 @@
       "hiddenUntil": null,
       "createdAt": 1766964201059,
       "history": []
+    },
+    {
+      "id": "ped-1767001201120",
+      "client": "Viviane Dalzotto Beckmann",
+      "phone": "+554298177085",
+      "chat_id": "457738932",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-01",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767001201120,
+      "history": []
     }
   ]
 }
