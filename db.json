@@ -4807,7 +4807,13 @@
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767025880656,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767025923419
+        }
+      ]
     }
   ]
 }
