@@ -4814,6 +4814,19 @@
           "date": 1767025923419
         }
       ]
+    },
+    {
+      "id": "ped-1767027129744",
+      "client": "marcos vinicios ferreira da silva",
+      "phone": "+554291648877",
+      "chat_id": "457136566",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-01",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767027129744,
+      "history": []
     }
   ]
 }
