@@ -4723,6 +4723,19 @@
       "hiddenUntil": null,
       "createdAt": 1767014679243,
       "history": []
+    },
+    {
+      "id": "ped-1767015428296",
+      "client": "Duda Morski",
+      "phone": "+554284095856",
+      "chat_id": "495747239",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-01",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767015428296,
+      "history": []
     }
   ]
 }
