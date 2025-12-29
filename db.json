@@ -4671,6 +4671,19 @@
       "hiddenUntil": null,
       "createdAt": 1767001201120,
       "history": []
+    },
+    {
+      "id": "ped-1767014142465",
+      "client": "Jaqueline Sicredi",
+      "phone": "+554291230387",
+      "chat_id": "455727231",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-01",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767014142465,
+      "history": []
     }
   ]
 }
