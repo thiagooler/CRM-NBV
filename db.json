@@ -1339,11 +1339,18 @@
       "phone": "+554298269808",
       "chat_id": "847136513",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "disponivelpararetirada_769",
+      "dueDate": "2026-01-06",
+      "status": "prontoparaentrega_2",
       "waiting": false,
       "createdAt": 1766845692092,
-      "history": []
+      "history": [
+        {
+          "from": "disponivelpararetirada_769",
+          "to": "prontoparaentrega_2",
+          "date": 1767112659544
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766845720450",
