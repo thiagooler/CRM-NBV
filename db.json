@@ -1046,8 +1046,8 @@
       "phone": "+554284013431",
       "chat_id": "847423773",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-29",
-      "status": "payment",
+      "dueDate": "2026-01-09",
+      "status": "filadeproduo_612",
       "waiting": true,
       "createdAt": 1766782693491,
       "history": [
@@ -1055,6 +1055,11 @@
           "from": "review",
           "to": "payment",
           "date": 1767119644172
+        },
+        {
+          "from": "payment",
+          "to": "filadeproduo_612",
+          "date": 1767119864889
         }
       ],
       "hiddenUntil": null
