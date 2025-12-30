@@ -1237,11 +1237,18 @@
       "phone": "+554499792669",
       "chat_id": "846977980",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-31",
-      "status": "review",
+      "dueDate": "2026-01-29",
+      "status": "payment",
       "waiting": false,
       "createdAt": 1766784642492,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1767127861958
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766784792205",
