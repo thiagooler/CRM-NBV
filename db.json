@@ -1046,11 +1046,18 @@
       "phone": "+554284013431",
       "chat_id": "847423773",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-31",
-      "status": "review",
+      "dueDate": "2026-01-29",
+      "status": "payment",
       "waiting": true,
       "createdAt": 1766782693491,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1767119644172
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766782826512",
