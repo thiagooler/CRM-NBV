@@ -161,9 +161,18 @@
       "client": "Lucimara",
       "chat_id": "841878044",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-29",
-      "status": "review",
-      "waiting": false
+      "dueDate": "2026-01-09",
+      "status": "filadeproduo_612",
+      "waiting": false,
+      "history": [
+        {
+          "from": "review",
+          "to": "filadeproduo_612",
+          "date": 1767063142643
+        }
+      ],
+      "hiddenUntil": null,
+      "phone": "+554284073117"
     },
     {
       "id": "ped-1766583660836",
