@@ -4925,6 +4925,19 @@
       "hiddenUntil": null,
       "createdAt": 1767113687228,
       "history": []
+    },
+    {
+      "id": "ped-1767115190183",
+      "client": "prof  Fatima",
+      "phone": "+5542933008048",
+      "chat_id": "847966162",
+      "product": "Pedido via Bot",
+      "dueDate": "",
+      "status": "approval",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767115190183,
+      "history": []
     }
   ]
 }
