@@ -3292,18 +3292,6 @@
       "history": []
     },
     {
-      "id": "ped-1766861320298",
-      "client": "Gisele",
-      "phone": "+554299115395",
-      "chat_id": "509574584",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "aguardandoseleo_897",
-      "waiting": true,
-      "createdAt": 1766861320298,
-      "history": []
-    },
-    {
       "id": "ped-1766861328692",
       "client": "Cliente Bot",
       "phone": "+554298577880",
