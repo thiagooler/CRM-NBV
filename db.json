@@ -2118,8 +2118,8 @@
       "phone": "+554299301665",
       "chat_id": "842759212",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "aguardandoseleo_897",
+      "dueDate": "2026-01-29",
+      "status": "doing",
       "waiting": true,
       "createdAt": 1766859033911,
       "history": [
@@ -2127,8 +2127,14 @@
           "from": "aguardandoseleo_897",
           "to": "aguardandoseleo_897",
           "date": 1766860235924
+        },
+        {
+          "from": "aguardandoseleo_897",
+          "to": "doing",
+          "date": 1767058234336
         }
-      ]
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766859390324",
