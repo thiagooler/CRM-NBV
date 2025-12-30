@@ -4886,6 +4886,19 @@
       "hiddenUntil": null,
       "createdAt": 1767113330828,
       "history": []
+    },
+    {
+      "id": "ped-1767113687228",
+      "client": "🍀",
+      "phone": "+554298141436",
+      "chat_id": "847975424",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-29",
+      "status": "doing",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767113687228,
+      "history": []
     }
   ]
 }
