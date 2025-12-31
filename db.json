@@ -732,7 +732,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2025-12-31",
       "status": "review",
-      "waiting": true,
+      "waiting": false,
       "createdAt": 1766722387545,
       "history": []
     },
