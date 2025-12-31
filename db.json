@@ -4999,6 +4999,19 @@
           "date": 1767139550829
         }
       ]
+    },
+    {
+      "id": "ped-1767176099060",
+      "client": "Rosimari Alexandre dos Santos",
+      "phone": "+554299964707",
+      "chat_id": "842583207",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767176099060,
+      "history": []
     }
   ]
 }
