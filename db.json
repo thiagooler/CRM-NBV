@@ -5048,6 +5048,19 @@
       "hiddenUntil": null,
       "createdAt": 1767184817611,
       "history": []
+    },
+    {
+      "id": "ped-1767201562719",
+      "client": "Lucinir Rossato da Silva",
+      "phone": "+554298191081",
+      "chat_id": "456225142",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-03",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767201562719,
+      "history": []
     }
   ]
 }
