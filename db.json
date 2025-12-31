@@ -4919,12 +4919,18 @@
       "phone": "+554291648877",
       "chat_id": "457136566",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-01",
+      "dueDate": "2026-01-03",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767027129744,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767210486215
+        }
+      ]
     },
     {
       "id": "ped-1767113330828",
