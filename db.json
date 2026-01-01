@@ -5159,6 +5159,19 @@
           "date": 1767237610974
         }
       ]
+    },
+    {
+      "id": "ped-1767242396241",
+      "client": "Dany Rossatto",
+      "phone": "+554399580945",
+      "chat_id": "686788674",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-04",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767242396241,
+      "history": []
     }
   ]
 }
