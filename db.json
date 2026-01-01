@@ -5080,6 +5080,19 @@
       "hiddenUntil": null,
       "createdAt": 1767227079123,
       "history": []
+    },
+    {
+      "id": "ped-1767234610565",
+      "client": "Halan",
+      "phone": "+554298161299",
+      "chat_id": "853267326",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-04",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767234610565,
+      "history": []
     }
   ]
 }
