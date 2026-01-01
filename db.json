@@ -2763,11 +2763,18 @@
       "phone": "+554298349321",
       "chat_id": "620005601",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "aguardandoseleo_897",
+      "dueDate": "2026-01-31",
+      "status": "doing",
       "waiting": false,
       "createdAt": 1766860915521,
-      "history": []
+      "history": [
+        {
+          "from": "aguardandoseleo_897",
+          "to": "doing",
+          "date": 1767274625338
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766860926885",
