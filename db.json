@@ -4575,11 +4575,18 @@
       "phone": "+554396237399",
       "chat_id": "849490829",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
+      "dueDate": "2026-01-31",
       "status": "doing",
       "waiting": false,
       "createdAt": 1766864195030,
-      "history": []
+      "history": [
+        {
+          "from": "doing",
+          "to": "doing",
+          "date": 1767301108035
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766933090298",
