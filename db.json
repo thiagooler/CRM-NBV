@@ -5190,6 +5190,19 @@
           "date": 1767249382421
         }
       ]
+    },
+    {
+      "id": "ped-1767279846753",
+      "client": "Clauddia Muniz📸",
+      "phone": "+554299109837",
+      "chat_id": "463349242",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-04",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767279846753,
+      "history": []
     }
   ]
 }
