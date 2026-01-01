@@ -1864,7 +1864,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-03",
       "status": "aguardandoseleo_897",
-      "waiting": true,
+      "waiting": false,
       "createdAt": 1766857780872,
       "history": []
     },
