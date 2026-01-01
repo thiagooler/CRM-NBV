@@ -1747,8 +1747,8 @@
       "phone": "+554298228203",
       "chat_id": "849329028",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "aguardandoseleo_897",
+      "dueDate": "2026-01-31",
+      "status": "doing",
       "waiting": true,
       "createdAt": 1766857617269,
       "history": [
@@ -1756,9 +1756,14 @@
           "from": "aguardandoseleo_897",
           "to": "aguardandoseleo_897",
           "date": 1766860954541
+        },
+        {
+          "from": "aguardandoseleo_897",
+          "to": "doing",
+          "date": 1767300678151
         }
       ],
-      "hiddenUntil": 1766977200000
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766857639454",
