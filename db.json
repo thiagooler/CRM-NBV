@@ -5225,6 +5225,19 @@
       "hiddenUntil": null,
       "createdAt": 1767279846753,
       "history": []
+    },
+    {
+      "id": "ped-1767362318468",
+      "client": "Vanessa🤭",
+      "phone": "+554284128428",
+      "chat_id": "639881904",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-05",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767362318468,
+      "history": []
     }
   ]
 }
