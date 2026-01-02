@@ -1048,7 +1048,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-06",
       "status": "prontoparaentrega_2",
-      "waiting": true,
+      "waiting": false,
       "createdAt": 1766782693491,
       "history": [
         {
