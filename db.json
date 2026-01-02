@@ -5238,6 +5238,19 @@
       "hiddenUntil": null,
       "createdAt": 1767362318468,
       "history": []
+    },
+    {
+      "id": "ped-1767375549724",
+      "client": "Andressa fabri pilz",
+      "phone": "+554284097058",
+      "chat_id": "665969245",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-05",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767375549724,
+      "history": []
     }
   ]
 }
