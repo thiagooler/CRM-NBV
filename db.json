@@ -2229,7 +2229,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-06",
       "status": "filadeproduo_612",
-      "waiting": true,
+      "waiting": false,
       "createdAt": 1766859456191,
       "history": []
     },
