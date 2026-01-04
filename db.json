@@ -4712,7 +4712,7 @@
       "phone": "+554299878939",
       "chat_id": "488412578",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-02",
+      "dueDate": "2026-01-07",
       "status": "filadeatendimento_988",
       "waiting": false,
       "hiddenUntil": null,
@@ -4752,6 +4752,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767111095547
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767489443924
         }
       ]
     },
