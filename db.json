@@ -5350,6 +5350,19 @@
       "hiddenUntil": null,
       "createdAt": 1767471492896,
       "history": []
+    },
+    {
+      "id": "ped-1767522626829",
+      "client": "Alessandra",
+      "phone": "+554299975602",
+      "chat_id": "457639824",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-07",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767522626829,
+      "history": []
     }
   ]
 }
