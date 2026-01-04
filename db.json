@@ -5376,6 +5376,19 @@
       "hiddenUntil": null,
       "createdAt": 1767524337927,
       "history": []
+    },
+    {
+      "id": "ped-1767544775731",
+      "client": "Eduarda",
+      "phone": "+554299827747",
+      "chat_id": "461547701",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-07",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767544775731,
+      "history": []
     }
   ]
 }
