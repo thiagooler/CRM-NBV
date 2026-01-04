@@ -5363,6 +5363,19 @@
       "hiddenUntil": null,
       "createdAt": 1767522626829,
       "history": []
+    },
+    {
+      "id": "ped-1767524337927",
+      "client": "Janayne",
+      "phone": "+554288523107",
+      "chat_id": "730495306",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-07",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767524337927,
+      "history": []
     }
   ]
 }
