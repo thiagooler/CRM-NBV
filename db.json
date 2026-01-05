@@ -5450,6 +5450,19 @@
       "hiddenUntil": null,
       "createdAt": 1767613086163,
       "history": []
+    },
+    {
+      "id": "ped-1767616062138",
+      "client": "Lucineia",
+      "phone": "+554299696864",
+      "chat_id": "748934278",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-08",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767616062138,
+      "history": []
     }
   ]
 }
