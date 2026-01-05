@@ -5012,12 +5012,18 @@
       "phone": "+554298141436",
       "chat_id": "847975424",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-29",
-      "status": "doing",
+      "dueDate": "2026-01-12",
+      "status": "aguardandoseleo_897",
       "waiting": true,
       "hiddenUntil": null,
       "createdAt": 1767113687228,
-      "history": []
+      "history": [
+        {
+          "from": "doing",
+          "to": "aguardandoseleo_897",
+          "date": 1767615149220
+        }
+      ]
     },
     {
       "id": "ped-1767115190183",
