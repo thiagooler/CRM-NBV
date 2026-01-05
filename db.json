@@ -4886,9 +4886,9 @@
       "phone": "+554298393326",
       "chat_id": "851300576",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-01",
+      "dueDate": "2026-01-08",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767020347024,
       "history": [
@@ -4896,6 +4896,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767020365676
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767645259962
         }
       ]
     },
