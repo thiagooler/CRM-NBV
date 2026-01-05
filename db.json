@@ -4801,12 +4801,18 @@
       "phone": "+554298177085",
       "chat_id": "457738932",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-01",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-02-04",
+      "status": "payment",
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767001201120,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "payment",
+          "date": 1767644652680
+        }
+      ]
     },
     {
       "id": "ped-1767014142465",
