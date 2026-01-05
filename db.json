@@ -246,9 +246,10 @@
       "client": "Rosa Sass",
       "chat_id": "742853128",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
+      "dueDate": "2026-01-12",
       "status": "done",
-      "hiddenUntil": 1767063600000
+      "hiddenUntil": 1767063600000,
+      "phone": ""
     },
     {
       "id": "ped-1766593630976",
