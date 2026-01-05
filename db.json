@@ -4918,7 +4918,7 @@
       "phone": "+554299427090",
       "chat_id": "852456023",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-02",
+      "dueDate": "2026-01-08",
       "status": "filadeatendimento_988",
       "waiting": false,
       "hiddenUntil": null,
@@ -4938,6 +4938,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767062617621
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767644974631
         }
       ]
     },
