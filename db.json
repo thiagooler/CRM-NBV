@@ -5184,8 +5184,8 @@
       "phone": "+554284128428",
       "chat_id": "639881904",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-08",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-01-15",
+      "status": "filadeproduo_612",
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767362318468,
@@ -5229,6 +5229,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767622266694
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeproduo_612",
+          "date": 1767623513360
         }
       ]
     },
