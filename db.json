@@ -5419,6 +5419,19 @@
       "hiddenUntil": null,
       "createdAt": 1767555989628,
       "history": []
+    },
+    {
+      "id": "ped-1767613086163",
+      "client": "Claudete Conrado",
+      "phone": "+554284121284",
+      "chat_id": "584081292",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-08",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767613086163,
+      "history": []
     }
   ]
 }
