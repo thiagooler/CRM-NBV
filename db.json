@@ -4639,11 +4639,18 @@
       "phone": "+554299921784",
       "chat_id": "845335146",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "doing",
-      "waiting": false,
+      "dueDate": "2026-01-12",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
       "createdAt": 1766864065426,
-      "history": []
+      "history": [
+        {
+          "from": "doing",
+          "to": "aguardandoseleo_897",
+          "date": 1767642992182
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766864195030",
