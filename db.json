@@ -4579,11 +4579,18 @@
       "phone": "+554284184365",
       "chat_id": "675014377",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "doing",
-      "waiting": false,
+      "dueDate": "2026-01-12",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
       "createdAt": 1766863826151,
-      "history": []
+      "history": [
+        {
+          "from": "doing",
+          "to": "aguardandoseleo_897",
+          "date": 1767643069854
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766863866285",
