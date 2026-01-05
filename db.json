@@ -5370,6 +5370,19 @@
       "hiddenUntil": null,
       "createdAt": 1767620311192,
       "history": []
+    },
+    {
+      "id": "ped-1767622216027",
+      "client": "Jaine dos santos",
+      "phone": "+554299317992",
+      "chat_id": "484610102",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-08",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767622216027,
+      "history": []
     }
   ]
 }
