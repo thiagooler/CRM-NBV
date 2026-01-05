@@ -4637,8 +4637,8 @@
       "phone": "+554396237399",
       "chat_id": "849490829",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-31",
-      "status": "doing",
+      "dueDate": "2026-01-10",
+      "status": "review",
       "waiting": false,
       "createdAt": 1766864195030,
       "history": [
@@ -4646,6 +4646,11 @@
           "from": "doing",
           "to": "doing",
           "date": 1767301108035
+        },
+        {
+          "from": "doing",
+          "to": "review",
+          "date": 1767622279165
         }
       ],
       "hiddenUntil": null
