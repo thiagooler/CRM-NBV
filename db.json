@@ -1674,11 +1674,18 @@
       "phone": "+554284027742",
       "chat_id": "769225243",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-06",
-      "status": "filadeproduo_612",
-      "waiting": false,
+      "dueDate": "2026-01-12",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
       "createdAt": 1766857437817,
-      "history": []
+      "history": [
+        {
+          "from": "filadeproduo_612",
+          "to": "aguardandoseleo_897",
+          "date": 1767618318541
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766857537107",
