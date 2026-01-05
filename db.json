@@ -643,11 +643,18 @@
       "phone": "+554284037158",
       "chat_id": "847749295",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-31",
+      "dueDate": "2026-01-10",
       "status": "review",
       "waiting": false,
       "createdAt": 1766719545890,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "review",
+          "date": 1767610647623
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766719586141",
