@@ -5392,6 +5392,19 @@
       "hiddenUntil": null,
       "createdAt": 1767630729153,
       "history": []
+    },
+    {
+      "id": "ped-1767636314969",
+      "client": "moisés",
+      "phone": "+554699174065",
+      "chat_id": "461364245",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-08",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767636314969,
+      "history": []
     }
   ]
 }
