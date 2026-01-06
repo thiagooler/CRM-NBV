@@ -4676,8 +4676,8 @@
       "phone": "+554284349985",
       "chat_id": "520620238",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-09",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-01-26",
+      "status": "emproduo_216",
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1766964201059,
@@ -4691,6 +4691,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767699385538
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "emproduo_216",
+          "date": 1767700085756
         }
       ]
     },
