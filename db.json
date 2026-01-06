@@ -5172,19 +5172,6 @@
       ]
     },
     {
-      "id": "ped-1767627589457",
-      "client": "👻",
-      "phone": "+554588166428",
-      "chat_id": "854491923",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-08",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1767627589457,
-      "history": []
-    },
-    {
       "id": "ped-1767630729153",
       "client": "Izabel",
       "phone": "+554284257407",
