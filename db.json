@@ -2058,7 +2058,7 @@
       "product": "quer compra rminha moto",
       "dueDate": "2026-01-09",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "createdAt": 1766858698636,
       "finishedAt": null,
       "history": [
@@ -2076,6 +2076,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767705749889
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767729926671
         }
       ],
       "hiddenUntil": null
