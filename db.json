@@ -3892,10 +3892,17 @@
       "chat_id": "487034747",
       "product": "Pedido via Bot",
       "dueDate": "2026-01-26",
-      "status": "doing",
+      "status": "emproduo_216",
       "waiting": false,
       "createdAt": 1766862530923,
-      "history": []
+      "history": [
+        {
+          "from": "doing",
+          "to": "emproduo_216",
+          "date": 1767703784479
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766862551456",
