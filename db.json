@@ -5465,6 +5465,19 @@
       "hiddenUntil": null,
       "createdAt": 1767710347431,
       "history": []
+    },
+    {
+      "id": "ped-1767711790496",
+      "client": "Ana Sofia",
+      "phone": "+554298628763",
+      "chat_id": "493646586",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-09",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767711790496,
+      "history": []
     }
   ]
 }
