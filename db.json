@@ -5207,8 +5207,8 @@
       "phone": "+554284284886",
       "chat_id": "503987136",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-09",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-01-16",
+      "status": "filadeproduo_612",
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767639089273,
@@ -5232,6 +5232,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767703171578
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeproduo_612",
+          "date": 1767703721555
         }
       ]
     },
