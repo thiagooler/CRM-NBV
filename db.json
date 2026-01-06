@@ -5283,12 +5283,18 @@
       "phone": "+554299049829",
       "chat_id": "680386303",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-08",
+      "dueDate": "2026-01-09",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767646510798,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767704847847
+        }
+      ]
     },
     {
       "id": "ped-1767655897868",
