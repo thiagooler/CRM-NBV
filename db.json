@@ -4830,9 +4830,9 @@
       "phone": "+554299427090",
       "chat_id": "852456023",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-08",
+      "dueDate": "2026-01-09",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767023422711,
       "history": [
@@ -4855,6 +4855,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767644974631
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767701354437
         }
       ]
     },
