@@ -2197,6 +2197,11 @@
           "from": "filadeproduo_612",
           "to": "disponivelpararetirada_769",
           "date": 1767705724772
+        },
+        {
+          "from": "disponivelpararetirada_769",
+          "to": "disponivelpararetirada_769",
+          "date": 1767705735702
         }
       ],
       "hiddenUntil": null
