@@ -1985,15 +1985,22 @@
     {
       "id": "ped-1766858689068",
       "client": "GUSTAVO KEKES KUACINYAK",
-      "phone": "554299494474",
+      "phone": "+554299494474",
       "chat_id": "844883544",
       "product": "quer compra rminha moto",
-      "dueDate": "2026-12-27",
+      "dueDate": "2026-01-09",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "createdAt": 1766858698636,
       "finishedAt": null,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767702263910
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766858786778",
