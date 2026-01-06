@@ -1829,31 +1829,6 @@
       "history": []
     },
     {
-      "id": "ped-1766857971924",
-      "client": "Jean Gabriel Batista",
-      "phone": "+554298407153",
-      "chat_id": "790908745",
-      "product": "Manual",
-      "dueDate": "2026-01-09",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "createdAt": 1766857979321,
-      "finishedAt": null,
-      "history": [
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767657939652
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767657957510
-        }
-      ],
-      "hiddenUntil": null
-    },
-    {
       "id": "ped-1766858196128",
       "client": "Elizete",
       "phone": "+554299461817",
