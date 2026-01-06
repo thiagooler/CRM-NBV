@@ -4673,9 +4673,9 @@
       "phone": "+554299310668",
       "chat_id": "464745101",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-12",
+      "dueDate": "2026-01-09",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1766933090298,
       "history": [
@@ -4718,6 +4718,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767195796535
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767713324294
         }
       ]
     },
