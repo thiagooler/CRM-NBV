@@ -613,11 +613,18 @@
       "phone": "+554299802117",
       "chat_id": "844412478",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-29",
-      "status": "review",
+      "dueDate": "2026-01-26",
+      "status": "emproduo_216",
       "waiting": true,
       "createdAt": 1766618543903,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "emproduo_216",
+          "date": 1767718221574
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766628512039",
