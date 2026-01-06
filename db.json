@@ -5266,25 +5266,6 @@
           "date": 1767700599025
         }
       ]
-    },
-    {
-      "id": "ped-1767702930888",
-      "client": "551147373367",
-      "phone": "+551147373367",
-      "chat_id": "774993056",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-09",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1767702930888,
-      "history": [
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767703313327
-        }
-      ]
     }
   ]
 }
