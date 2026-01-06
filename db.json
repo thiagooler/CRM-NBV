@@ -1990,7 +1990,7 @@
       "product": "quer compra rminha moto",
       "dueDate": "2026-01-09",
       "status": "filadeatendimento_988",
-      "waiting": false,
+      "waiting": true,
       "createdAt": 1766858698636,
       "finishedAt": null,
       "history": [
