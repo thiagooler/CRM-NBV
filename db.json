@@ -561,11 +561,18 @@
       "phone": "+554284045659",
       "chat_id": "487870532",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-29",
-      "status": "review",
+      "dueDate": "2026-02-05",
+      "status": "payment",
       "waiting": true,
       "createdAt": 1766618319146,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1767706419199
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766618441304",
