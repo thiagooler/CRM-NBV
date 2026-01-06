@@ -1179,11 +1179,18 @@
       "phone": "+554284422786",
       "chat_id": "847820812",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-31",
-      "status": "review",
+      "dueDate": "2026-02-05",
+      "status": "payment",
       "waiting": false,
       "createdAt": 1766784381756,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1767705663120
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766784642492",
