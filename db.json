@@ -441,10 +441,17 @@
       "chat_id": "843964164",
       "product": "Pedido via Bot",
       "dueDate": "2025-12-29",
-      "status": "review",
+      "status": "approval",
       "waiting": true,
       "createdAt": 1766609749096,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "approval",
+          "date": 1767661175583
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766614350445",
