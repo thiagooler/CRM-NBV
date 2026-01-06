@@ -573,11 +573,18 @@
       "phone": "+554298033980",
       "chat_id": "848254154",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-29",
+      "dueDate": "2026-01-11",
       "status": "review",
       "waiting": false,
       "createdAt": 1766618441304,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "review",
+          "date": 1767705399813
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766618543903",
