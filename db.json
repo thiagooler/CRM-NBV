@@ -5534,6 +5534,19 @@
           "date": 1767736072271
         }
       ]
+    },
+    {
+      "id": "ped-1767737161663",
+      "client": "Jéssica",
+      "phone": "+554298102317",
+      "chat_id": "486602880",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-09",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767737161663,
+      "history": []
     }
   ]
 }
