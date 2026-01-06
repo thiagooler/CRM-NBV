@@ -4925,12 +4925,18 @@
       "phone": "+41786242249",
       "chat_id": "853162313",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
+      "dueDate": "2026-01-09",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767184791959,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767690532815
+        }
+      ]
     },
     {
       "id": "ped-1767184817611",
