@@ -5562,10 +5562,16 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-10",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767799557695,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767807443332
+        }
+      ]
     },
     {
       "id": "ped-1767800265180",
