@@ -5528,6 +5528,19 @@
       "hiddenUntil": null,
       "createdAt": 1767795071794,
       "history": []
+    },
+    {
+      "id": "ped-1767795224827",
+      "client": "Salete Oneyszko",
+      "phone": "+554299029763",
+      "chat_id": "459667972",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-10",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767795224827,
+      "history": []
     }
   ]
 }
