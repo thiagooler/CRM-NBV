@@ -3834,11 +3834,18 @@
       "phone": "+554284240994",
       "chat_id": "473291639",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
+      "dueDate": "2026-02-06",
       "status": "doing",
       "waiting": false,
       "createdAt": 1766862267944,
-      "history": []
+      "history": [
+        {
+          "from": "doing",
+          "to": "doing",
+          "date": 1767793118066
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766862310502",
