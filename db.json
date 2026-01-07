@@ -3000,11 +3000,18 @@
       "phone": "+554299092741",
       "chat_id": "847959863",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "aguardandoseleo_897",
+      "dueDate": "2026-02-06",
+      "status": "doing",
       "waiting": false,
       "createdAt": 1766861036672,
-      "history": []
+      "history": [
+        {
+          "from": "aguardandoseleo_897",
+          "to": "doing",
+          "date": 1767808294989
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766861045649",
