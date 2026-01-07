@@ -5616,6 +5616,19 @@
       "hiddenUntil": null,
       "createdAt": 1767784546208,
       "history": []
+    },
+    {
+      "id": "ped-1767790146120",
+      "client": "Maria",
+      "phone": "+554284266327",
+      "chat_id": "679332442",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-10",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767790146120,
+      "history": []
     }
   ]
 }
