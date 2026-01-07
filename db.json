@@ -5470,12 +5470,18 @@
       "phone": "+554298102317",
       "chat_id": "486602880",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-09",
+      "dueDate": "2026-01-10",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767737161663,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767801154483
+        }
+      ]
     },
     {
       "id": "ped-1767784546208",
