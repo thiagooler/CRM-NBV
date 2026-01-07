@@ -5532,8 +5532,8 @@
       "phone": "+554298222965",
       "chat_id": "455721567",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-10",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-01-17",
+      "status": "filadeproduo_612",
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767801023946,
@@ -5552,6 +5552,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767811875877
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeproduo_612",
+          "date": 1767816443815
         }
       ]
     }
