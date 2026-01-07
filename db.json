@@ -4539,18 +4539,6 @@
       "history": []
     },
     {
-      "id": "ped-1766863655380",
-      "client": "Mileni Milani",
-      "phone": "+554291121899",
-      "chat_id": "462592870",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "doing",
-      "waiting": false,
-      "createdAt": 1766863655380,
-      "history": []
-    },
-    {
       "id": "ped-1766863696850",
       "client": "Bruno",
       "phone": "+554299920935",
