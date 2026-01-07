@@ -1093,34 +1093,6 @@
       "hiddenUntil": 1766977200000
     },
     {
-      "id": "ped-1766783181518",
-      "client": "Fran",
-      "phone": "+554299143209",
-      "chat_id": "491575401",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-02",
-      "status": "prontoparaentrega_2",
-      "waiting": false,
-      "createdAt": 1766783181518,
-      "history": [
-        {
-          "from": "review",
-          "to": "filadeproduo_612",
-          "date": 1766790738084
-        },
-        {
-          "from": "filadeproduo_612",
-          "to": "emproduo_216",
-          "date": 1766790800625
-        },
-        {
-          "from": "emproduo_216",
-          "to": "prontoparaentrega_2",
-          "date": 1766792281534
-        }
-      ]
-    },
-    {
       "id": "ped-1766783241925",
       "client": "FranRigon.🦋",
       "phone": "+554284355128",
