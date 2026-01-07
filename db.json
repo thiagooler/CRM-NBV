@@ -5554,6 +5554,19 @@
       "hiddenUntil": null,
       "createdAt": 1767796201114,
       "history": []
+    },
+    {
+      "id": "ped-1767799557695",
+      "client": "stefani",
+      "phone": "+5542920013905",
+      "chat_id": "855530203",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-10",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767799557695,
+      "history": []
     }
   ]
 }
