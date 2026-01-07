@@ -3009,6 +3009,11 @@
           "from": "aguardandoseleo_897",
           "to": "doing",
           "date": 1767808294989
+        },
+        {
+          "from": "doing",
+          "to": "doing",
+          "date": 1767808687763
         }
       ],
       "hiddenUntil": null
