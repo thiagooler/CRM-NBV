@@ -118,34 +118,6 @@
       "waiting": true
     },
     {
-      "id": "ped-1766579616831",
-      "client": "Leandrinho ❤️",
-      "chat_id": "844633018",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-02-05",
-      "status": "psvenda_619",
-      "history": [
-        {
-          "from": "filadeproduo_612",
-          "to": "emproduo_216",
-          "date": 1766788669968
-        },
-        {
-          "from": "emproduo_216",
-          "to": "disponivelpararetirada_769",
-          "date": 1766793355853
-        },
-        {
-          "from": "disponivelpararetirada_769",
-          "to": "psvenda_619",
-          "date": 1767704312686
-        }
-      ],
-      "phone": "+554299283086",
-      "waiting": false,
-      "hiddenUntil": null
-    },
-    {
       "id": "ped-1766581691126",
       "client": "kcricieli",
       "chat_id": "710183164",
