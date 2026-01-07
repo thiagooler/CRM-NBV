@@ -541,40 +541,6 @@
       "history": []
     },
     {
-      "id": "ped-1766616798176",
-      "client": "Fran",
-      "phone": "+554284159571",
-      "chat_id": "849317124",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-13",
-      "status": "prontoparaentrega_2",
-      "waiting": false,
-      "createdAt": 1766616798176,
-      "history": [
-        {
-          "from": "review",
-          "to": "payment",
-          "date": 1767036694236
-        },
-        {
-          "from": "payment",
-          "to": "filadeproduo_612",
-          "date": 1767036878011
-        },
-        {
-          "from": "filadeproduo_612",
-          "to": "emproduo_216",
-          "date": 1767728680759
-        },
-        {
-          "from": "emproduo_216",
-          "to": "prontoparaentrega_2",
-          "date": 1767729589011
-        }
-      ],
-      "hiddenUntil": null
-    },
-    {
       "id": "ped-1766618319146",
       "client": "Marieli",
       "phone": "+554284045659",
