@@ -5402,10 +5402,16 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-10",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767784546208,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767812215296
+        }
+      ]
     },
     {
       "id": "ped-1767790146120",
