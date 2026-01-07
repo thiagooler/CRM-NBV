@@ -5567,6 +5567,19 @@
       "hiddenUntil": null,
       "createdAt": 1767799557695,
       "history": []
+    },
+    {
+      "id": "ped-1767800265180",
+      "client": "kakawzinha",
+      "phone": "+554298451006",
+      "chat_id": "853871232",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-10",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767800265180,
+      "history": []
     }
   ]
 }
