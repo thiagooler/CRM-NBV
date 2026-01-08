@@ -5265,8 +5265,8 @@
       "phone": "+554298628763",
       "chat_id": "493646586",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-11",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-02-07",
+      "status": "payment",
       "waiting": true,
       "hiddenUntil": null,
       "createdAt": 1767711790496,
@@ -5280,6 +5280,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767897480443
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "payment",
+          "date": 1767897600201
         }
       ]
     },
