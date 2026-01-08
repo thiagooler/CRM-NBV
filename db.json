@@ -832,11 +832,18 @@
       "phone": "+554299065865",
       "chat_id": "822397935",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-31",
-      "status": "review",
+      "dueDate": "2026-02-07",
+      "status": "payment",
       "waiting": false,
       "createdAt": 1766723906175,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1767915255120
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766724203992",
