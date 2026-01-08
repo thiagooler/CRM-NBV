@@ -4773,7 +4773,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-01",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767014142465,
       "history": [
