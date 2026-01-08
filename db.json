@@ -5267,12 +5267,18 @@
       "phone": "+554298628763",
       "chat_id": "493646586",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-09",
+      "dueDate": "2026-01-11",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767711790496,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767895381861
+        }
+      ]
     },
     {
       "id": "ped-1767714438146",
