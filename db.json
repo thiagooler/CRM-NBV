@@ -319,8 +319,17 @@
       "client": "Carina Ferreira Kloster",
       "chat_id": "495750734",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-13",
-      "status": "emproduo_216"
+      "dueDate": "2026-01-15",
+      "status": "prontoparaentrega_2",
+      "history": [
+        {
+          "from": "emproduo_216",
+          "to": "prontoparaentrega_2",
+          "date": 1767896785967
+        }
+      ],
+      "hiddenUntil": null,
+      "phone": "+554299409725"
     },
     {
       "id": "ped-1766597932625",
