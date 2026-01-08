@@ -4052,11 +4052,18 @@
       "phone": "+554299127710",
       "chat_id": "849494829",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "doing",
+      "dueDate": "2026-01-13",
+      "status": "review",
       "waiting": false,
       "createdAt": 1766862760854,
-      "history": []
+      "history": [
+        {
+          "from": "doing",
+          "to": "review",
+          "date": 1767893099108
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766862768795",
