@@ -563,8 +563,8 @@
       "phone": "+554299802117",
       "chat_id": "844412478",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "emproduo_216",
+      "dueDate": "2026-02-07",
+      "status": "psvenda_619",
       "waiting": true,
       "createdAt": 1766618543903,
       "history": [
@@ -572,6 +572,11 @@
           "from": "review",
           "to": "emproduo_216",
           "date": 1767718221574
+        },
+        {
+          "from": "emproduo_216",
+          "to": "psvenda_619",
+          "date": 1767891481372
         }
       ],
       "hiddenUntil": null
