@@ -5323,25 +5323,6 @@
       "history": []
     },
     {
-      "id": "ped-1767710347431",
-      "client": "Ana Lívia",
-      "phone": "+554284112707",
-      "chat_id": "767359198",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-11",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1767710347431,
-      "history": [
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767831133809
-        }
-      ]
-    },
-    {
       "id": "ped-1767711790496",
       "client": "Ana Sofia",
       "phone": "+554298628763",
