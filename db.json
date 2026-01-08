@@ -5565,8 +5565,8 @@
       "phone": "+554499882310",
       "chat_id": "458171121",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-11",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-01-28",
+      "status": "emproduo_216",
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767871065181,
@@ -5670,6 +5670,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767883292675
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "emproduo_216",
+          "date": 1767883424092
         }
       ]
     }
