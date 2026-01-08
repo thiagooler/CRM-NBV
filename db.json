@@ -1156,8 +1156,8 @@
       "phone": "+554284422786",
       "chat_id": "847820812",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-16",
-      "status": "filadeproduo_612",
+      "dueDate": "2026-01-28",
+      "status": "emproduo_216",
       "waiting": false,
       "createdAt": 1766784381756,
       "history": [
@@ -1170,6 +1170,11 @@
           "from": "payment",
           "to": "filadeproduo_612",
           "date": 1767708117721
+        },
+        {
+          "from": "filadeproduo_612",
+          "to": "emproduo_216",
+          "date": 1767898591241
         }
       ],
       "hiddenUntil": null
