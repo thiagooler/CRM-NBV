@@ -5618,6 +5618,19 @@
       "hiddenUntil": null,
       "createdAt": 1767898025169,
       "history": []
+    },
+    {
+      "id": "ped-1767915619482",
+      "client": "🤪🤪",
+      "phone": "+554298643010",
+      "chat_id": "856263026",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-11",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767915619482,
+      "history": []
     }
   ]
 }
