@@ -252,7 +252,8 @@
       "chat_id": "455335224",
       "product": "Pedido via Bot",
       "dueDate": "2026-01-23",
-      "status": "payment"
+      "status": "payment",
+      "waiting": true
     },
     {
       "id": "ped-1766595208837",
