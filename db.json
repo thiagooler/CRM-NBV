@@ -1644,8 +1644,8 @@
       "phone": "+554299686541",
       "chat_id": "486168450",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-27",
-      "status": "doing",
+      "dueDate": "2026-01-13",
+      "status": "review",
       "waiting": true,
       "createdAt": 1766857613857,
       "history": [
@@ -1658,6 +1658,11 @@
           "from": "aguardandoseleo_897",
           "to": "doing",
           "date": 1766919562651
+        },
+        {
+          "from": "doing",
+          "to": "review",
+          "date": 1767891908172
         }
       ],
       "hiddenUntil": null
