@@ -5515,45 +5515,6 @@
       ]
     },
     {
-      "id": "ped-1767801023946",
-      "client": "Gabriela Fortuna",
-      "phone": "+554298222965",
-      "chat_id": "455721567",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-28",
-      "status": "emproduo_216",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1767801023946,
-      "history": [
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767805448166
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767806259777
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767811875877
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeproduo_612",
-          "date": 1767816443815
-        },
-        {
-          "from": "filadeproduo_612",
-          "to": "emproduo_216",
-          "date": 1767882538795
-        }
-      ]
-    },
-    {
       "id": "ped-1767835820037",
       "client": "Vanessa rodrigues",
       "phone": "+554298740162",
