@@ -5614,6 +5614,19 @@
           "date": 1767956843911
         }
       ]
+    },
+    {
+      "id": "ped-1767956879457",
+      "client": "Fran",
+      "phone": "+554299143209",
+      "chat_id": "491575401",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-02-08",
+      "status": "psvenda_619",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767956879457,
+      "history": []
     }
   ]
 }
