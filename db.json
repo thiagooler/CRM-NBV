@@ -484,11 +484,18 @@
       "phone": "+554299913752",
       "chat_id": "849663779",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-29",
-      "status": "review",
+      "dueDate": "2026-01-19",
+      "status": "filadeproduo_612",
       "waiting": false,
       "createdAt": 1766614947424,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "filadeproduo_612",
+          "date": 1767919638672
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766615205975",
