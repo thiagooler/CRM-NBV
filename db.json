@@ -5664,6 +5664,19 @@
       "hiddenUntil": null,
       "createdAt": 1767973800607,
       "history": []
+    },
+    {
+      "id": "ped-1767979192458",
+      "client": "Ceslav",
+      "phone": "+41786242249",
+      "chat_id": "853162313",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-12",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767979192458,
+      "history": []
     }
   ]
 }
