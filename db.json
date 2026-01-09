@@ -105,10 +105,11 @@
       "client": "Amanda Batista dos Santos",
       "chat_id": "486040647",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-29",
+      "dueDate": "2026-02-01",
       "status": "review",
       "waiting": true,
-      "hiddenUntil": 1766890800000
+      "hiddenUntil": 1766890800000,
+      "phone": ""
     },
     {
       "id": "ped-1766581691126",
