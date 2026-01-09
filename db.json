@@ -5776,10 +5776,16 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-12",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767984496762,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767996676500
+        }
+      ]
     },
     {
       "id": "ped-1767988770045",
