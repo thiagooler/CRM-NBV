@@ -5077,7 +5077,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-12",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767555989628,
       "history": [
@@ -5090,6 +5090,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767921248061
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767924326705
         }
       ]
     },
