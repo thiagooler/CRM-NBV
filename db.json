@@ -93,15 +93,6 @@
       "phone": "+554284056441"
     },
     {
-      "id": "ped-1766536799923",
-      "client": "Ataisa Ferreira",
-      "chat_id": "464211085",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-13",
-      "status": "emproduo_216",
-      "waiting": true
-    },
-    {
       "id": "ped-1766536869498",
       "client": "Leonir Quadros",
       "chat_id": "748406397",
