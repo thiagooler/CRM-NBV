@@ -5683,6 +5683,19 @@
           "date": 1767968043534
         }
       ]
+    },
+    {
+      "id": "ped-1767968772737",
+      "client": "Caroline Fontana Fabbris",
+      "phone": "+554699415186",
+      "chat_id": "765599109",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-12",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767968772737,
+      "history": []
     }
   ]
 }
