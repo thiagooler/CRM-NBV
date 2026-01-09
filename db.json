@@ -5618,7 +5618,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-12",
       "status": "filadeatendimento_988",
-      "waiting": false,
+      "waiting": true,
       "hiddenUntil": null,
       "createdAt": 1767966107356,
       "history": [
