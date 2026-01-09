@@ -5020,30 +5020,6 @@
       "history": []
     },
     {
-      "id": "ped-1767184817611",
-      "client": "Marina Potereiko",
-      "phone": "+554299980994",
-      "chat_id": "731030558",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-09",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1767184817611,
-      "history": [
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767651744740
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767700884548
-        }
-      ]
-    },
-    {
       "id": "ped-1767400040828",
       "client": "Maristela❣️",
       "phone": "+554299943704",
