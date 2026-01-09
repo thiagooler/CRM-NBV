@@ -5550,6 +5550,19 @@
       "hiddenUntil": null,
       "createdAt": 1767947534660,
       "history": []
+    },
+    {
+      "id": "ped-1767948787844",
+      "client": "Jackson Luiz schuvab",
+      "phone": "+554284052387",
+      "chat_id": "819609637",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-12",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767948787844,
+      "history": []
     }
   ]
 }
