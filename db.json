@@ -4850,7 +4850,7 @@
       "dueDate": "2026-01-17",
       "status": "filadeproduo_612",
       "waiting": false,
-      "hiddenUntil": null,
+      "hiddenUntil": 1767927600000,
       "createdAt": 1767020347024,
       "history": [
         {
