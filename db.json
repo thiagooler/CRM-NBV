@@ -4785,45 +4785,6 @@
       ]
     },
     {
-      "id": "ped-1767014142465",
-      "client": "Jaqueline Sicredi",
-      "phone": "+554291230387",
-      "chat_id": "455727231",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-01",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1767014142465,
-      "history": [
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767014164017
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767014171592
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767014182236
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767014195642
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767014204960
-        }
-      ]
-    },
-    {
       "id": "ped-1767015836093",
       "client": "Josefina",
       "phone": "+554299350633",
