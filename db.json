@@ -133,8 +133,16 @@
       "client": "Rosana",
       "chat_id": "554299520233",
       "product": "Manual",
-      "dueDate": "2026-01-23",
-      "status": "payment"
+      "dueDate": "2026-02-08",
+      "status": "psvenda_619",
+      "history": [
+        {
+          "from": "payment",
+          "to": "psvenda_619",
+          "date": 1767969672815
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766583537428",
