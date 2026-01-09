@@ -107,7 +107,8 @@
       "product": "Pedido via Bot",
       "dueDate": "2025-12-29",
       "status": "review",
-      "waiting": true
+      "waiting": true,
+      "hiddenUntil": 1766890800000
     },
     {
       "id": "ped-1766581691126",
