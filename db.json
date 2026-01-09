@@ -5120,9 +5120,9 @@
       "phone": "+554284257407",
       "chat_id": "464794845",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-11",
+      "dueDate": "2026-01-12",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767630729153,
       "history": [
@@ -5150,6 +5150,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767896982178
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767980826604
         }
       ]
     },
