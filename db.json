@@ -5804,6 +5804,19 @@
       "hiddenUntil": null,
       "createdAt": 1767988770045,
       "history": []
+    },
+    {
+      "id": "ped-1767997613005",
+      "client": "Jandira",
+      "phone": "+554299382562",
+      "chat_id": "620067505",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-12",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767997613005,
+      "history": []
     }
   ]
 }
