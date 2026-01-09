@@ -5574,19 +5574,6 @@
           "date": 1767889335824
         }
       ]
-    },
-    {
-      "id": "ped-1767919525828",
-      "client": "Vanessa rodrigues",
-      "phone": "+554298740162",
-      "chat_id": "467319959",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-12",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1767919525828,
-      "history": []
     }
   ]
 }
