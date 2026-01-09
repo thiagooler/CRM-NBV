@@ -1091,11 +1091,18 @@
       "phone": "+554299681711",
       "chat_id": "841858869",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-31",
-      "status": "review",
+      "dueDate": "2026-02-08",
+      "status": "payment",
       "waiting": true,
       "createdAt": 1766783417862,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1767918065113
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766783494833",
