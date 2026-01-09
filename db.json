@@ -1078,40 +1078,6 @@
       ]
     },
     {
-      "id": "ped-1766782693491",
-      "client": "Ar uniformes",
-      "phone": "+554284013431",
-      "chat_id": "847423773",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-02-08",
-      "status": "psvenda_619",
-      "waiting": false,
-      "createdAt": 1766782693491,
-      "history": [
-        {
-          "from": "review",
-          "to": "payment",
-          "date": 1767119644172
-        },
-        {
-          "from": "payment",
-          "to": "filadeproduo_612",
-          "date": 1767119864889
-        },
-        {
-          "from": "filadeproduo_612",
-          "to": "prontoparaentrega_2",
-          "date": 1767123304498
-        },
-        {
-          "from": "prontoparaentrega_2",
-          "to": "psvenda_619",
-          "date": 1767956940176
-        }
-      ],
-      "hiddenUntil": null
-    },
-    {
       "id": "ped-1766782826512",
       "client": "Sil",
       "phone": "+554299409873",
