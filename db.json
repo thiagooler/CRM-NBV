@@ -734,8 +734,8 @@
       "phone": "+554299783258",
       "chat_id": "762236340",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-13",
-      "status": "prontoparaentrega_2",
+      "dueDate": "2026-02-08",
+      "status": "psvenda_619",
       "waiting": false,
       "createdAt": 1766721717857,
       "history": [
@@ -778,6 +778,11 @@
           "from": "disponivelpararetirada_769",
           "to": "prontoparaentrega_2",
           "date": 1767704043158
+        },
+        {
+          "from": "prontoparaentrega_2",
+          "to": "psvenda_619",
+          "date": 1767956948823
         }
       ],
       "hiddenUntil": null
