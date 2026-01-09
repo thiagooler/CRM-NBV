@@ -728,11 +728,18 @@
       "phone": "+554299897617",
       "chat_id": "795290870",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-31",
+      "dueDate": "2026-01-14",
       "status": "review",
       "waiting": true,
       "createdAt": 1766721365866,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "review",
+          "date": 1767961681475
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766721717857",
