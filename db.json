@@ -5711,6 +5711,19 @@
       "hiddenUntil": null,
       "createdAt": 1767963492264,
       "history": []
+    },
+    {
+      "id": "ped-1767966107356",
+      "client": "𝐒.𝐊𝐫𝐢𝐞𝐠𝐞𝐫",
+      "phone": "+554284353890",
+      "chat_id": "856371609",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-12",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767966107356,
+      "history": []
     }
   ]
 }
