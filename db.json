@@ -484,8 +484,8 @@
       "phone": "+554299913752",
       "chat_id": "849663779",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-19",
-      "status": "filadeproduo_612",
+      "dueDate": "2026-01-29",
+      "status": "emproduo_216",
       "waiting": false,
       "createdAt": 1766614947424,
       "history": [
@@ -493,6 +493,11 @@
           "from": "review",
           "to": "filadeproduo_612",
           "date": 1767919638672
+        },
+        {
+          "from": "filadeproduo_612",
+          "to": "emproduo_216",
+          "date": 1767925058641
         }
       ],
       "hiddenUntil": null
