@@ -528,7 +528,7 @@
       "chat_id": "793479815",
       "product": "Pedido via Bot",
       "dueDate": "2026-01-16",
-      "status": "aguardandoseleo_897",
+      "status": "approval",
       "waiting": true,
       "createdAt": 1766616243165,
       "history": [
@@ -536,6 +536,11 @@
           "from": "review",
           "to": "aguardandoseleo_897",
           "date": 1767919876729
+        },
+        {
+          "from": "aguardandoseleo_897",
+          "to": "approval",
+          "date": 1767921321952
         }
       ],
       "hiddenUntil": null
