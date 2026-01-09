@@ -1919,11 +1919,18 @@
       "phone": "+554299504665",
       "chat_id": "477629257",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "aguardandoseleo_897",
+      "dueDate": "2026-02-08",
+      "status": "doing",
       "waiting": true,
       "createdAt": 1766857852958,
-      "history": []
+      "history": [
+        {
+          "from": "aguardandoseleo_897",
+          "to": "doing",
+          "date": 1767981685201
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766857896051",
