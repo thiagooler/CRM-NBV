@@ -2108,41 +2108,6 @@
       "history": []
     },
     {
-      "id": "ped-1766858689068",
-      "client": "GUSTAVO KEKES KUACINYAK",
-      "phone": "+554299494474",
-      "chat_id": "844883544",
-      "product": "quer compra rminha moto",
-      "dueDate": "2026-02-09",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "createdAt": 1766858698636,
-      "finishedAt": null,
-      "history": [
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767702263910
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767703106488
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767705749889
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767729926671
-        }
-      ],
-      "hiddenUntil": null
-    },
-    {
       "id": "ped-1766858786778",
       "client": "Leonete M.C Barbosa",
       "phone": "+5542920014791",
