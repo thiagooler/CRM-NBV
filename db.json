@@ -5686,6 +5686,19 @@
       "hiddenUntil": null,
       "createdAt": 1767959203662,
       "history": []
+    },
+    {
+      "id": "ped-1767960963307",
+      "client": "Luciana",
+      "phone": "+554284130093",
+      "chat_id": "464988807",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-12",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767960963307,
+      "history": []
     }
   ]
 }
