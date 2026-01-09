@@ -1393,6 +1393,11 @@
           "from": "prontoparaentrega_2",
           "to": "psvenda_619",
           "date": 1767956895275
+        },
+        {
+          "from": "psvenda_619",
+          "to": "psvenda_619",
+          "date": 1767956902408
         }
       ],
       "hiddenUntil": null
