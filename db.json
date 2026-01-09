@@ -5013,7 +5013,7 @@
       "dueDate": "2026-01-12",
       "status": "filadeatendimento_988",
       "waiting": false,
-      "hiddenUntil": 1768014000000,
+      "hiddenUntil": null,
       "createdAt": 1767555989628,
       "history": [
         {
@@ -5035,6 +5035,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767927799992
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767970029820
         }
       ]
     },
