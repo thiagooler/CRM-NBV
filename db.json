@@ -5060,12 +5060,18 @@
       "phone": "+554299644903",
       "chat_id": "659510196",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-07",
+      "dueDate": "2026-01-12",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767555989628,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1767921215721
+        }
+      ]
     },
     {
       "id": "ped-1767613086163",
