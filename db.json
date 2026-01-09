@@ -4971,65 +4971,6 @@
       ]
     },
     {
-      "id": "ped-1767362318468",
-      "client": "Vanessa🤭",
-      "phone": "+554284128428",
-      "chat_id": "639881904",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-15",
-      "status": "filadeproduo_612",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1767362318468,
-      "history": [
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767465307586
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767614662617
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767616266426
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767617585702
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767619433243
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767619885280
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767620425843
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1767622266694
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeproduo_612",
-          "date": 1767623513360
-        }
-      ]
-    },
-    {
       "id": "ped-1767400040828",
       "client": "Maristela❣️",
       "phone": "+554299943704",
