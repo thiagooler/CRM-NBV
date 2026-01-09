@@ -527,11 +527,18 @@
       "phone": "+554298448122",
       "chat_id": "793479815",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-29",
-      "status": "review",
-      "waiting": false,
+      "dueDate": "2026-01-16",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
       "createdAt": 1766616243165,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "aguardandoseleo_897",
+          "date": 1767919876729
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766618319146",
