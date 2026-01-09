@@ -815,8 +815,8 @@
       "phone": "+554599434675",
       "chat_id": "847965355",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-29",
-      "status": "emproduo_216",
+      "dueDate": "2026-01-16",
+      "status": "prontoparaentrega_2",
       "waiting": false,
       "createdAt": 1766721884409,
       "history": [
@@ -834,6 +834,11 @@
           "from": "filadeproduo_612",
           "to": "emproduo_216",
           "date": 1767924834982
+        },
+        {
+          "from": "emproduo_216",
+          "to": "prontoparaentrega_2",
+          "date": 1767977972925
         }
       ],
       "hiddenUntil": null
