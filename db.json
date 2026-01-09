@@ -2319,40 +2319,6 @@
       "hiddenUntil": null
     },
     {
-      "id": "ped-1766859542992",
-      "client": "Rosana",
-      "phone": "+554299261686",
-      "chat_id": "844645351",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-02-08",
-      "status": "psvenda_619",
-      "waiting": false,
-      "createdAt": 1766859542992,
-      "history": [
-        {
-          "from": "filadeproduo_612",
-          "to": "emproduo_216",
-          "date": 1767705927211
-        },
-        {
-          "from": "emproduo_216",
-          "to": "prontoparaentrega_2",
-          "date": 1767710731386
-        },
-        {
-          "from": "prontoparaentrega_2",
-          "to": "psvenda_619",
-          "date": 1767956856257
-        },
-        {
-          "from": "psvenda_619",
-          "to": "psvenda_619",
-          "date": 1767956868029
-        }
-      ],
-      "hiddenUntil": null
-    },
-    {
       "id": "ped-1766859547949",
       "client": "Nilza",
       "phone": "+554298129104",
