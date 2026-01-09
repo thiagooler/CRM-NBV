@@ -188,7 +188,8 @@
       "chat_id": "841866083",
       "product": "Pedido via Bot",
       "dueDate": "2026-06-10",
-      "status": "payment"
+      "status": "payment",
+      "waiting": false
     },
     {
       "id": "ped-1766589265978",
