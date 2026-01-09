@@ -5738,6 +5738,19 @@
       "hiddenUntil": null,
       "createdAt": 1767984496762,
       "history": []
+    },
+    {
+      "id": "ped-1767988770045",
+      "client": "Silvania Strapasson",
+      "phone": "+554284088166",
+      "chat_id": "471710512",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-12",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767988770045,
+      "history": []
     }
   ]
 }
