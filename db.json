@@ -2225,8 +2225,8 @@
       "phone": "+554298113951",
       "chat_id": "841858916",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-16",
-      "status": "filadeproduo_612",
+      "dueDate": "2026-01-29",
+      "status": "emproduo_216",
       "waiting": false,
       "createdAt": 1766859397817,
       "history": [
@@ -2234,6 +2234,11 @@
           "from": "filadeproduo_612",
           "to": "filadeproduo_612",
           "date": 1767704468755
+        },
+        {
+          "from": "filadeproduo_612",
+          "to": "emproduo_216",
+          "date": 1767923934409
         }
       ],
       "hiddenUntil": null
