@@ -5585,6 +5585,19 @@
       "hiddenUntil": null,
       "createdAt": 1767948787844,
       "history": []
+    },
+    {
+      "id": "ped-1767956835896",
+      "client": "Fran",
+      "phone": "+554284159571",
+      "chat_id": "849317124",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-02-08",
+      "status": "psvenda_619",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1767956835896,
+      "history": []
     }
   ]
 }
