@@ -5850,6 +5850,19 @@
       "hiddenUntil": null,
       "createdAt": 1768007845823,
       "history": []
+    },
+    {
+      "id": "ped-1768007931858",
+      "client": " ",
+      "phone": "+621060456",
+      "chat_id": "856704481",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-20",
+      "status": "filadeproduo_612",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768007931858,
+      "history": []
     }
   ]
 }
