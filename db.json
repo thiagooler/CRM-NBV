@@ -6076,6 +6076,19 @@
       "hiddenUntil": null,
       "createdAt": 1768056496899,
       "history": []
+    },
+    {
+      "id": "ped-1768056604472",
+      "client": "Mercado JL",
+      "phone": "+554298622041",
+      "chat_id": "814556710",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-13",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768056604472,
+      "history": []
     }
   ]
 }
