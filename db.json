@@ -5566,9 +5566,9 @@
       "phone": "+554284052387",
       "chat_id": "819609637",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-12",
+      "dueDate": "2026-01-13",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767948787844,
       "history": [
@@ -5576,6 +5576,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767962950888
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1768046634084
         }
       ]
     },
