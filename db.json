@@ -6031,6 +6031,19 @@
       "hiddenUntil": null,
       "createdAt": 1768053160667,
       "history": []
+    },
+    {
+      "id": "ped-1768055484779",
+      "client": "Gabriela Fortuna",
+      "phone": "+554298222965",
+      "chat_id": "455721567",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-02-09",
+      "status": "psvenda_619",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768055484779,
+      "history": []
     }
   ]
 }
