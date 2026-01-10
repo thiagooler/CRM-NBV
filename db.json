@@ -5894,6 +5894,19 @@
       "hiddenUntil": null,
       "createdAt": 1768044062386,
       "history": []
+    },
+    {
+      "id": "ped-1768044723146",
+      "client": "Clarice Carvalho",
+      "phone": "+554284160369",
+      "chat_id": "631400813",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-13",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768044723146,
+      "history": []
     }
   ]
 }
