@@ -6089,6 +6089,19 @@
       "hiddenUntil": null,
       "createdAt": 1768056604472,
       "history": []
+    },
+    {
+      "id": "ped-1768057176667",
+      "client": "Luiz Carlos Maciel",
+      "phone": "+554284059131",
+      "chat_id": "469387157",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-13",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768057176667,
+      "history": []
     }
   ]
 }
