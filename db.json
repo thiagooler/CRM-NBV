@@ -5943,6 +5943,19 @@
       "hiddenUntil": null,
       "createdAt": 1768044723146,
       "history": []
+    },
+    {
+      "id": "ped-1768050181916",
+      "client": "Maria Tereza ✨",
+      "phone": "+554299254031",
+      "chat_id": "856766713",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-13",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768050181916,
+      "history": []
     }
   ]
 }
