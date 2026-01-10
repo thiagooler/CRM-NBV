@@ -5876,6 +5876,19 @@
       "hiddenUntil": null,
       "createdAt": 1768040589043,
       "history": []
+    },
+    {
+      "id": "ped-1768044062386",
+      "client": "Izabel Lima",
+      "phone": "+554284093726",
+      "chat_id": "455999916",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-13",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768044062386,
+      "history": []
     }
   ]
 }
