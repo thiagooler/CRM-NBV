@@ -6063,6 +6063,19 @@
       "hiddenUntil": null,
       "createdAt": 1768055909839,
       "history": []
+    },
+    {
+      "id": "ped-1768056496899",
+      "client": "Clínica Do Celular",
+      "phone": "+554284070469",
+      "chat_id": "457642290",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-13",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768056496899,
+      "history": []
     }
   ]
 }
