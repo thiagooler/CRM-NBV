@@ -5760,8 +5760,8 @@
       "phone": "+554299980994",
       "chat_id": "731030558",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-12",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-02-09",
+      "status": "psvenda_619",
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767980836076,
@@ -5780,6 +5780,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767998187426
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "psvenda_619",
+          "date": 1768006781463
         }
       ]
     },
