@@ -5785,6 +5785,11 @@
           "from": "filadeatendimento_988",
           "to": "psvenda_619",
           "date": 1768006781463
+        },
+        {
+          "from": "psvenda_619",
+          "to": "psvenda_619",
+          "date": 1768006788572
         }
       ]
     },
