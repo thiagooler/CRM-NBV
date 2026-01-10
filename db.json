@@ -5055,9 +5055,9 @@
       "phone": "+554299696864",
       "chat_id": "748934278",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-12",
+      "dueDate": "2026-01-13",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767616062138,
       "history": [
@@ -5085,6 +5085,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767983467605
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1768044307567
         }
       ]
     },
