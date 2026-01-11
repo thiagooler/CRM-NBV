@@ -6179,6 +6179,19 @@
       "hiddenUntil": null,
       "createdAt": 1768078251047,
       "history": []
+    },
+    {
+      "id": "ped-1768089643428",
+      "client": "Denilson Costa",
+      "phone": "+554299040294",
+      "chat_id": "856987833",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-14",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768089643428,
+      "history": []
     }
   ]
 }
