@@ -6192,6 +6192,19 @@
       "hiddenUntil": null,
       "createdAt": 1768089643428,
       "history": []
+    },
+    {
+      "id": "ped-1768140701765",
+      "client": "cris❤️",
+      "phone": "+554284015887",
+      "chat_id": "857062018",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-14",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768140701765,
+      "history": []
     }
   ]
 }
