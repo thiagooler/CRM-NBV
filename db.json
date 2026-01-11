@@ -6231,6 +6231,19 @@
       "hiddenUntil": null,
       "createdAt": 1768159026504,
       "history": []
+    },
+    {
+      "id": "ped-1768169007249",
+      "client": "Danielzinho",
+      "phone": "+554299950826",
+      "chat_id": "857172677",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-14",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768169007249,
+      "history": []
     }
   ]
 }
