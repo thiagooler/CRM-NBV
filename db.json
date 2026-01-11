@@ -6218,6 +6218,19 @@
       "hiddenUntil": null,
       "createdAt": 1768145666822,
       "history": []
+    },
+    {
+      "id": "ped-1768159026504",
+      "client": "Rosimeire",
+      "phone": "+5513981300025",
+      "chat_id": "857114547",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-02-10",
+      "status": "doing",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768159026504,
+      "history": []
     }
   ]
 }
