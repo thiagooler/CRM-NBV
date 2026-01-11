@@ -3056,8 +3056,8 @@
       "phone": "+554284111604",
       "chat_id": "506445323",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-16",
-      "status": "aguardandoseleo_897",
+      "dueDate": "2026-02-10",
+      "status": "doing",
       "waiting": true,
       "createdAt": 1766861054296,
       "history": [
@@ -3070,6 +3070,11 @@
           "from": "doing",
           "to": "aguardandoseleo_897",
           "date": 1767979787462
+        },
+        {
+          "from": "aguardandoseleo_897",
+          "to": "doing",
+          "date": 1768169758352
         }
       ],
       "hiddenUntil": null
