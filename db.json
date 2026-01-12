@@ -5382,12 +5382,18 @@
       "phone": "+554299007854",
       "chat_id": "510060554",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-10",
+      "dueDate": "2026-01-15",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767796201114,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1768240702724
+        }
+      ]
     },
     {
       "id": "ped-1767799557695",
