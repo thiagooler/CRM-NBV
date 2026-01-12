@@ -6212,6 +6212,19 @@
       "hiddenUntil": null,
       "createdAt": 1768244148084,
       "history": []
+    },
+    {
+      "id": "ped-1768247857724",
+      "client": "Marcio Expressiva",
+      "phone": "+554498578292",
+      "chat_id": "708999266",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-15",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768247857724,
+      "history": []
     }
   ]
 }
