@@ -6262,6 +6262,19 @@
       "hiddenUntil": null,
       "createdAt": 1768174728875,
       "history": []
+    },
+    {
+      "id": "ped-1768179096275",
+      "client": "Lucilene De Souza Fortuna",
+      "phone": "+5517988188099",
+      "chat_id": "857197664",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-02-11",
+      "status": "doing",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768179096275,
+      "history": []
     }
   ]
 }
