@@ -5432,9 +5432,9 @@
       "phone": "+554298451006",
       "chat_id": "853871232",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-10",
+      "dueDate": "2026-01-15",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767800265180,
       "history": [
@@ -5457,6 +5457,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767816512706
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1768247094636
         }
       ]
     },
