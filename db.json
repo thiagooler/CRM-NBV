@@ -6430,6 +6430,19 @@
       "hiddenUntil": null,
       "createdAt": 1768235328331,
       "history": []
+    },
+    {
+      "id": "ped-1768237333696",
+      "client": "Jorlei Bim",
+      "phone": "+554299026707",
+      "chat_id": "626221259",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-15",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768237333696,
+      "history": []
     }
   ]
 }
