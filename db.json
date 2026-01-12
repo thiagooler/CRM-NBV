@@ -5904,19 +5904,6 @@
       ]
     },
     {
-      "id": "ped-1768057674173",
-      "client": "5511978506319",
-      "phone": "+5511978506319",
-      "chat_id": "578523493",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-13",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1768057674173,
-      "history": []
-    },
-    {
       "id": "ped-1768059053103",
       "client": "Belmira Cardoso",
       "phone": "+554298291159",
