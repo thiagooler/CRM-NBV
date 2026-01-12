@@ -6323,6 +6323,19 @@
       "hiddenUntil": null,
       "createdAt": 1768217748658,
       "history": []
+    },
+    {
+      "id": "ped-1768220806680",
+      "client": "Gertrudes",
+      "phone": "+554298182433",
+      "chat_id": "857285048",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-15",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768220806680,
+      "history": []
     }
   ]
 }
