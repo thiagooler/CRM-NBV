@@ -6401,6 +6401,19 @@
       "hiddenUntil": null,
       "createdAt": 1768231446900,
       "history": []
+    },
+    {
+      "id": "ped-1768235328331",
+      "client": "maurofut150",
+      "phone": "+554288916938",
+      "chat_id": "857458452",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-15",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768235328331,
+      "history": []
     }
   ]
 }
