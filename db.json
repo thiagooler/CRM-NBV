@@ -6396,6 +6396,19 @@
           "date": 1768242508044
         }
       ]
+    },
+    {
+      "id": "ped-1768244148084",
+      "client": "Edenilson",
+      "phone": "+554299494407",
+      "chat_id": "488048125",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-15",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768244148084,
+      "history": []
     }
   ]
 }
