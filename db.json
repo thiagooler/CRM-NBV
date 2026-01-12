@@ -5200,7 +5200,7 @@
       "dueDate": "2026-01-12",
       "status": "filadeatendimento_988",
       "waiting": false,
-      "hiddenUntil": null,
+      "hiddenUntil": 1768100400000,
       "createdAt": 1767630729153,
       "history": [
         {
