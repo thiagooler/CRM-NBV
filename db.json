@@ -703,8 +703,8 @@
       "phone": "+554284037158",
       "chat_id": "847749295",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-10",
-      "status": "review",
+      "dueDate": "2026-02-11",
+      "status": "payment",
       "waiting": false,
       "createdAt": 1766719545890,
       "history": [
@@ -712,6 +712,11 @@
           "from": "review",
           "to": "review",
           "date": 1767610647623
+        },
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1768254185812
         }
       ],
       "hiddenUntil": null
