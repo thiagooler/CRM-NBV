@@ -237,7 +237,8 @@
       "dueDate": "2026-01-12",
       "status": "done",
       "hiddenUntil": 1768100400000,
-      "phone": ""
+      "phone": "",
+      "waiting": true
     },
     {
       "id": "ped-1766593630976",
