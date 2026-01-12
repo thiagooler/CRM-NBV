@@ -6284,6 +6284,19 @@
       "hiddenUntil": null,
       "createdAt": 1768179096275,
       "history": []
+    },
+    {
+      "id": "ped-1768216470421",
+      "client": "Vagner",
+      "phone": "+554284257960",
+      "chat_id": "857256023",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-15",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768216470421,
+      "history": []
     }
   ]
 }
