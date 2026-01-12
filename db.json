@@ -5885,19 +5885,6 @@
       "history": []
     },
     {
-      "id": "ped-1768051975626",
-      "client": "Marcos",
-      "phone": "+554284071727",
-      "chat_id": "457632943",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-13",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1768051975626,
-      "history": []
-    },
-    {
       "id": "ped-1768053160667",
       "client": "Alessandra Dalzoto ferreira",
       "phone": "+554299798518",
