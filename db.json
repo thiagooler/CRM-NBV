@@ -5904,19 +5904,6 @@
       ]
     },
     {
-      "id": "ped-1768076398044",
-      "client": "Valtair Cardoso De Olivei",
-      "phone": "+554298502744",
-      "chat_id": "856932270",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-13",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1768076398044,
-      "history": []
-    },
-    {
       "id": "ped-1768078251047",
       "client": "Zé Koco",
       "phone": "+554299531361",
