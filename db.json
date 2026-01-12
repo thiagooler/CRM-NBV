@@ -5101,8 +5101,8 @@
       "phone": "+554299696864",
       "chat_id": "748934278",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-15",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-02-01",
+      "status": "emproduo_216",
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767616062138,
@@ -5146,6 +5146,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1768237041517
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "emproduo_216",
+          "date": 1768246422030
         }
       ]
     },
