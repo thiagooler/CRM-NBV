@@ -5904,19 +5904,6 @@
       ]
     },
     {
-      "id": "ped-1768055909839",
-      "client": "Elizaria",
-      "phone": "+554284431910",
-      "chat_id": "573773876",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-13",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1768055909839,
-      "history": []
-    },
-    {
       "id": "ped-1768056496899",
       "client": "Clínica Do Celular",
       "phone": "+554284070469",
