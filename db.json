@@ -6382,6 +6382,19 @@
       "hiddenUntil": null,
       "createdAt": 1768230729285,
       "history": []
+    },
+    {
+      "id": "ped-1768231446900",
+      "client": "Kaue Marques",
+      "phone": "+554288051560",
+      "chat_id": "857390210",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-15",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768231446900,
+      "history": []
     }
   ]
 }
