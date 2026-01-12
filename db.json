@@ -344,8 +344,17 @@
       "chat_id": "714796901",
       "product": "Pedido via Bot",
       "dueDate": "2025-12-29",
-      "status": "review",
-      "waiting": true
+      "status": "approval",
+      "waiting": true,
+      "history": [
+        {
+          "from": "review",
+          "to": "approval",
+          "date": 1768185497246
+        }
+      ],
+      "hiddenUntil": null,
+      "phone": "+554298092881"
     },
     {
       "id": "ped-1766598040826",
