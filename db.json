@@ -5240,9 +5240,9 @@
       "phone": "+554299049829",
       "chat_id": "680386303",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-15",
+      "dueDate": "2026-01-16",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767646510798,
       "history": [
@@ -5275,6 +5275,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1768257683244
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1768265418601
         }
       ]
     },
