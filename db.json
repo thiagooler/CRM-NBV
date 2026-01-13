@@ -5256,8 +5256,8 @@
       "phone": "+554298628763",
       "chat_id": "493646586",
       "product": "Pedido via Bot",
-      "dueDate": "2026-02-12",
-      "status": "disponivelpararetirada_769",
+      "dueDate": "2026-01-20",
+      "status": "prontoparaentrega_2",
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767711790496,
@@ -5291,6 +5291,11 @@
           "from": "emproduo_216",
           "to": "disponivelpararetirada_769",
           "date": 1768262763173
+        },
+        {
+          "from": "disponivelpararetirada_769",
+          "to": "prontoparaentrega_2",
+          "date": 1768318481711
         }
       ]
     },
