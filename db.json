@@ -6221,6 +6221,19 @@
       "hiddenUntil": null,
       "createdAt": 1768347956052,
       "history": []
+    },
+    {
+      "id": "ped-1768348514085",
+      "client": "Tatiane cordeiro dos Santos",
+      "phone": "+554298759982",
+      "chat_id": "505997015",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-23",
+      "status": "done",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768348514085,
+      "history": []
     }
   ]
 }
