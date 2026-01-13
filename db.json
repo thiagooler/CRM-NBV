@@ -6270,6 +6270,19 @@
       "hiddenUntil": null,
       "createdAt": 1768255405737,
       "history": []
+    },
+    {
+      "id": "ped-1768306380045",
+      "client": "Grafis comercial- Bruna",
+      "phone": "+554298332514",
+      "chat_id": "493889162",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-16",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768306380045,
+      "history": []
     }
   ]
 }
