@@ -1101,8 +1101,8 @@
       "phone": "+554284355128",
       "chat_id": "673538270",
       "product": "Pedido via Bot",
-      "dueDate": "2026-02-02",
-      "status": "emproduo_216",
+      "dueDate": "2026-01-20",
+      "status": "prontoparaentrega_2",
       "waiting": false,
       "createdAt": 1766783241925,
       "history": [
@@ -1120,6 +1120,11 @@
           "from": "filadeproduo_612",
           "to": "emproduo_216",
           "date": 1768274730287
+        },
+        {
+          "from": "emproduo_216",
+          "to": "prontoparaentrega_2",
+          "date": 1768275779198
         }
       ],
       "hiddenUntil": null
