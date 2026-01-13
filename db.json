@@ -6234,6 +6234,19 @@
       "hiddenUntil": null,
       "createdAt": 1768348514085,
       "history": []
+    },
+    {
+      "id": "ped-1768348677153",
+      "client": "Vanessa rodrigues",
+      "phone": "+554298740162",
+      "chat_id": "467319959",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-16",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768348677153,
+      "history": []
     }
   ]
 }
