@@ -5918,19 +5918,6 @@
       ]
     },
     {
-      "id": "ped-1768078251047",
-      "client": "Zé Koco",
-      "phone": "+554299531361",
-      "chat_id": "459776333",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-13",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1768078251047,
-      "history": []
-    },
-    {
       "id": "ped-1768089643428",
       "client": "Denilson Costa",
       "phone": "+554299040294",
