@@ -728,65 +728,6 @@
       "hiddenUntil": null
     },
     {
-      "id": "ped-1766721717857",
-      "client": "Ingrid Thais",
-      "phone": "+554299783258",
-      "chat_id": "762236340",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-02-08",
-      "status": "psvenda_619",
-      "waiting": false,
-      "createdAt": 1766721717857,
-      "history": [
-        {
-          "from": "review",
-          "to": "payment",
-          "date": 1766788496215
-        },
-        {
-          "from": "payment",
-          "to": "filadeproduo_612",
-          "date": 1766788777676
-        },
-        {
-          "from": "filadeproduo_612",
-          "to": "emproduo_216",
-          "date": 1766868314600
-        },
-        {
-          "from": "emproduo_216",
-          "to": "review",
-          "date": 1766869091254
-        },
-        {
-          "from": "review",
-          "to": "filadeproduo_612",
-          "date": 1766870030345
-        },
-        {
-          "from": "filadeproduo_612",
-          "to": "emproduo_216",
-          "date": 1767610776737
-        },
-        {
-          "from": "emproduo_216",
-          "to": "disponivelpararetirada_769",
-          "date": 1767612636886
-        },
-        {
-          "from": "disponivelpararetirada_769",
-          "to": "prontoparaentrega_2",
-          "date": 1767704043158
-        },
-        {
-          "from": "prontoparaentrega_2",
-          "to": "psvenda_619",
-          "date": 1767956948823
-        }
-      ],
-      "hiddenUntil": null
-    },
-    {
       "id": "ped-1766721884409",
       "client": "Adriana",
       "phone": "+554599434675",
