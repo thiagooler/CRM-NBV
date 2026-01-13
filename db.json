@@ -6037,12 +6037,18 @@
       "phone": "+554299712691",
       "chat_id": "468762249",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-15",
+      "dueDate": "2026-01-16",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1768220908198,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1768317596488
+        }
+      ]
     },
     {
       "id": "ped-1768229441404",
