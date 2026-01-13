@@ -1094,8 +1094,8 @@
       "phone": "+554299934367",
       "chat_id": "849585455",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-03",
-      "status": "aguardandoseleo_897",
+      "dueDate": "2026-01-18",
+      "status": "review",
       "waiting": false,
       "createdAt": 1766783071751,
       "history": [
@@ -1103,9 +1103,14 @@
           "from": "review",
           "to": "aguardandoseleo_897",
           "date": 1766860965160
+        },
+        {
+          "from": "aguardandoseleo_897",
+          "to": "review",
+          "date": 1768314432964
         }
       ],
-      "hiddenUntil": 1766977200000
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766783241925",
