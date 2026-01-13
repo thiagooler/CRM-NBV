@@ -5243,7 +5243,7 @@
       "dueDate": "2026-01-16",
       "status": "filadeatendimento_988",
       "waiting": false,
-      "hiddenUntil": null,
+      "hiddenUntil": 1768273200000,
       "createdAt": 1767646510798,
       "history": [
         {
