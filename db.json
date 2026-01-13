@@ -867,8 +867,8 @@
       "phone": "+554298528836",
       "chat_id": "848250413",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-18",
-      "status": "review",
+      "dueDate": "2026-02-12",
+      "status": "payment",
       "waiting": true,
       "createdAt": 1766770546191,
       "history": [
@@ -881,6 +881,11 @@
           "from": "doing",
           "to": "review",
           "date": 1768275967357
+        },
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1768316106167
         }
       ],
       "hiddenUntil": null
