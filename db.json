@@ -307,14 +307,19 @@
       "client": "Meri Carneiro",
       "chat_id": "714796901",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-29",
-      "status": "approval",
+      "dueDate": "2026-02-12",
+      "status": "doing",
       "waiting": true,
       "history": [
         {
           "from": "review",
           "to": "approval",
           "date": 1768185497246
+        },
+        {
+          "from": "approval",
+          "to": "doing",
+          "date": 1768319649305
         }
       ],
       "hiddenUntil": null,
