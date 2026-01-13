@@ -1133,11 +1133,18 @@
       "phone": "+554284355128",
       "chat_id": "673538270",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-31",
-      "status": "review",
+      "dueDate": "2026-02-12",
+      "status": "payment",
       "waiting": false,
       "createdAt": 1766783241925,
-      "history": []
+      "history": [
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1768264083303
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766783417862",
