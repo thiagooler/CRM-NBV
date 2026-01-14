@@ -6502,7 +6502,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-15",
       "status": "filadeatendimento_988",
-      "waiting": false,
+      "waiting": true,
       "hiddenUntil": null,
       "createdAt": 1768416601258,
       "history": [
