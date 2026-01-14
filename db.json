@@ -4141,8 +4141,8 @@
       "phone": "+554298617714",
       "chat_id": "813735501",
       "product": "Pedido via Bot",
-      "dueDate": "2026-02-03",
-      "status": "emproduo_216",
+      "dueDate": "2026-01-24",
+      "status": "filadeproduo_612",
       "waiting": true,
       "createdAt": 1766862551456,
       "history": [
@@ -4155,6 +4155,11 @@
           "from": "review",
           "to": "emproduo_216",
           "date": 1768411072636
+        },
+        {
+          "from": "emproduo_216",
+          "to": "filadeproduo_612",
+          "date": 1768412304951
         }
       ],
       "hiddenUntil": null
