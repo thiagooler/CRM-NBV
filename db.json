@@ -1285,7 +1285,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-16",
       "status": "review",
-      "waiting": false,
+      "waiting": true,
       "createdAt": 1766784792205,
       "history": [],
       "hiddenUntil": 1768359600000
