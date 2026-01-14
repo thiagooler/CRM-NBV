@@ -1682,11 +1682,18 @@
       "phone": "+554299021147",
       "chat_id": "509539652",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "doing",
+      "dueDate": "2026-01-19",
+      "status": "review",
       "waiting": false,
       "createdAt": 1766856559964,
-      "history": []
+      "history": [
+        {
+          "from": "doing",
+          "to": "review",
+          "date": 1768357960549
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766856668220",
