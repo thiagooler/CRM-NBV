@@ -105,8 +105,8 @@
       "client": "Amanda Batista dos Santos",
       "chat_id": "486040647",
       "product": "Pedido via Bot",
-      "dueDate": "2026-02-13",
-      "status": "payment",
+      "dueDate": "2026-01-24",
+      "status": "filadeproduo_612",
       "waiting": true,
       "hiddenUntil": null,
       "phone": "+554284012256",
@@ -115,6 +115,11 @@
           "from": "review",
           "to": "payment",
           "date": 1768353631527
+        },
+        {
+          "from": "payment",
+          "to": "filadeproduo_612",
+          "date": 1768356051792
         }
       ]
     },
