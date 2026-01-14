@@ -1779,8 +1779,8 @@
       "phone": "+554299252276",
       "chat_id": "523182277",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-19",
-      "status": "review",
+      "dueDate": "2026-02-13",
+      "status": "payment",
       "waiting": true,
       "createdAt": 1766857582212,
       "history": [
@@ -1793,6 +1793,11 @@
           "from": "doing",
           "to": "review",
           "date": 1768359899084
+        },
+        {
+          "from": "review",
+          "to": "payment",
+          "date": 1768434116595
         }
       ],
       "hiddenUntil": null
