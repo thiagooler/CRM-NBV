@@ -848,8 +848,8 @@
       "phone": "+554299065865",
       "chat_id": "822397935",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-19",
-      "status": "filadeproduo_612",
+      "dueDate": "2026-02-03",
+      "status": "emproduo_216",
       "waiting": false,
       "createdAt": 1766723906175,
       "history": [
@@ -862,6 +862,11 @@
           "from": "payment",
           "to": "filadeproduo_612",
           "date": 1767994831613
+        },
+        {
+          "from": "filadeproduo_612",
+          "to": "emproduo_216",
+          "date": 1768350187724
         }
       ],
       "hiddenUntil": null
