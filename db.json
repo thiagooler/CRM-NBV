@@ -1380,7 +1380,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-26",
       "status": "doing",
-      "waiting": false,
+      "waiting": true,
       "createdAt": 1766845241344,
       "history": [
         {
