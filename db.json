@@ -1378,8 +1378,8 @@
       "phone": "+555196044669",
       "chat_id": "848104551",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "doing",
+      "dueDate": "2026-01-19",
+      "status": "review",
       "waiting": true,
       "createdAt": 1766845241344,
       "history": [
@@ -1387,8 +1387,14 @@
           "from": "payment",
           "to": "doing",
           "date": 1766861926374
+        },
+        {
+          "from": "doing",
+          "to": "review",
+          "date": 1768352311951
         }
-      ]
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766845692092",
