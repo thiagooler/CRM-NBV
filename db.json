@@ -6471,6 +6471,19 @@
       "hiddenUntil": null,
       "createdAt": 1768402502855,
       "history": []
+    },
+    {
+      "id": "ped-1768410114451",
+      "client": "Revail",
+      "phone": "+554299750188",
+      "chat_id": "856780661",
+      "product": "Pedido via Bot",
+      "dueDate": "2026-01-17",
+      "status": "filadeatendimento_988",
+      "waiting": false,
+      "hiddenUntil": null,
+      "createdAt": 1768410114451,
+      "history": []
     }
   ]
 }
