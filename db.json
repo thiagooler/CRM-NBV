@@ -946,7 +946,7 @@
       "product": "Pedido via Bot",
       "dueDate": "2026-01-15",
       "status": "emproduo_216",
-      "waiting": false,
+      "waiting": true,
       "createdAt": 1766779954067,
       "history": [
         {
