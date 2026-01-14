@@ -284,7 +284,7 @@
       "client": "Tatiane",
       "chat_id": "477994543",
       "product": "Manual",
-      "dueDate": "2026-02-13",
+      "dueDate": "2026-01-15",
       "status": "payment",
       "waiting": false,
       "history": [
@@ -295,7 +295,7 @@
         }
       ],
       "hiddenUntil": null,
-      "phone": "+554284182991"
+      "phone": ""
     },
     {
       "id": "ped-1766595478812",
