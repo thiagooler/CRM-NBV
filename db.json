@@ -1825,8 +1825,8 @@
       "phone": "+554299252276",
       "chat_id": "523182277",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "doing",
+      "dueDate": "2026-01-19",
+      "status": "review",
       "waiting": false,
       "createdAt": 1766857582212,
       "history": [
@@ -1834,8 +1834,14 @@
           "from": "doing",
           "to": "doing",
           "date": 1766862545467
+        },
+        {
+          "from": "doing",
+          "to": "review",
+          "date": 1768359899084
         }
-      ]
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766857592350",
