@@ -1552,8 +1552,8 @@
       "phone": "+554284094703",
       "chat_id": "849435438",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "doing",
+      "dueDate": "2026-01-19",
+      "status": "review",
       "waiting": false,
       "createdAt": 1766853888315,
       "history": [
@@ -1561,8 +1561,14 @@
           "from": "doing",
           "to": "doing",
           "date": 1766863773861
+        },
+        {
+          "from": "doing",
+          "to": "review",
+          "date": 1768352799753
         }
-      ]
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766853925123",
