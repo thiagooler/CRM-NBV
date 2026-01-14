@@ -5970,12 +5970,18 @@
       "phone": "+554284088166",
       "chat_id": "471710512",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-12",
+      "dueDate": "2026-01-17",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767988770045,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1768385093585
+        }
+      ]
     },
     {
       "id": "ped-1767997613005",
