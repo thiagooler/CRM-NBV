@@ -5032,8 +5032,8 @@
       "phone": "+554298455726",
       "chat_id": "822397301",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-30",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-01-21",
+      "status": "aguardandoseleo_897",
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1767400263226,
@@ -5042,6 +5042,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1767706683300
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "aguardandoseleo_897",
+          "date": 1768417846952
         }
       ]
     },
