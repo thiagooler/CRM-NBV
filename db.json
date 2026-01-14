@@ -848,8 +848,8 @@
       "phone": "+554299065865",
       "chat_id": "822397935",
       "product": "Pedido via Bot",
-      "dueDate": "2026-02-03",
-      "status": "emproduo_216",
+      "dueDate": "2026-02-13",
+      "status": "disponivelpararetirada_769",
       "waiting": false,
       "createdAt": 1766723906175,
       "history": [
@@ -867,6 +867,11 @@
           "from": "filadeproduo_612",
           "to": "emproduo_216",
           "date": 1768350187724
+        },
+        {
+          "from": "emproduo_216",
+          "to": "disponivelpararetirada_769",
+          "date": 1768351735127
         }
       ],
       "hiddenUntil": null
