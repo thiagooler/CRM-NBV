@@ -6008,12 +6008,18 @@
       "phone": "+621060456",
       "chat_id": "856704481",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-20",
+      "dueDate": "2026-01-24",
       "status": "filadeproduo_612",
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1768007931858,
-      "history": []
+      "history": [
+        {
+          "from": "filadeproduo_612",
+          "to": "filadeproduo_612",
+          "date": 1768359784707
+        }
+      ]
     },
     {
       "id": "ped-1768055484779",
