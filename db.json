@@ -6486,8 +6486,8 @@
       "phone": "+554499241055",
       "chat_id": "763102649",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-17",
-      "status": "filadeatendimento_988",
+      "dueDate": "2026-02-03",
+      "status": "emproduo_216",
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1768413351184,
@@ -6496,6 +6496,11 @@
           "from": "filadeatendimento_988",
           "to": "filadeatendimento_988",
           "date": 1768413379945
+        },
+        {
+          "from": "filadeatendimento_988",
+          "to": "emproduo_216",
+          "date": 1768418745683
         }
       ]
     },
