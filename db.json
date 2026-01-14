@@ -944,8 +944,8 @@
       "phone": "+554298638737",
       "chat_id": "847685278",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-15",
-      "status": "emproduo_216",
+      "dueDate": "2026-01-21",
+      "status": "prontoparaentrega_2",
       "waiting": true,
       "createdAt": 1766779954067,
       "history": [
@@ -953,6 +953,11 @@
           "from": "prontoparaentrega_2",
           "to": "emproduo_216",
           "date": 1768399753427
+        },
+        {
+          "from": "emproduo_216",
+          "to": "prontoparaentrega_2",
+          "date": 1768409037257
         }
       ],
       "hiddenUntil": null
