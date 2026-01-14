@@ -1576,8 +1576,8 @@
       "phone": "+554299320140",
       "chat_id": "643239698",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "doing",
+      "dueDate": "2026-01-19",
+      "status": "review",
       "waiting": false,
       "createdAt": 1766853925123,
       "history": [
@@ -1585,8 +1585,14 @@
           "from": "doing",
           "to": "doing",
           "date": 1766862567525
+        },
+        {
+          "from": "doing",
+          "to": "review",
+          "date": 1768353416412
         }
-      ]
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766855403717",
