@@ -1672,7 +1672,7 @@
       "phone": "+554298731123",
       "chat_id": "457652621",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
+      "dueDate": "2026-02-13",
       "status": "doing",
       "waiting": false,
       "createdAt": 1766856668220,
@@ -1681,8 +1681,14 @@
           "from": "doing",
           "to": "doing",
           "date": 1766862646656
+        },
+        {
+          "from": "doing",
+          "to": "doing",
+          "date": 1768353440046
         }
-      ]
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766857239271",
