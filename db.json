@@ -6455,7 +6455,13 @@
       "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1768391781904,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1768406557708
+        }
+      ]
     },
     {
       "id": "ped-1768402502855",
