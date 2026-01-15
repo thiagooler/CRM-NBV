@@ -6183,12 +6183,18 @@
       "phone": "+554298182433",
       "chat_id": "857285048",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-15",
-      "status": "filadeatendimento_988",
-      "waiting": false,
+      "dueDate": "2026-01-22",
+      "status": "aguardandoseleo_897",
+      "waiting": true,
       "hiddenUntil": null,
       "createdAt": 1768220806680,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "aguardandoseleo_897",
+          "date": 1768440126365
+        }
+      ]
     },
     {
       "id": "ped-1768220908198",
