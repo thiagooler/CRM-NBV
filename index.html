@@ -181,6 +181,7 @@
             <select id="integrationActionType" class="inp-full" onchange="toggleIntegratorOptions()">
                 <option value="move">📁 Mover Card de Coluna</option>
                 <option value="color">🎨 Alterar Cor (Semáforo)</option>
+                <option value="date">📅 Alterar Prazo</option>
                 <option value="delete">❌ Deletar Pedido</option>
             </select>
             <div id="opt-move">
@@ -194,6 +195,12 @@
             </div>
             <div id="opt-color" style="display:none;"><label>Definir Status:</label><select id="integrationColorSelect" class="inp-full" onchange="updateIntegratorCode()"><option value="true">🟡 Aguardando Cliente</option><option value="false">🟢 Em Execução</option></select></div>
             
+            <div id="opt-date" style="display:none;">
+                <label>Novo Valor (Dias ou Data):</label>
+                <div style="font-size:0.8em; color:#666; margin-bottom:5px;">Digite um número (ex: 5) para somar dias, ou uma variável de data.</div>
+                <input type="text" id="integrationDateValue" class="inp-full" placeholder="Ex: 5 ou {prazo}" onkeyup="updateIntegratorCode()">
+            </div>
+
             <h4 style="margin-bottom:5px; color:#333;">Body (JSON)</h4>
             <div class="code-block" style="position:relative; font-size:0.85em;"><pre id="jsonContent" style="margin:0; white-space:pre-wrap;">...</pre><button class="btn-copy" onclick="copyText('jsonContent')">Copiar</button></div>
         </div>
@@ -219,7 +226,6 @@
 
     <script>
         // CONFIGURAÇÃO CENTRAL DA URL DO BOT
-        // Mude aqui se sua conta no BotConversa mudar no futuro
         const BOT_URL_BASE = 'https://app.botconversa.com.br/121326/live-chat/all/7c4a6195222fc4a590f5bfadbf9acc07965e55b095a593a4459bec7f350e8096';
         
         const API_URL = 'https://script.google.com/macros/s/AKfycbzpVIhBpNd5trGp-yxZ32P0cMsNw3k_KjnYZXxc3mec7CX3cw3fMHsDgDYhdxVIHcYzog/exec'; 
@@ -238,7 +244,6 @@
             if (slider) { slider.addEventListener('wheel', (e) => { if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; } }); }
 
             await loadData();
-            // Google é rápido, podemos consultar a cada 10s sem medo
             setInterval(() => loadData(true), 10000); 
         }
 
@@ -627,6 +632,7 @@
             const type = document.getElementById('integrationActionType').value; 
             document.getElementById('opt-move').style.display = type === 'move' ? 'block' : 'none'; 
             document.getElementById('opt-color').style.display = type === 'color' ? 'block' : 'none'; 
+            document.getElementById('opt-date').style.display = type === 'date' ? 'block' : 'none'; 
             updateIntegratorCode(); 
         }
         function updateIntegratorCode() { 
@@ -643,7 +649,10 @@
                 json = { "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; 
             } else if (type === 'delete') { 
                 json = { "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; 
-            } 
+            } else if (type === 'date') { 
+                const val = document.getElementById('integrationDateValue').value;
+                json = { "client_payload": { "real_action": "update_date", "chat_id": "{codigo-indicacao}", "date_value": val } }; 
+            }
             document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); 
         }
 
