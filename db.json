@@ -5717,25 +5717,6 @@
       ]
     },
     {
-      "id": "ped-1767956835896",
-      "client": "Fran",
-      "phone": "+554284159571",
-      "chat_id": "849317124",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-02-08",
-      "status": "psvenda_619",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1767956835896,
-      "history": [
-        {
-          "from": "psvenda_619",
-          "to": "psvenda_619",
-          "date": 1767956843911
-        }
-      ]
-    },
-    {
       "id": "ped-1767966107356",
       "client": "𝐒alete 𝐊𝐫𝐢𝐞𝐠𝐞𝐫",
       "phone": "+554284353890",
