@@ -6372,30 +6372,6 @@
       "history": []
     },
     {
-      "id": "ped-1768348677153",
-      "client": "Vanessa rodrigues",
-      "phone": "+554298740162",
-      "chat_id": "467319959",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-16",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1768348677153,
-      "history": [
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1768437912636
-        },
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1768437952177
-        }
-      ]
-    },
-    {
       "id": "ped-1768352675643",
       "client": "Olga",
       "phone": "+554298219630",
