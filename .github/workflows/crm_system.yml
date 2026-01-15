@@ -1,0 +1,25 @@
+name: CRM Bridge (Relay to Google)
+
+on:
+  repository_dispatch:
+    types: [custom_event_name, webhook] 
+
+jobs:
+  relay-to-google:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repassar Webhook para Google Script
+        env:
+          # URL DO SEU SCRIPT GOOGLE JÁ CONFIGURADA:
+          GOOGLE_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzpVIhBpNd5trGp-yxZ32P0cMsNw3k_KjnYZXxc3mec7CX3cw3fMHsDgDYhdxVIHcYzog/exec"
+          PAYLOAD: ${{ toJson(github.event.client_payload) }}
+        run: |
+          echo "Recebendo dados do Bot..."
+          echo "Enviando para o Google Drive via Script..."
+          
+          # Envia POST para o Google Script
+          curl -L -X POST "$GOOGLE_SCRIPT_URL" \
+          -H "Content-Type: application/json" \
+          -d "{\"client_payload\": $PAYLOAD}"
+          
+          echo "Dados repassados com sucesso!"
