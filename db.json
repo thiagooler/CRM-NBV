@@ -6173,12 +6173,18 @@
       "phone": "+554288916938",
       "chat_id": "857458452",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-15",
+      "dueDate": "2026-01-16",
       "status": "filadeatendimento_988",
-      "waiting": true,
+      "waiting": false,
       "hiddenUntil": null,
       "createdAt": 1768235328331,
-      "history": []
+      "history": [
+        {
+          "from": "filadeatendimento_988",
+          "to": "filadeatendimento_988",
+          "date": 1768441589241
+        }
+      ]
     },
     {
       "id": "ped-1768237468397",
