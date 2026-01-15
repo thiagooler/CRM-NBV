@@ -6441,25 +6441,6 @@
       "history": []
     },
     {
-      "id": "ped-1768410114451",
-      "client": "Revail",
-      "phone": "+554299750188",
-      "chat_id": "856780661",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-16",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1768410114451,
-      "history": [
-        {
-          "from": "filadeatendimento_988",
-          "to": "filadeatendimento_988",
-          "date": 1768438914934
-        }
-      ]
-    },
-    {
       "id": "ped-1768413351184",
       "client": "Anderson",
       "phone": "+554499241055",
