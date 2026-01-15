@@ -530,7 +530,19 @@
             showStatus('Salvando...', '#ffab00');
             try { await sendToApi('save_columns', { columns: columnsConfig, order: columnOrder }); showStatus('✅ Salvo!', '#36b37e'); setTimeout(hideStatus, 2000); } catch(e) { showStatus('❌ Erro!', '#bf2600'); }
         }
-        async function addColumn() { const t = document.getElementById('newColTitle').value; if(!t) return; const id = t.toLowerCase().replace(/[^a-z0-9]/g, '')+'_'+Math.floor(Math.random()*1000); columnsConfig[id] = { title: t, color: document.getElementById('newColColor').value, days: parseInt(document.getElementById('newColDays').value)||0 }; columnOrder.push(id); document.getElementById('newColTitle').value = ''; openSettings(); }
+        async function addColumn() { 
+            const t = document.getElementById('newColTitle').value; 
+            if(!t) return; 
+            const id = t.toLowerCase().replace(/[^a-z0-9]/g, '')+'_'+Math.floor(Math.random()*1000); 
+            columnsConfig[id] = { title: t, color: document.getElementById('newColColor').value, days: parseInt(document.getElementById('newColDays').value)||0 }; 
+            columnOrder.push(id); 
+            document.getElementById('newColTitle').value = ''; 
+            openSettings(); 
+            
+            // --- SALVAR NO BACKEND ---
+            await saveAllColumns(); 
+        }
+        
         async function removeColumn(k) { if(!confirm("Remover?")) return; delete columnsConfig[k]; columnOrder = columnOrder.filter(id => id !== k); openSettings(); }
         async function deleteOrder(id) { if(confirm('Apagar?')) { orders = orders.filter(o => o.id !== id); if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToApi('delete_order', { id }); } catch(e) {} } }
         function openSettings() { const l = document.getElementById('columnsList'); l.innerHTML = ''; columnOrder.forEach((k, index) => { if(columnsConfig[k]) { const c = columnsConfig[k]; const d = document.createElement('div'); d.className='col-item'; d.innerHTML = `<input type="number" class="order-input" data-key="${k}" value="${index + 1}"><div class="status-dot" style="background:${c.color}; margin-left:5px;"></div><div class="col-inputs"><input class="inp-full" style="margin:0;padding:5px;" value="${c.title}" onchange="columnsConfig['${k}'].title=this.value"><div class="col-row"><input type="number" class="inp-mini" value="${c.days}" onchange="columnsConfig['${k}'].days=parseInt(this.value)"><input type="color" style="height:30px;" value="${c.color}" onchange="columnsConfig['${k}'].color=this.value"></div></div><button onclick="removeColumn('${k}')" style="color:red;border:none;background:none;"><i class="fa-solid fa-trash"></i></button>`; l.appendChild(d); } }); document.getElementById('settingsModal').showModal(); }
