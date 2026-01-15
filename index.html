@@ -216,7 +216,6 @@
     <dialog id="editOrderModal"><div class="modal-header"><h3 style="margin:0">Editar</h3><button onclick="closeModal('editOrderModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><input type="hidden" id="editOrderId"><label>Nome</label><input type="text" id="editClientName" class="inp-full"><label>Telefone</label><input type="text" id="editPhone" class="inp-full"><label>Produto</label><input type="text" id="editProduct" class="inp-full"><label>Prazo</label><input type="date" id="editDueDate" class="inp-full"><button class="btn-primary" onclick="saveOrderEdits()">Salvar</button></div></dialog>
 
     <script>
-        // --- URL CONFIGURADA ---
         const API_URL = 'https://script.google.com/macros/s/AKfycbzpVIhBpNd5trGp-yxZ32P0cMsNw3k_KjnYZXxc3mec7CX3cw3fMHsDgDYhdxVIHcYzog/exec'; 
         
         let columnsConfig = {'todo': { title: '📥 Novos', color: '#ff5630', days: 0 }, 'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 }, 'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }};
@@ -265,10 +264,20 @@
             else if(!isAuto) showStatus('Carregando...', '#0052cc'); 
             
             try { 
-                // GET NO GOOGLE SCRIPT
                 const r = await fetch(API_URL); 
-                if(!r.ok) throw new Error("Erro API Google"); 
-                const d = await r.json(); 
+                if(!r.ok) throw new Error("Erro HTTP: " + r.status);
+                
+                // --- DEBUG DE TELA BRANCA ---
+                const text = await r.text();
+                let d;
+                try {
+                    d = JSON.parse(text);
+                } catch(err) {
+                    console.error("Conteudo recebido não é JSON:", text);
+                    if(!isAuto) alert("ERRO: Tela Branca detectada.\n\nCausa: O Google Script não retornou dados válidos.\n\nSolução: Vá no Apps Script -> Implantar -> Gerenciar -> Editar -> Mude 'Quem pode acessar' para 'Qualquer pessoa'.");
+                    throw new Error("Resposta inválida do Google");
+                }
+                // -----------------------------
                 
                 if (Array.isArray(d)) orders = d; else { orders = d.orders||[]; if(d.columns) columnsConfig = d.columns; if(d.columnOrder) columnOrder = d.columnOrder; else columnOrder = Object.keys(columnsConfig); } 
                 
@@ -368,7 +377,7 @@
             }
         }
 
-        // --- FUNÇÃO QUE FALTAVA (RESOLVE O ERRO) ---
+        // --- GRÁFICOS E RELATÓRIOS ---
         function renderReports() {
             const total = orders.length;
             const done = orders.filter(o => o.status === 'done').length;
