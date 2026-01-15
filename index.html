@@ -368,6 +368,66 @@
             }
         }
 
+        // --- FUNÇÃO QUE FALTAVA (RESOLVE O ERRO) ---
+        function renderReports() {
+            const total = orders.length;
+            const done = orders.filter(o => o.status === 'done').length;
+            const active = total - done;
+
+            // Media de tempo
+            let totalDays = 0;
+            let count = 0;
+            orders.forEach(o => {
+                const t = calculateTime(o);
+                totalDays += t.total;
+                count++;
+            });
+            const avg = count > 0 ? Math.round(totalDays / count) : 0;
+
+            document.getElementById('kpi-total').innerText = total;
+            document.getElementById('kpi-active').innerText = active;
+            document.getElementById('kpi-done').innerText = done;
+            document.getElementById('kpi-avg').innerText = avg + 'd';
+
+            // Chart
+            const ctx = document.getElementById('chartStatus');
+            if (ctx) {
+                const labels = columnOrder.map(k => columnsConfig[k] ? columnsConfig[k].title : k);
+                const data = columnOrder.map(k => orders.filter(o => o.status === k).length);
+                const colors = columnOrder.map(k => columnsConfig[k] ? columnsConfig[k].color : '#ccc');
+
+                if (myChart) myChart.destroy();
+                myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Pedidos',
+                            data: data,
+                            backgroundColor: colors
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+
+            // Top Clientes
+            const clientMap = {};
+            orders.forEach(o => { clientMap[o.client] = (clientMap[o.client] || 0) + 1; });
+            const sortedClients = Object.entries(clientMap).sort((a,b) => b[1] - a[1]).slice(0, 10);
+            
+            const tbody = document.querySelector('#tableClients tbody');
+            if(tbody) {
+                tbody.innerHTML = '';
+                sortedClients.forEach(([name, count]) => {
+                    tbody.innerHTML += `<tr><td>${name}</td><td>${count}</td></tr>`;
+                });
+            }
+        }
+
         function createCard(o, c) { 
             const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; 
             const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
@@ -440,6 +500,20 @@
         function openEditOrder(id) { const o = orders.find(ord => ord.id === id); if(!o) return; document.getElementById('editOrderId').value = o.id; document.getElementById('editClientName').value = o.client; document.getElementById('editPhone').value = o.phone||''; document.getElementById('editProduct').value = o.product; document.getElementById('editDueDate').value = o.dueDate; document.getElementById('editOrderModal').showModal(); }
         
         async function saveOrderEdits() { const id = document.getElementById('editOrderId').value; const c = document.getElementById('editClientName').value; const ph = document.getElementById('editPhone').value; const p = document.getElementById('editProduct').value; const d = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=c; orders[idx].phone=ph; orders[idx].product=p; orders[idx].dueDate=d; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); } closeModal('editOrderModal'); try { await sendToApi('update_order', { id, client: c, phone: ph, product: p, dueDate: d }); } catch(e) {} }
+
+        // --- EXPORTAR CSV ---
+        function exportCSV() {
+            let csv = "ID,Cliente,Telefone,Produto,Status,Data\n";
+            orders.forEach(o => {
+                csv += `${o.id},${o.client},${o.phone},${o.product},${o.status},${o.dueDate}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'crm_export.csv';
+            a.click();
+        }
 
         // --- FILTRO E DRAG/DROP ---
         function openFilterModal() { const l = document.getElementById('filterList'); l.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) l.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${k}" value="${k}" ${visibleColumns.includes(k)?'checked':''}><div style="width:15px;height:15px;background:${columnsConfig[k].color};border-radius:50%;"></div><label for="chk-${k}">${columnsConfig[k].title}</label></div>`; }); document.getElementById('chk-hideWaiting').checked = hideWaiting; document.getElementById('filterModal').showModal(); }
