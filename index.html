@@ -218,6 +218,10 @@
     <dialog id="editOrderModal"><div class="modal-header"><h3 style="margin:0">Editar</h3><button onclick="closeModal('editOrderModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><input type="hidden" id="editOrderId"><label>Nome</label><input type="text" id="editClientName" class="inp-full"><label>Telefone</label><input type="text" id="editPhone" class="inp-full"><label>Produto</label><input type="text" id="editProduct" class="inp-full"><label>Prazo</label><input type="date" id="editDueDate" class="inp-full"><button class="btn-primary" onclick="saveOrderEdits()">Salvar</button></div></dialog>
 
     <script>
+        // CONFIGURAÇÃO CENTRAL DA URL DO BOT
+        // Mude aqui se sua conta no BotConversa mudar no futuro
+        const BOT_URL_BASE = 'https://app.botconversa.com.br/121326/live-chat/all/7c4a6195222fc4a590f5bfadbf9acc07965e55b095a593a4459bec7f350e8096';
+        
         const API_URL = 'https://script.google.com/macros/s/AKfycbzpVIhBpNd5trGp-yxZ32P0cMsNw3k_KjnYZXxc3mec7CX3cw3fMHsDgDYhdxVIHcYzog/exec'; 
         
         let columnsConfig = {'todo': { title: '📥 Novos', color: '#ff5630', days: 0 }, 'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 }, 'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }};
@@ -369,7 +373,10 @@
                 count++;
 
                 const col = columnsConfig[o.status]||{color:'#ccc',title:'?'}; const dt = new Date(o.dueDate); const df = Math.ceil((dt - new Date()) / (86400000)); let cl = '#36b37e'; if (df < 0) cl = '#bf2600'; else if (df <= 2) cl = '#ffab00'; if (o.status === 'done') cl = '#42526e'; let opts = ''; columnOrder.forEach(k => { if(columnsConfig[k]) opts += `<option value="${k}" ${o.status === k ? 'selected' : ''}>${columnsConfig[k].title}</option>`; }); const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
-                const wa = o.phone ? `<button class="btn-icon btn-wa" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
+                
+                // --- LINK BOTCONVERSA ---
+                const wa = o.phone ? `<button class="btn-icon btn-wa" title="Abrir BotConversa" onclick="window.open('${BOT_URL_BASE}?search_name=${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-solid fa-robot"></i> ${o.phone}</button>` : '';
+                // ------------------------
                 
                 const div = document.createElement('div');
                 div.className = 'timeline-item';
@@ -468,7 +475,11 @@
         function createCard(o, c, moveOptions) { 
             const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; 
             const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
-            const wa = o.phone ? `<button class="btn-icon btn-wa" title="Whats" onclick="window.open('https://wa.me/${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-brands fa-whatsapp"></i> ${o.phone}</button>` : '';
+            
+            // --- LINK BOTCONVERSA ---
+            const wa = o.phone ? `<button class="btn-icon btn-wa" title="Abrir BotConversa" onclick="window.open('${BOT_URL_BASE}?search_name=${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-solid fa-robot"></i> ${o.phone}</button>` : '';
+            // ------------------------
+
             const times = calculateTime(o);
             
             d.innerHTML = `
