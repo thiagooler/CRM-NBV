@@ -431,35 +431,6 @@
       "waiting": true
     },
     {
-      "id": "ped-1766609256890",
-      "client": "Leocádia",
-      "phone": "+554299892523",
-      "chat_id": "841862909",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-02-08",
-      "status": "psvenda_619",
-      "waiting": false,
-      "createdAt": 1766609256890,
-      "history": [
-        {
-          "from": "filadeproduo_612",
-          "to": "emproduo_216",
-          "date": 1766787623778
-        },
-        {
-          "from": "emproduo_216",
-          "to": "prontoparaentrega_2",
-          "date": 1766788443071
-        },
-        {
-          "from": "prontoparaentrega_2",
-          "to": "psvenda_619",
-          "date": 1767956958171
-        }
-      ],
-      "hiddenUntil": null
-    },
-    {
       "id": "ped-1766609749096",
       "client": "Emerson",
       "phone": "+554284052400",
