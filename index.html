@@ -216,6 +216,7 @@
     <dialog id="editOrderModal"><div class="modal-header"><h3 style="margin:0">Editar</h3><button onclick="closeModal('editOrderModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><input type="hidden" id="editOrderId"><label>Nome</label><input type="text" id="editClientName" class="inp-full"><label>Telefone</label><input type="text" id="editPhone" class="inp-full"><label>Produto</label><input type="text" id="editProduct" class="inp-full"><label>Prazo</label><input type="date" id="editDueDate" class="inp-full"><button class="btn-primary" onclick="saveOrderEdits()">Salvar</button></div></dialog>
 
     <script>
+        // --- URL CONFIGURADA ---
         const API_URL = 'https://script.google.com/macros/s/AKfycbzpVIhBpNd5trGp-yxZ32P0cMsNw3k_KjnYZXxc3mec7CX3cw3fMHsDgDYhdxVIHcYzog/exec'; 
         
         let columnsConfig = {'todo': { title: '📥 Novos', color: '#ff5630', days: 0 }, 'doing': { title: '🔨 Em Produção', color: '#ffab00', days: 30 }, 'done': { title: '✅ Finalizado', color: '#42526e', days: 0 }};
