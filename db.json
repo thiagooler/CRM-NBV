@@ -1591,8 +1591,8 @@
       "phone": "+554284280642",
       "chat_id": "522198781",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-26",
-      "status": "doing",
+      "dueDate": "2026-01-25",
+      "status": "filadeproduo_612",
       "waiting": false,
       "createdAt": 1766855403717,
       "history": [
@@ -1600,8 +1600,14 @@
           "from": "doing",
           "to": "doing",
           "date": 1766862685251
+        },
+        {
+          "from": "doing",
+          "to": "filadeproduo_612",
+          "date": 1768437428637
         }
-      ]
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766855714038",
