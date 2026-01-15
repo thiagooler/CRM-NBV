@@ -344,9 +344,21 @@
             let hiddenCount = 0;
             const now = Date.now();
             const frag = document.createDocumentFragment();
+            
+            // Data de hoje (YYYY-MM-DD) para comparar
+            const localDate = new Date();
+            localDate.setMinutes(localDate.getMinutes() - localDate.getTimezoneOffset());
+            const todayStr = localDate.toISOString().split('T')[0];
 
             s.forEach(o => { 
-                if (!visibleColumns.includes(o.status)) return; 
+                // --- REDE DE SEGURANÇA ---
+                const isHiddenColumn = !visibleColumns.includes(o.status);
+                const isLate = o.dueDate && o.dueDate <= todayStr; // Venceu ou vence hoje
+
+                // Se a coluna está oculta E não está atrasado, tchau.
+                if (isHiddenColumn && !isLate) return;
+                // -------------------------
+
                 if (hideWaiting && o.waiting) return; 
                 if (!matchesSearch(o)) return;
                 
