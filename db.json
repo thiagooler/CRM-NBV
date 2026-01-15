@@ -545,8 +545,8 @@
       "phone": "+554298448122",
       "chat_id": "793479815",
       "product": "Pedido via Bot",
-      "dueDate": "2026-01-16",
-      "status": "approval",
+      "dueDate": "2026-01-25",
+      "status": "filadeproduo_612",
       "waiting": false,
       "createdAt": 1766616243165,
       "history": [
@@ -559,6 +559,11 @@
           "from": "aguardandoseleo_897",
           "to": "approval",
           "date": 1767921321952
+        },
+        {
+          "from": "approval",
+          "to": "filadeproduo_612",
+          "date": 1768442285443
         }
       ],
       "hiddenUntil": null
