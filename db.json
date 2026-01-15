@@ -6152,19 +6152,6 @@
       "history": []
     },
     {
-      "id": "ped-1768217318707",
-      "client": "Ledimar De Campos",
-      "phone": "+554298587248",
-      "chat_id": "857258944",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-15",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1768217318707,
-      "history": []
-    },
-    {
       "id": "ped-1768220806680",
       "client": "Gertrudes",
       "phone": "+554298182433",
