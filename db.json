@@ -6165,19 +6165,6 @@
       "history": []
     },
     {
-      "id": "ped-1768217748658",
-      "client": "Lucimere Campos",
-      "phone": "+554298485037",
-      "chat_id": "639742140",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-01-15",
-      "status": "filadeatendimento_988",
-      "waiting": false,
-      "hiddenUntil": null,
-      "createdAt": 1768217748658,
-      "history": []
-    },
-    {
       "id": "ped-1768220806680",
       "client": "Gertrudes",
       "phone": "+554298182433",
