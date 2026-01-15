@@ -2332,30 +2332,6 @@
       "hiddenUntil": null
     },
     {
-      "id": "ped-1766859456191",
-      "client": "Maria Eduarda",
-      "phone": "+554499975523",
-      "chat_id": "806873317",
-      "product": "Pedido via Bot",
-      "dueDate": "2026-02-05",
-      "status": "disponivelpararetirada_769",
-      "waiting": true,
-      "createdAt": 1766859456191,
-      "history": [
-        {
-          "from": "filadeproduo_612",
-          "to": "disponivelpararetirada_769",
-          "date": 1767705724772
-        },
-        {
-          "from": "disponivelpararetirada_769",
-          "to": "disponivelpararetirada_769",
-          "date": 1767705735702
-        }
-      ],
-      "hiddenUntil": null
-    },
-    {
       "id": "ped-1766859467904",
       "client": "Jaqueline",
       "phone": "+554299617875",
