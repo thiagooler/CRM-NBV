@@ -192,9 +192,17 @@
       "client": "Ronaldo",
       "chat_id": "536947908",
       "product": "Pedido via Bot",
-      "dueDate": "2025-12-29",
-      "status": "review",
-      "waiting": true
+      "dueDate": "2026-02-14",
+      "status": "psvenda_619",
+      "waiting": true,
+      "history": [
+        {
+          "from": "review",
+          "to": "psvenda_619",
+          "date": 1768442170859
+        }
+      ],
+      "hiddenUntil": null
     },
     {
       "id": "ped-1766586845289",
