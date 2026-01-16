@@ -393,12 +393,11 @@
                 const col = columnsConfig[o.status]||{color:'#ccc',title:'?'}; const dt = new Date(o.dueDate); const df = Math.ceil((dt - new Date()) / (86400000)); let cl = '#36b37e'; if (df < 0) cl = '#bf2600'; else if (df <= 2) cl = '#ffab00'; if (o.status === 'done') cl = '#42526e'; let opts = ''; columnOrder.forEach(k => { if(columnsConfig[k]) opts += `<option value="${k}" ${o.status === k ? 'selected' : ''}>${columnsConfig[k].title}</option>`; }); const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
                 
                 // --- LINK BOTCONVERSA / WHATSAPP / COPIAR ---
-                // Preparar dados para o menu
                 const cleanPhone = o.phone ? o.phone.replace(/[^0-9]/g, '') : '';
                 const waButton = o.phone ? `
                     <div class="phone-wrapper">
-                        <button class="btn-icon btn-wa" onclick="togglePhoneMenu('pmenu-${o.id}')"><i class="fa-solid fa-phone"></i> ${o.phone}</button>
-                        <div id="pmenu-${o.id}" class="phone-dropdown">
+                        <button class="btn-icon btn-wa" onclick="togglePhoneMenu('pmenu-tl-${o.id}')"><i class="fa-solid fa-phone"></i> ${o.phone}</button>
+                        <div id="pmenu-tl-${o.id}" class="phone-dropdown">
                             <div onclick="window.open('${BOT_URL_BASE}?search_name=${cleanPhone}', '_blank')"><i class="fa-solid fa-robot"></i> BotConversa</div>
                             <div onclick="window.open('https://wa.me/${cleanPhone}', '_blank')"><i class="fa-brands fa-whatsapp"></i> WhatsApp</div>
                             <div onclick="copyPhoneClean('${cleanPhone}')"><i class="fa-regular fa-copy"></i> Copiar (s/ 55)</div>
