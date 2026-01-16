@@ -199,6 +199,11 @@
                 <label>Novo Valor (Dias ou Data):</label>
                 <div style="font-size:0.8em; color:#666; margin-bottom:5px;">Digite um número (ex: 5) para somar dias, ou uma variável de data.</div>
                 <input type="text" id="integrationDateValue" class="inp-full" placeholder="Ex: 5 ou {prazo}" onkeyup="updateIntegratorCode()">
+                
+                <div class="filter-item" style="border:1px solid #eee; border-radius:4px; margin-top:5px;">
+                    <input type="checkbox" id="integrationDateFromToday" onchange="updateIntegratorCode()">
+                    <label for="integrationDateFromToday" style="font-weight:normal;">Calcular a partir de <b>HOJE</b>? (Se não, soma ao prazo atual)</label>
+                </div>
             </div>
 
             <h4 style="margin-bottom:5px; color:#333;">Body (JSON)</h4>
@@ -244,6 +249,7 @@
             if (slider) { slider.addEventListener('wheel', (e) => { if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; } }); }
 
             await loadData();
+            // Google é rápido, podemos consultar a cada 10s sem medo
             setInterval(() => loadData(true), 10000); 
         }
 
@@ -651,7 +657,15 @@
                 json = { "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; 
             } else if (type === 'date') { 
                 const val = document.getElementById('integrationDateValue').value;
-                json = { "client_payload": { "real_action": "update_date", "chat_id": "{codigo-indicacao}", "date_value": val } }; 
+                const fromToday = document.getElementById('integrationDateFromToday').checked;
+                json = { 
+                    "client_payload": { 
+                        "real_action": "update_date", 
+                        "chat_id": "{codigo-indicacao}", 
+                        "date_value": val,
+                        "from_today": fromToday
+                    } 
+                }; 
             }
             document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); 
         }
