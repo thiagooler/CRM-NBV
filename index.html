@@ -59,6 +59,13 @@
         /* MINI SELECT NO CARD */
         .card-move-select { font-size: 0.8em; padding: 4px; border: 1px solid #dfe1e6; border-radius: 4px; max-width: 100px; color: #444; margin-right: auto; }
 
+        /* PHONE DROPDOWN STYLES */
+        .phone-wrapper { position: relative; display: inline-block; }
+        .phone-dropdown { display: none; position: absolute; bottom: 100%; left: 0; background: white; border: 1px solid #dfe1e6; border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 1000; min-width: 160px; overflow: hidden; margin-bottom: 5px; text-align: left; }
+        .phone-dropdown div { padding: 10px 12px; cursor: pointer; font-size: 0.9em; color: #333; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+        .phone-dropdown div:hover { background: #f4f5f7; color: #0052cc; }
+        .phone-dropdown.active { display: block; }
+
         #timelineView, #reportsView { display: none; max-width: 1200px; margin: 0 auto; }
         .timeline-item { background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid transparent; }
         .tl-info { display: flex; flex-direction: column; gap: 5px; flex-grow: 1; }
@@ -385,9 +392,19 @@
 
                 const col = columnsConfig[o.status]||{color:'#ccc',title:'?'}; const dt = new Date(o.dueDate); const df = Math.ceil((dt - new Date()) / (86400000)); let cl = '#36b37e'; if (df < 0) cl = '#bf2600'; else if (df <= 2) cl = '#ffab00'; if (o.status === 'done') cl = '#42526e'; let opts = ''; columnOrder.forEach(k => { if(columnsConfig[k]) opts += `<option value="${k}" ${o.status === k ? 'selected' : ''}>${columnsConfig[k].title}</option>`; }); const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
                 
-                // --- LINK BOTCONVERSA ---
-                const wa = o.phone ? `<button class="btn-icon btn-wa" title="Abrir BotConversa" onclick="window.open('${BOT_URL_BASE}?search_name=${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-solid fa-robot"></i> ${o.phone}</button>` : '';
-                // ------------------------
+                // --- LINK BOTCONVERSA / WHATSAPP / COPIAR ---
+                // Preparar dados para o menu
+                const cleanPhone = o.phone ? o.phone.replace(/[^0-9]/g, '') : '';
+                const waButton = o.phone ? `
+                    <div class="phone-wrapper">
+                        <button class="btn-icon btn-wa" onclick="togglePhoneMenu('pmenu-${o.id}')"><i class="fa-solid fa-phone"></i> ${o.phone}</button>
+                        <div id="pmenu-${o.id}" class="phone-dropdown">
+                            <div onclick="window.open('${BOT_URL_BASE}?search_name=${cleanPhone}', '_blank')"><i class="fa-solid fa-robot"></i> BotConversa</div>
+                            <div onclick="window.open('https://wa.me/${cleanPhone}', '_blank')"><i class="fa-brands fa-whatsapp"></i> WhatsApp</div>
+                            <div onclick="copyPhoneClean('${cleanPhone}')"><i class="fa-regular fa-copy"></i> Copiar (s/ 55)</div>
+                        </div>
+                    </div>` : '';
+                // ---------------------------------------------
                 
                 const div = document.createElement('div');
                 div.className = 'timeline-item';
@@ -404,7 +421,7 @@
                         </div>
                     </div>
                     <div class="tl-actions">
-                        ${wa}
+                        ${waButton}
                         <button class="btn-icon" onclick="openSnooze('${o.id}')" title="Ocultar"><i class="fa-solid fa-eye-slash"></i></button>
                         <select class="status-select" onchange="changeStatus('${o.id}',this.value)">${opts}</select>
                         <button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button>
@@ -487,9 +504,18 @@
             const d = document.createElement('div'); d.className = 'card'; d.id = o.id; d.draggable = true; d.style.borderLeftColor = c; d.ondragstart = drag; 
             const late = new Date(o.dueDate) < new Date() && o.status !== 'done'; const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
             
-            // --- LINK BOTCONVERSA ---
-            const wa = o.phone ? `<button class="btn-icon btn-wa" title="Abrir BotConversa" onclick="window.open('${BOT_URL_BASE}?search_name=${o.phone.replace(/[^0-9]/g,'')}', '_blank')"><i class="fa-solid fa-robot"></i> ${o.phone}</button>` : '';
-            // ------------------------
+            // --- LINK BOTCONVERSA / WHATSAPP / COPIAR ---
+            const cleanPhone = o.phone ? o.phone.replace(/[^0-9]/g, '') : '';
+            const waButton = o.phone ? `
+                <div class="phone-wrapper">
+                    <button class="btn-icon btn-wa" onclick="togglePhoneMenu('pmenu-${o.id}')"><i class="fa-solid fa-phone"></i> ${o.phone}</button>
+                    <div id="pmenu-${o.id}" class="phone-dropdown">
+                        <div onclick="window.open('${BOT_URL_BASE}?search_name=${cleanPhone}', '_blank')"><i class="fa-solid fa-robot"></i> BotConversa</div>
+                        <div onclick="window.open('https://wa.me/${cleanPhone}', '_blank')"><i class="fa-brands fa-whatsapp"></i> WhatsApp</div>
+                        <div onclick="copyPhoneClean('${cleanPhone}')"><i class="fa-regular fa-copy"></i> Copiar (s/ 55)</div>
+                    </div>
+                </div>` : '';
+            // ---------------------------------------------
 
             const times = calculateTime(o);
             
@@ -505,7 +531,7 @@
                 </div>
                 <div class="card-actions">
                     <select class="card-move-select" onchange="changeStatus('${o.id}', this.value)">${moveOptions}</select>
-                    ${wa}
+                    ${waButton}
                     <button class="btn-icon" onclick="copyLink('${o.id}')"><i class="fa-solid fa-link"></i></button>
                     <button class="btn-icon" onclick="openEditOrder('${o.id}')"><i class="fa-solid fa-pen"></i></button>
                     <button class="btn-icon btn-trash" onclick="deleteOrder('${o.id}')"><i class="fa-solid fa-trash"></i></button>
@@ -670,6 +696,30 @@
             document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); 
         }
 
+        // --- MENUS DE TELEFONE ---
+        function togglePhoneMenu(id) {
+            const menu = document.getElementById(id);
+            // Fecha outros menus abertos
+            document.querySelectorAll('.phone-dropdown').forEach(el => {
+                if (el.id !== id) el.classList.remove('active');
+            });
+            if (menu) menu.classList.toggle('active');
+        }
+
+        function copyPhoneClean(phone) {
+            // Remove o 55 do começo se existir (e tiver mais que 10 digitos pra evitar erro)
+            let clean = phone.replace(/\D/g, '');
+            if (clean.startsWith('55') && clean.length > 10) {
+                clean = clean.substring(2);
+            }
+            navigator.clipboard.writeText(clean).then(() => {
+                showStatus('📋 Copiado!', '#36b37e');
+                setTimeout(hideStatus, 2000);
+            });
+            // Fecha menus
+            document.querySelectorAll('.phone-dropdown').forEach(el => el.classList.remove('active'));
+        }
+
         // --- COMUNICAÇÃO COM API GOOGLE ---
         async function sendToApi(realAction, payload) { 
             if(API_URL.includes('COLE_SUA')) { alert("URL do Google não configurada!"); return; }
@@ -699,7 +749,11 @@
         function sortColumn(k, t) { let c = orders.filter(o => o.status === k); let o = orders.filter(o => o.status !== k); if (t === 'date') c.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); else c.sort((a,b) => a.client.localeCompare(b.client)); orders = [...o, ...c]; renderBoard(); } 
         function toggleMenu(k) { document.getElementById('menu-'+k).classList.toggle('active'); } 
 
-        document.addEventListener('click', e => { if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); });
+        // Listener para fechar menus ao clicar fora
+        document.addEventListener('click', e => { 
+            if(!e.target.closest('.col-menu-btn')) document.querySelectorAll('.col-options').forEach(el=>el.classList.remove('active')); 
+            if(!e.target.closest('.phone-wrapper')) document.querySelectorAll('.phone-dropdown').forEach(el=>el.classList.remove('active'));
+        });
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
