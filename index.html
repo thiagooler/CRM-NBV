@@ -253,7 +253,20 @@
     </dialog>
     <dialog id="settingsModal"><div class="modal-header"><h3 style="margin:0">Configurações</h3><button onclick="closeModal('settingsModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><div class="tab-content active"><div style="background:#e3f2fd;padding:10px;margin-bottom:10px;border-radius:4px;">✋ Digite a posição (1, 2, 3...) e Salve.</div><div id="columnsList"></div><button class="btn-primary" onclick="saveAllColumns()">💾 Salvar Ordem</button><h4 style="margin-top:20px;">Nova Coluna</h4><input id="newColTitle" class="inp-full" placeholder="Nome"><div style="display:flex;gap:10px;"><input type="color" id="newColColor" style="height:40px;width:50px;"><input type="number" id="newColDays" class="inp-full" placeholder="Dias"></div><button class="btn-primary" onclick="addColumn()">+ Adicionar</button></div></div></dialog>
     <dialog id="newOrderModal"><div class="modal-header"><h3 style="margin:0">Novo Pedido</h3><button onclick="closeModal('newOrderModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><label>Cliente *</label><input type="text" id="manualName" class="inp-full"><label>Telefone</label><input type="text" id="manualPhone" class="inp-full"><label>ID (Opcional)</label><input type="text" id="manualChatId" class="inp-full"><label>Coluna Inicial</label><select id="manualColumn" class="inp-full" onchange="autoDateManual(this.value)"></select><label>Produto</label><input type="text" id="manualProduct" class="inp-full"><label>Prazo</label><input type="date" id="manualDate" class="inp-full"><button class="btn-primary" onclick="createManualOrder()">Criar</button></div></dialog>
-    <dialog id="newTaskModal"><div class="modal-header"><h3 style="margin:0">Nova Tarefa</h3><button onclick="closeModal('newTaskModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><label>O que fazer? *</label><input type="text" id="taskTitle" class="inp-full" placeholder="Ex: Relatório Financeiro"><label>Horário *</label><input type="time" id="taskTime" class="inp-full"><button class="btn-primary" onclick="createTask()">Adicionar Tarefa</button></div></dialog>
+    
+    <dialog id="newTaskModal"><div class="modal-header"><h3 style="margin:0">Nova Tarefa</h3><button onclick="closeModal('newTaskModal')" style="border:none; background:none;">&times;</button></div>
+    <div class="modal-body">
+        <label>O que fazer? *</label><input type="text" id="taskTitle" class="inp-full" placeholder="Ex: Relatório Financeiro">
+        <label>Horário *</label><input type="time" id="taskTime" class="inp-full">
+        <label>Data:</label><input type="date" id="taskDate" class="inp-full">
+        <div class="filter-item" style="border:1px solid #eee; margin-bottom:15px; border-radius:4px;">
+            <input type="checkbox" id="taskRecurring" onchange="toggleTaskDate()">
+            <label for="taskRecurring" style="font-weight:normal;">🔄 Todo dia</label>
+        </div>
+        <button class="btn-primary" onclick="createTask()">Adicionar Tarefa</button>
+    </div>
+    </dialog>
+
     <dialog id="plusMenuModal"><div class="modal-header"><h3 style="margin:0">Adicionar</h3><button onclick="closeModal('plusMenuModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body" style="display:flex; flex-direction:column; gap:10px;"><button class="btn-primary" onclick="closeModal('plusMenuModal');openNewOrderModal();">📦 Novo Pedido</button><button class="btn-primary" style="background:#ff9800" onclick="closeModal('plusMenuModal');openNewTaskModal();">📌 Nova Tarefa</button></div></dialog>
     <dialog id="editOrderModal"><div class="modal-header"><h3 style="margin:0">Editar</h3><button onclick="closeModal('editOrderModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><input type="hidden" id="editOrderId"><label>Nome</label><input type="text" id="editClientName" class="inp-full"><label>Telefone</label><input type="text" id="editPhone" class="inp-full"><label>Produto</label><input type="text" id="editProduct" class="inp-full"><label>Prazo</label><input type="date" id="editDueDate" class="inp-full"><button class="btn-primary" onclick="saveOrderEdits()">Salvar</button></div></dialog>
 
@@ -354,7 +367,7 @@
         function renderTimeline() {
             const c = document.getElementById('timelineContent'); if(!c) return; c.innerHTML = ''; 
             
-            // --- AGENDA & TAREFAS (PAINEL SUPERIOR) ---
+            // --- AGENDA & TAREFAS ---
             const todayStr = new Date().toISOString().split('T')[0];
             const nowTime = new Date();
             const nowMinutes = nowTime.getHours() * 60 + nowTime.getMinutes();
@@ -363,43 +376,51 @@
             const todayEvents = calendar.filter(ev => !ev.isTomorrow && !hiddenEvents.includes(ev.id));
             const tomorrowEvents = calendar.filter(ev => ev.isTomorrow);
             
-            // 2. Tarefas do Dia (Local) - Filtra e Ordena
-            const todayTasks = tasks.filter(t => t.date === todayStr).sort((a,b) => a.time.localeCompare(b.time));
+            // 2. Tarefas - FILTRO DE FOCO (1 HORA ANTES)
+            const todayTasks = tasks.filter(t => {
+                const isForToday = t.isRecurring || t.date === todayStr;
+                // Se for recorrente e já foi feita HOJE, esconde.
+                const isDoneToday = t.isRecurring && t.lastDone === todayStr;
+                
+                if (!isForToday || isDoneToday) return false;
+
+                const [h, m] = t.time.split(':').map(Number);
+                const taskMinutes = h * 60 + m;
+                const minutesUntil = taskMinutes - nowMinutes;
+
+                // Mostra se faltar 60 min ou menos (ou se já passou da hora mas não foi feita)
+                return minutesUntil <= 60;
+            }).sort((a,b) => a.time.localeCompare(b.time));
             
             let agendaHTML = '';
             if (todayEvents.length > 0 || todayTasks.length > 0 || tomorrowEvents.length > 0) {
                 agendaHTML = `<div class="agenda-panel"><div class="agenda-header">📅 Agenda Studio NBV & Tarefas</div><div class="agenda-grid">`;
                 
-                // Renderiza Eventos Hoje
                 todayEvents.forEach(ev => {
                     const timeStr = ev.isAllDay ? 'Dia todo' : new Date(ev.start).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
                     agendaHTML += `<div class="agenda-item"><div class="agenda-item-info"><span class="agenda-time">${timeStr}</span><span class="agenda-title">${ev.title}</span></div><button class="btn-icon" onclick="hideCalendarEvent('${ev.id}')" title="Concluir/Ocultar"><i class="fa-solid fa-check"></i></button></div>`;
                 });
 
-                // Renderiza Tarefas Hoje
                 todayTasks.forEach(t => {
                     const [h, m] = t.time.split(':').map(Number);
                     const taskMinutes = h * 60 + m;
                     const diff = taskMinutes - nowMinutes;
                     let urgentClass = '';
-                    if (diff <= 10 && diff > -60) urgentClass = 'urgent-10'; // 10 min antes (ou passou 1h)
-                    else if (diff <= 30 && diff > 0) urgentClass = 'urgent-30'; // 30 min antes
+                    if (diff <= 10 && diff > -60) urgentClass = 'urgent-10'; 
+                    else if (diff <= 30 && diff > 0) urgentClass = 'urgent-30'; 
 
-                    agendaHTML += `<div class="agenda-item ${urgentClass}"><div class="agenda-item-info"><span class="agenda-time">${t.time}</span><span class="agenda-title">${t.title}</span></div><button class="btn-icon" onclick="completeTask('${t.id}')" title="Concluir"><i class="fa-solid fa-check"></i></button></div>`;
+                    agendaHTML += `<div class="agenda-item ${urgentClass}"><div class="agenda-item-info"><span class="agenda-time">${t.time}</span><span class="agenda-title">${t.title} ${t.isRecurring ? '🔄' : ''}</span></div><button class="btn-icon" onclick="completeTask('${t.id}')" title="Concluir"><i class="fa-solid fa-check"></i></button></div>`;
                 });
 
-                // Renderiza Amanhã
                 if (tomorrowEvents.length > 0) {
                     agendaHTML += `<div class="agenda-tomorrow-list"><span>Amanhã:</span>`;
-                    tomorrowEvents.forEach(ev => {
-                        agendaHTML += `<div class="mini-event">${ev.title}</div>`;
-                    });
+                    tomorrowEvents.forEach(ev => { agendaHTML += `<div class="mini-event">${ev.title}</div>`; });
                     agendaHTML += `</div>`;
                 }
                 agendaHTML += `</div></div>`;
                 c.innerHTML = agendaHTML;
             }
-            // ------------------------------------------
+            // ------------------------
 
             const s = [...orders].sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); 
             let count = 0; let hiddenCount = 0; const now = Date.now(); const frag = document.createDocumentFragment();
@@ -449,22 +470,33 @@
         }
 
         function openPlusMenu() { document.getElementById('plusMenuModal').showModal(); }
-        function openNewTaskModal() { document.getElementById('taskTitle').value = ''; document.getElementById('taskTime').value = ''; document.getElementById('newTaskModal').showModal(); }
+        function openNewTaskModal() { document.getElementById('taskTitle').value = ''; document.getElementById('taskTime').value = ''; document.getElementById('taskDate').valueAsDate = new Date(); document.getElementById('taskRecurring').checked = false; document.getElementById('taskDate').disabled = false; document.getElementById('newTaskModal').showModal(); }
+        function toggleTaskDate() { const isRec = document.getElementById('taskRecurring').checked; document.getElementById('taskDate').disabled = isRec; }
+        
         async function createTask() {
             const title = document.getElementById('taskTitle').value;
             const time = document.getElementById('taskTime').value;
-            if(!title || !time) return alert("Preencha tudo!");
-            const todayStr = new Date().toISOString().split('T')[0];
-            const newTask = { id: 'task-'+Date.now(), title, time, date: todayStr, done: false };
+            const isRecurring = document.getElementById('taskRecurring').checked;
+            const date = document.getElementById('taskDate').value;
+            if(!title || !time) return alert("Preencha o que e que horas!");
+            if(!isRecurring && !date) return alert("Escolha uma data ou marque Todo dia!");
+            
+            const newTask = { id: 'task-'+Date.now(), title, time, date: isRecurring ? '' : date, isRecurring, done: false, lastDone: null };
             tasks.push(newTask);
             renderTimeline();
             closeModal('newTaskModal');
-            try { await sendToApi('add_task', { title, time, date: todayStr }); } catch(e) {}
+            try { await sendToApi('add_task', { title, time, date: isRecurring ? '' : date, isRecurring }); } catch(e) {}
         }
         async function completeTask(id) {
-            tasks = tasks.filter(t => t.id !== id);
+            const t = tasks.find(x => x.id === id);
+            if (t && t.isRecurring) {
+                t.lastDone = new Date().toISOString().split('T')[0];
+            } else {
+                tasks = tasks.filter(x => x.id !== id);
+            }
             renderTimeline();
-            try { await sendToApi('complete_task', { id }); } catch(e) {}
+            const todayStr = new Date().toISOString().split('T')[0];
+            try { await sendToApi('complete_task', { id, todayStr }); } catch(e) {}
         }
         async function hideCalendarEvent(id) {
             hiddenEvents.push(id);
