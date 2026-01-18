@@ -231,7 +231,17 @@
         </div>
     </dialog>
 
-    <dialog id="filterModal"><div class="modal-header"><h3 style="margin:0">👁️ Filtros</h3><button onclick="closeModal('filterModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><div id="filterList"></div><hr style="margin:15px 0; border:0; border-top:1px solid #eee;"><div class="filter-item"><input type="checkbox" id="chk-hideWaiting"><span class="status-dot dot-yellow"></span><label for="chk-hideWaiting"> Ocultar "Aguardando" (Amarelos)</label></div><button class="btn-primary" onclick="applyFilters()">Aplicar</button></div></dialog>
+    <dialog id="filterModal"><div class="modal-header"><h3 style="margin:0">👁️ Filtros</h3><button onclick="closeModal('filterModal')" style="border:none; background:none;">&times;</button></div>
+    <div class="modal-body">
+        <label>🎯 Foco (Qtd. Cards):</label>
+        <input type="number" id="timelineLimitInput" class="inp-full" placeholder="Ex: 5" value="50">
+        <hr style="margin:15px 0; border:0; border-top:1px solid #eee;">
+        <div id="filterList"></div>
+        <hr style="margin:15px 0; border:0; border-top:1px solid #eee;">
+        <div class="filter-item"><input type="checkbox" id="chk-hideWaiting"><span class="status-dot dot-yellow"></span><label for="chk-hideWaiting"> Ocultar "Aguardando" (Amarelos)</label></div>
+        <button class="btn-primary" onclick="applyFilters()">Aplicar</button>
+    </div>
+    </dialog>
     <dialog id="settingsModal"><div class="modal-header"><h3 style="margin:0">Configurações</h3><button onclick="closeModal('settingsModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><div class="tab-content active"><div style="background:#e3f2fd;padding:10px;margin-bottom:10px;border-radius:4px;">✋ Digite a posição (1, 2, 3...) e Salve.</div><div id="columnsList"></div><button class="btn-primary" onclick="saveAllColumns()">💾 Salvar Ordem</button><h4 style="margin-top:20px;">Nova Coluna</h4><input id="newColTitle" class="inp-full" placeholder="Nome"><div style="display:flex;gap:10px;"><input type="color" id="newColColor" style="height:40px;width:50px;"><input type="number" id="newColDays" class="inp-full" placeholder="Dias"></div><button class="btn-primary" onclick="addColumn()">+ Adicionar</button></div></div></dialog>
     <dialog id="newOrderModal"><div class="modal-header"><h3 style="margin:0">Novo Pedido</h3><button onclick="closeModal('newOrderModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><label>Cliente *</label><input type="text" id="manualName" class="inp-full"><label>Telefone</label><input type="text" id="manualPhone" class="inp-full"><label>ID (Opcional)</label><input type="text" id="manualChatId" class="inp-full"><label>Coluna Inicial</label><select id="manualColumn" class="inp-full" onchange="autoDateManual(this.value)"></select><label>Produto</label><input type="text" id="manualProduct" class="inp-full"><label>Prazo</label><input type="date" id="manualDate" class="inp-full"><button class="btn-primary" onclick="createManualOrder()">Criar</button></div></dialog>
     <dialog id="editOrderModal"><div class="modal-header"><h3 style="margin:0">Editar</h3><button onclick="closeModal('editOrderModal')" style="border:none; background:none;">&times;</button></div><div class="modal-body"><input type="hidden" id="editOrderId"><label>Nome</label><input type="text" id="editClientName" class="inp-full"><label>Telefone</label><input type="text" id="editPhone" class="inp-full"><label>Produto</label><input type="text" id="editProduct" class="inp-full"><label>Prazo</label><input type="date" id="editDueDate" class="inp-full"><button class="btn-primary" onclick="saveOrderEdits()">Salvar</button></div></dialog>
@@ -247,11 +257,19 @@
         let orders = []; let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let dragSrcEl = null; let myChart = null;
         let searchTerm = ''; 
         let timelineLimit = 50; 
+        let timelineUserLimit = 50; // Limite definido pelo usuário
 
         async function init() { 
             const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
             const savedWait = localStorage.getItem('warrior_crm_hideWaiting'); if(savedWait) hideWaiting = JSON.parse(savedWait);
             
+            // Carregar limite salvo
+            const savedLimit = localStorage.getItem('warrior_crm_limit'); 
+            if(savedLimit) {
+                timelineUserLimit = parseInt(savedLimit);
+                timelineLimit = timelineUserLimit; // Inicializa com o limite do usuário
+            }
+
             const slider = document.getElementById('kanbanView');
             if (slider) { slider.addEventListener('wheel', (e) => { if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; } }); }
 
@@ -265,7 +283,7 @@
         function hideStatus() { const e=document.getElementById('statusMsg'); if(e) e.style.display='none'; } 
 
         // --- BUSCA E PAGINAÇÃO ---
-        function handleSearch(val) { searchTerm = val.toLowerCase(); timelineLimit = 50; if(currentView === 'kanban') renderBoard(); else if(currentView === 'timeline') renderTimeline(); }
+        function handleSearch(val) { searchTerm = val.toLowerCase(); timelineLimit = timelineUserLimit; if(currentView === 'kanban') renderBoard(); else if(currentView === 'timeline') renderTimeline(); }
         function loadMoreTimeline() { timelineLimit += 50; renderTimeline(); }
         
         function matchesSearch(order) { if(!searchTerm) return true; const term = searchTerm; const name = (order.client || '').toLowerCase(); const id = (order.id || '').toLowerCase(); const prod = (order.product || '').toLowerCase(); const rawPhone = (order.phone || '').toLowerCase(); const cleanPhone = rawPhone.replace(/\D/g, ''); return name.includes(term) || id.includes(term) || prod.includes(term) || rawPhone.includes(term) || cleanPhone.includes(term); }
@@ -387,8 +405,11 @@
                 // SNOOZE LOGIC
                 if (o.hiddenUntil && o.hiddenUntil > now) return;
 
+                // --- LÓGICA DE LIMITE DE FOCO ---
+                // Se count atingir o limite definido pelo usuário, para de renderizar (mas conta ocultos)
                 if (count >= timelineLimit) { hiddenCount++; return; }
                 count++;
+                // -------------------------------
 
                 const col = columnsConfig[o.status]||{color:'#ccc',title:'?'}; const dt = new Date(o.dueDate); const df = Math.ceil((dt - new Date()) / (86400000)); let cl = '#36b37e'; if (df < 0) cl = '#bf2600'; else if (df <= 2) cl = '#ffab00'; if (o.status === 'done') cl = '#42526e'; let opts = ''; columnOrder.forEach(k => { if(columnsConfig[k]) opts += `<option value="${k}" ${o.status === k ? 'selected' : ''}>${columnsConfig[k].title}</option>`; }); const dotClass = o.waiting ? 'dot-yellow' : 'dot-green'; 
                 
@@ -631,8 +652,22 @@
         async function saveOrderEdits() { const id = document.getElementById('editOrderId').value; const c = document.getElementById('editClientName').value; const ph = document.getElementById('editPhone').value; const p = document.getElementById('editProduct').value; const d = document.getElementById('editDueDate').value; const idx = orders.findIndex(o => o.id === id); if(idx > -1) { orders[idx].client=c; orders[idx].phone=ph; orders[idx].product=p; orders[idx].dueDate=d; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); } closeModal('editOrderModal'); try { await sendToApi('update_order', { id, client: c, phone: ph, product: p, dueDate: d }); } catch(e) {} }
 
         // --- FILTRO E DRAG/DROP ---
-        function openFilterModal() { const l = document.getElementById('filterList'); l.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) l.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${k}" value="${k}" ${visibleColumns.includes(k)?'checked':''}><div style="width:15px;height:15px;background:${columnsConfig[k].color};border-radius:50%;"></div><label for="chk-${k}">${columnsConfig[k].title}</label></div>`; }); document.getElementById('chk-hideWaiting').checked = hideWaiting; document.getElementById('filterModal').showModal(); }
-        function applyFilters() { visibleColumns = []; document.querySelectorAll('#filterList input[type="checkbox"]').forEach(c => { if(c.checked) visibleColumns.push(c.value); }); localStorage.setItem('warrior_crm_filters', JSON.stringify(visibleColumns)); hideWaiting = document.getElementById('chk-hideWaiting').checked; localStorage.setItem('warrior_crm_hideWaiting', JSON.stringify(hideWaiting)); closeModal('filterModal'); if(currentView==='timeline') renderTimeline(); renderBoard(); }
+        function openFilterModal() { 
+            document.getElementById('timelineLimitInput').value = timelineUserLimit; // Carrega valor atual
+            const l = document.getElementById('filterList'); l.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) l.innerHTML += `<div class="filter-item"><input type="checkbox" id="chk-${k}" value="${k}" ${visibleColumns.includes(k)?'checked':''}><div style="width:15px;height:15px;background:${columnsConfig[k].color};border-radius:50%;"></div><label for="chk-${k}">${columnsConfig[k].title}</label></div>`; }); document.getElementById('chk-hideWaiting').checked = hideWaiting; document.getElementById('filterModal').showModal(); 
+        }
+        
+        function applyFilters() { 
+            visibleColumns = []; document.querySelectorAll('#filterList input[type="checkbox"]').forEach(c => { if(c.checked) visibleColumns.push(c.value); }); localStorage.setItem('warrior_crm_filters', JSON.stringify(visibleColumns)); hideWaiting = document.getElementById('chk-hideWaiting').checked; localStorage.setItem('warrior_crm_hideWaiting', JSON.stringify(hideWaiting)); 
+            
+            // Salvar Limite de Foco
+            const limitVal = document.getElementById('timelineLimitInput').value;
+            timelineUserLimit = parseInt(limitVal) || 50;
+            timelineLimit = timelineUserLimit; // Reseta a visualização para o limite escolhido
+            localStorage.setItem('warrior_crm_limit', timelineUserLimit);
+
+            closeModal('filterModal'); if(currentView==='timeline') renderTimeline(); renderBoard(); 
+        }
 
         function handleDragStart(e) { dragSrcEl = this; e.dataTransfer.effectAllowed = 'move'; } 
         function handleDragOver(e) { e.preventDefault(); return false; } 
