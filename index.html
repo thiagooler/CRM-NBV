@@ -281,7 +281,17 @@
         let orders = []; let tasks = []; let calendar = []; let hiddenEvents = [];
         let currentView = 'kanban'; let visibleColumns = []; let hideWaiting = false; let lastDataHash = ''; let dragSrcEl = null; let myChart = null;
         let searchTerm = ''; let timelineLimit = 50; let timelineUserLimit = 50;
-        let editingTaskId = null; // Variável para controlar edição
+        let editingTaskId = null; 
+
+        // --- CORREÇÃO DE FUSO HORÁRIO ---
+        function getLocalTodayStr() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        // --------------------------------
 
         async function init() { 
             const savedFilters = localStorage.getItem('warrior_crm_filters'); if(savedFilters) visibleColumns = JSON.parse(savedFilters);
@@ -370,8 +380,8 @@
         function renderTimeline() {
             const c = document.getElementById('timelineContent'); if(!c) return; c.innerHTML = ''; 
             
-            // --- AGENDA & TAREFAS ---
-            const todayStr = new Date().toISOString().split('T')[0];
+            // --- AGENDA & TAREFAS (USANDO DATA LOCAL) ---
+            const todayStr = getLocalTodayStr(); 
             const nowTime = new Date();
             const nowMinutes = nowTime.getHours() * 60 + nowTime.getMinutes();
 
@@ -539,12 +549,12 @@
         async function completeTask(id) {
             const t = tasks.find(x => x.id === id);
             if (t && t.isRecurring) {
-                t.lastDone = new Date().toISOString().split('T')[0];
+                t.lastDone = getLocalTodayStr();
             } else {
                 tasks = tasks.filter(x => x.id !== id);
             }
             renderTimeline();
-            const todayStr = new Date().toISOString().split('T')[0];
+            const todayStr = getLocalTodayStr();
             try { await sendToApi('complete_task', { id, todayStr }); } catch(e) {}
         }
         async function hideCalendarEvent(id) {
