@@ -365,7 +365,8 @@
             columnOrder.forEach(k => { 
                 const c = columnsConfig[k]; if(!c) return; 
                 const d = document.createElement('div'); d.className = 'column'; d.style.borderTopColor = c.color; 
-                d.innerHTML = `<div class="column-header" style="color:${c.color}"><span>${c.title} <span id="count-${k}" style="background:#fff;padding:2px 8px;border-radius:10px;font-size:0.8em;color:#333;">0</span></span><div style="position:relative"><i class="fa-solid fa-ellipsis-vertical col-menu-btn" onclick="toggleMenu('${k}')"></i><div id="menu-${k}" class="col-options"><div onclick="sortColumn('${k}','date')">📅 Prazo</div><div onclick="sortColumn('${k}','name')">🔤 Nome</div></div></div></div><div class="card-list" id="${k}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>`; b.appendChild(d); 
+                // AQUI: Opção de ordenar por Nome foi removida
+                d.innerHTML = `<div class="column-header" style="color:${c.color}"><span>${c.title} <span id="count-${k}" style="background:#fff;padding:2px 8px;border-radius:10px;font-size:0.8em;color:#333;">0</span></span><div style="position:relative"><i class="fa-solid fa-ellipsis-vertical col-menu-btn" onclick="toggleMenu('${k}')"></i><div id="menu-${k}" class="col-options"><div onclick="sortColumn('${k}','date')">📅 Organizar por Prazo</div></div></div></div><div class="card-list" id="${k}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>`; b.appendChild(d); 
                 const l = d.querySelector('.card-list'); 
                 let colOrders = orders.filter(ord => ord.status === k && matchesSearch(ord));
                 if (hideWaiting) { colOrders = colOrders.filter(o => !o.waiting); }
@@ -380,7 +381,7 @@
         function renderTimeline() {
             const c = document.getElementById('timelineContent'); if(!c) return; c.innerHTML = ''; 
             
-            // --- AGENDA & TAREFAS (USANDO DATA LOCAL) ---
+            // --- AGENDA & TAREFAS ---
             const todayStr = getLocalTodayStr(); 
             const nowTime = new Date();
             const nowMinutes = nowTime.getHours() * 60 + nowTime.getMinutes();
@@ -434,7 +435,13 @@
             }
             // ------------------------
 
-            const s = [...orders].sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); 
+            // AQUI: Ordenação por data (String)
+            const s = [...orders].sort((a, b) => {
+                const dateA = a.dueDate || '9999-12-31';
+                const dateB = b.dueDate || '9999-12-31';
+                return dateA.localeCompare(dateB);
+            });
+
             let count = 0; let hiddenCount = 0; const now = Date.now(); const frag = document.createDocumentFragment();
             
             s.forEach(o => { 
