@@ -365,7 +365,6 @@
             columnOrder.forEach(k => { 
                 const c = columnsConfig[k]; if(!c) return; 
                 const d = document.createElement('div'); d.className = 'column'; d.style.borderTopColor = c.color; 
-                // AQUI: Opção de ordenar por Nome foi removida
                 d.innerHTML = `<div class="column-header" style="color:${c.color}"><span>${c.title} <span id="count-${k}" style="background:#fff;padding:2px 8px;border-radius:10px;font-size:0.8em;color:#333;">0</span></span><div style="position:relative"><i class="fa-solid fa-ellipsis-vertical col-menu-btn" onclick="toggleMenu('${k}')"></i><div id="menu-${k}" class="col-options"><div onclick="sortColumn('${k}','date')">📅 Organizar por Prazo</div></div></div></div><div class="card-list" id="${k}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>`; b.appendChild(d); 
                 const l = d.querySelector('.card-list'); 
                 let colOrders = orders.filter(ord => ord.status === k && matchesSearch(ord));
@@ -435,7 +434,7 @@
             }
             // ------------------------
 
-            // AQUI: Ordenação por data (String)
+            // ORDENAÇÃO POR DATA (String)
             const s = [...orders].sort((a, b) => {
                 const dateA = a.dueDate || '9999-12-31';
                 const dateB = b.dueDate || '9999-12-31';
@@ -446,9 +445,15 @@
             
             s.forEach(o => { 
                 const isHiddenColumn = !visibleColumns.includes(o.status);
+                // LÓGICA DE URGÊNCIA: Se venceu ou vence hoje, ele fura o filtro
                 const isLate = o.dueDate && o.dueDate <= todayStr;
+                
+                // 1. Se a coluna está oculta, só mostra se estiver atrasado (isLate)
                 if (isHiddenColumn && !isLate) return;
-                if (hideWaiting && o.waiting) return; 
+                
+                // 2. Se o filtro "Ocultar Amarelo" está ligado, só mostra se estiver atrasado (isLate)
+                if (hideWaiting && o.waiting && !isLate) return; 
+
                 if (!matchesSearch(o)) return;
                 if (o.hiddenUntil && o.hiddenUntil > now) return;
                 if (count >= timelineLimit) { hiddenCount++; return; }
