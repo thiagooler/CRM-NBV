@@ -201,20 +201,25 @@
             <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
             <label>Tipo de Ação:</label>
             <select id="integrationActionType" class="inp-full" onchange="toggleIntegratorOptions()">
+                <option value="add_safe">🛡️ Garantir no CRM (Se não existir)</option>
                 <option value="move">📁 Mover Card de Coluna</option>
                 <option value="color">🎨 Alterar Cor (Semáforo)</option>
                 <option value="date">📅 Alterar Prazo</option>
                 <option value="delete">❌ Deletar Pedido</option>
             </select>
+            
             <div id="opt-move">
-                <label>Mover para:</label><select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select>
+                <label id="lbl-col-select">Coluna de Destino:</label>
+                <select id="integrationColSelect" class="inp-full" onchange="updateIntegratorCode()"></select>
+                
                 <label style="margin-top:10px; display:block;">Status do Semáforo:</label>
                 <select id="moveWaitSelect" class="inp-full" onchange="updateIntegratorCode()">
-                    <option value="keep">🔄 Manter atual (Não alterar)</option>
-                    <option value="true">🟡 Mudar para Aguardando</option>
-                    <option value="false">🟢 Mudar para Execução</option>
+                    <option value="keep">🔄 Manter atual (ou Padrão)</option>
+                    <option value="true">🟡 Definir como Aguardando</option>
+                    <option value="false">🟢 Definir como Execução</option>
                 </select>
             </div>
+
             <div id="opt-color" style="display:none;"><label>Definir Status:</label><select id="integrationColorSelect" class="inp-full" onchange="updateIntegratorCode()"><option value="true">🟡 Aguardando Cliente</option><option value="false">🟢 Em Execução</option></select></div>
             <div id="opt-date" style="display:none;">
                 <label>Novo Valor (Dias ou Data):</label>
@@ -626,9 +631,77 @@
         async function drop(ev) { ev.preventDefault(); const id = ev.dataTransfer.getData("text"); const col = ev.target.closest('.card-list'); if (!col) return; const ns = col.id; if(orders.find(o=>o.id===id).status !== ns) changeStatus(id, ns); }
         async function changeStatus(id, st) { const i = orders.findIndex(o => o.id === id); if(i === -1) return; const days = columnsConfig[st]?.days || 0; let nd = null; if(days>0) { const d = new Date(); d.setDate(d.getDate()+days); nd = d.toISOString().split('T')[0]; orders[i].dueDate = nd; } orders[i].status = st; if(currentView==='kanban') renderBoard(); else if(currentView==='timeline') renderTimeline(); else renderReports(); try { await sendToApi('update_status', { id, status: st, newDate: nd }); } catch(e) {} }
 
-        function openIntegrator() { document.getElementById('dispUrl').innerText = API_URL; const s = document.getElementById('integrationColSelect'); if(s) { s.innerHTML = ''; columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); } toggleIntegratorOptions(); document.getElementById('integratorModal').showModal(); }
-        function toggleIntegratorOptions() { const type = document.getElementById('integrationActionType').value; document.getElementById('opt-move').style.display = type === 'move' ? 'block' : 'none'; document.getElementById('opt-color').style.display = type === 'color' ? 'block' : 'none'; document.getElementById('opt-date').style.display = type === 'date' ? 'block' : 'none'; updateIntegratorCode(); }
-        function updateIntegratorCode() { const type = document.getElementById('integrationActionType').value; let json = {}; if (type === 'move') { const col = document.getElementById('integrationColSelect').value; const waitSel = document.getElementById('moveWaitSelect').value; let waitPayload; if(waitSel === 'true') waitPayload = true; else if(waitSel === 'false') waitPayload = false; json = { "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}", "waiting": waitPayload } }; } else if (type === 'color') { const isWaiting = document.getElementById('integrationColorSelect').value === 'true'; json = { "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; } else if (type === 'delete') { json = { "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; } else if (type === 'date') { const val = document.getElementById('integrationDateValue').value; const fromToday = document.getElementById('integrationDateFromToday').checked; json = { "client_payload": { "real_action": "update_date", "chat_id": "{codigo-indicacao}", "date_value": val, "from_today": fromToday } }; } document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); }
+        function openIntegrator() { 
+            document.getElementById('dispUrl').innerText = API_URL; 
+            const s = document.getElementById('integrationColSelect'); 
+            if(s) { 
+                s.innerHTML = ''; 
+                columnOrder.forEach(k => { if(columnsConfig[k]) s.innerHTML += `<option value="${k}">${columnsConfig[k].title}</option>`; }); 
+            } 
+            toggleIntegratorOptions(); 
+            document.getElementById('integratorModal').showModal(); 
+        }
+        
+        function toggleIntegratorOptions() { 
+            const type = document.getElementById('integrationActionType').value; 
+            // Mostra o bloco 'opt-move' se for 'move' OU 'add_safe' (pois ambos precisam de seleção de coluna)
+            document.getElementById('opt-move').style.display = (type === 'move' || type === 'add_safe') ? 'block' : 'none'; 
+            document.getElementById('opt-color').style.display = type === 'color' ? 'block' : 'none'; 
+            document.getElementById('opt-date').style.display = type === 'date' ? 'block' : 'none'; 
+            
+            // Muda o texto da label para fazer sentido
+            const lbl = document.getElementById('lbl-col-select');
+            if(type === 'add_safe') lbl.innerText = "Criar na Coluna:";
+            else lbl.innerText = "Mover para:";
+            
+            updateIntegratorCode(); 
+        }
+
+        function updateIntegratorCode() { 
+            const type = document.getElementById('integrationActionType').value; 
+            let json = {}; 
+            
+            if (type === 'move') { 
+                const col = document.getElementById('integrationColSelect').value; 
+                const waitSel = document.getElementById('moveWaitSelect').value; 
+                let waitPayload; if(waitSel === 'true') waitPayload = true; else if(waitSel === 'false') waitPayload = false; 
+                json = { "client_payload": { "real_action": "move_card_external", "chat_id": "{codigo-indicacao}", "status": col, "nome": "{nome-completo}", "telefone": "{telefone}", "waiting": waitPayload } }; 
+            } 
+            // === LÓGICA NOVA: ADICIONAR SE NÃO EXISTIR ===
+            else if (type === 'add_safe') {
+                const col = document.getElementById('integrationColSelect').value;
+                const waitSel = document.getElementById('moveWaitSelect').value;
+                let waitPayload; 
+                if(waitSel === 'true') waitPayload = true; 
+                else if(waitSel === 'false') waitPayload = false; 
+                else waitPayload = false; // Padrão se for 'keep' para novo pedido
+
+                json = { 
+                    "client_payload": { 
+                        "real_action": "novo_pedido", 
+                        "chat_id": "{codigo-indicacao}", 
+                        "status": col, 
+                        "nome": "{nome-completo}", 
+                        "telefone": "{telefone}", 
+                        "waiting": waitPayload 
+                    } 
+                };
+            }
+            // ===============================================
+            else if (type === 'color') { 
+                const isWaiting = document.getElementById('integrationColorSelect').value === 'true'; 
+                json = { "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; 
+            } 
+            else if (type === 'delete') { 
+                json = { "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; 
+            } 
+            else if (type === 'date') { 
+                const val = document.getElementById('integrationDateValue').value; 
+                const fromToday = document.getElementById('integrationDateFromToday').checked; 
+                json = { "client_payload": { "real_action": "update_date", "chat_id": "{codigo-indicacao}", "date_value": val, "from_today": fromToday } }; 
+            } 
+            document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); 
+        }
 
         function togglePhoneMenu(id) { const menu = document.getElementById(id); document.querySelectorAll('.phone-dropdown').forEach(el => { if (el.id !== id) el.classList.remove('active'); }); if (menu) menu.classList.toggle('active'); }
         function copyPhoneClean(phone) { let clean = phone.replace(/\D/g, ''); if (clean.startsWith('55') && clean.length > 10) { clean = clean.substring(2); } navigator.clipboard.writeText(clean).then(() => { showStatus('📋 Copiado!', '#36b37e'); setTimeout(hideStatus, 2000); }); document.querySelectorAll('.phone-dropdown').forEach(el => el.classList.remove('active')); }
