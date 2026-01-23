@@ -674,7 +674,7 @@
                 let waitPayload; 
                 if(waitSel === 'true') waitPayload = true; 
                 else if(waitSel === 'false') waitPayload = false; 
-                else waitPayload = false; // Padrão se for 'keep' para novo pedido
+                else waitPayload = false; 
 
                 json = { 
                     "client_payload": { 
@@ -690,15 +690,34 @@
             // ===============================================
             else if (type === 'color') { 
                 const isWaiting = document.getElementById('integrationColorSelect').value === 'true'; 
-                json = { "client_payload": { "real_action": "toggle_waiting", "chat_id": "{codigo-indicacao}", "waiting": isWaiting } }; 
-            } 
-            else if (type === 'delete') { 
-                json = { "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; 
+                // AGORA INCLUI NOME E TELEFONE
+                json = { 
+                    "client_payload": { 
+                        "real_action": "toggle_waiting", 
+                        "chat_id": "{codigo-indicacao}", 
+                        "waiting": isWaiting,
+                        "nome": "{nome-completo}",
+                        "telefone": "{telefone}"
+                    } 
+                }; 
             } 
             else if (type === 'date') { 
                 const val = document.getElementById('integrationDateValue').value; 
                 const fromToday = document.getElementById('integrationDateFromToday').checked; 
-                json = { "client_payload": { "real_action": "update_date", "chat_id": "{codigo-indicacao}", "date_value": val, "from_today": fromToday } }; 
+                // AGORA INCLUI NOME E TELEFONE
+                json = { 
+                    "client_payload": { 
+                        "real_action": "update_date", 
+                        "chat_id": "{codigo-indicacao}", 
+                        "date_value": val, 
+                        "from_today": fromToday,
+                        "nome": "{nome-completo}",
+                        "telefone": "{telefone}"
+                    } 
+                }; 
+            } 
+            else if (type === 'delete') { 
+                json = { "client_payload": { "real_action": "delete_order", "chat_id": "{codigo-indicacao}" } }; 
             } 
             document.getElementById('jsonContent').innerText = JSON.stringify(json, null, 2); 
         }
