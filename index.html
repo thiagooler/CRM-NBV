@@ -439,8 +439,17 @@
             }
             // ------------------------
 
-            // ORDENAÇÃO POR DATA (String)
+            // ORDENAÇÃO: 1º URGENTE, 2º DATA
             const s = [...orders].sort((a, b) => {
+                // Verifica se a coluna tem "urgente" no nome (case insensitive) ou se o ID é 'urgente'
+                const isUrgA = (a.status === 'urgente' || (columnsConfig[a.status] && columnsConfig[a.status].title.toLowerCase().includes('urgente')));
+                const isUrgB = (b.status === 'urgente' || (columnsConfig[b.status] && columnsConfig[b.status].title.toLowerCase().includes('urgente')));
+
+                // Lógica de Prioridade
+                if (isUrgA && !isUrgB) return -1; // A é urgente e B não -> A vem antes
+                if (!isUrgA && isUrgB) return 1;  // B é urgente e A não -> B vem antes
+                
+                // Se ambos forem urgentes ou ambos não forem, desempata pela Data (Lógica Antiga)
                 const dateA = a.dueDate || '9999-12-31';
                 const dateB = b.dueDate || '9999-12-31';
                 return dateA.localeCompare(dateB);
